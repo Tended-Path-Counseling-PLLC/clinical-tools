@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultation Call — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #242733;
+    --gold: #d79f55;
+    --cream: #ede8e1;
+    --warm-white: #f7f4f0;
+    --muted: #8a8490;
+    --border: #d6d0c8;
+    --field-bg: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @media print {
+    body { background: white; }
+    .no-print { display: none; }
+    .page { box-shadow: none; margin: 0; max-width: 100%; }
+    textarea { border: 1px solid #ccc !important; background: white !important; }
+    .section { break-inside: avoid; }
+  }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--warm-white);
+    box-shadow: 0 4px 32px rgba(36,39,51,0.09);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    padding: 36px 48px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .practice-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 300;
+    color: var(--warm-white);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .form-subtitle {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Meta row */
+  .meta-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-field {
+    padding: 18px 24px;
+    border-right: 1px solid var(--border);
+  }
+  .meta-field:last-child { border-right: none; }
+  .meta-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .meta-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    outline: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 3px;
+  }
+  .meta-input:focus { border-bottom-color: var(--gold); }
+
+  /* Body */
+  .body { padding: 0 48px 48px; }
+
+  /* Section */
+  .section {
+    margin-top: 36px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .section-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--gold);
+    min-width: 18px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    flex: 1;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Question block */
+  .q-block {
+    margin-bottom: 20px;
+  }
+  .q-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 7px;
+    line-height: 1.5;
+  }
+  .q-note {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  textarea {
+    width: 100%;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--field-bg);
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    padding: 10px 14px;
+    resize: vertical;
+    outline: none;
+    line-height: 1.6;
+    min-height: 64px;
+    transition: border-color 0.15s;
+  }
+  textarea:focus {
+    border-color: var(--gold);
+    background: #fffdf9;
+  }
+  textarea.sm { min-height: 46px; }
+  textarea.lg { min-height: 90px; }
+
+  /* Safety block — highlighted */
+  .safety-block {
+    background: #fdf5ea;
+    border: 1px solid #e8c88a;
+    border-radius: 2px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+  .safety-block .q-label {
+    font-weight: 500;
+  }
+  .safety-note {
+    font-size: 13px;
+    color: #9a6f2e;
+    font-style: italic;
+    margin-top: 6px;
+  }
+
+  /* Fit checkboxes */
+  .fit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .fit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--field-bg);
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .fit-item:hover { border-color: var(--gold); }
+  .fit-item input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--gold);
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .fit-item-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .fit-item-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Outcome row */
+  .outcome-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .outcome-btn {
+    border: 1px solid var(--border);
+    background: var(--field-bg);
+    border-radius: 1px;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Jost', sans-serif;
+  }
+  .outcome-btn input[type="radio"] { display: none; }
+  .outcome-btn-label {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .outcome-btn-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .outcome-btn:has(input:checked) {
+    border-color: var(--gold);
+    background: #fdf5ea;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  /* Follow-up section */
+  .followup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 20px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--cream);
+  }
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .btn-group {
+    display: flex;
+    gap: 10px;
+  }
+  .btn {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 20px;
+    border-radius: 1px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { border-color: var(--ink); color: var(--ink); }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--warm-white);
+  }
+  .btn-primary:hover { background: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="practice-name">Tended Path Counseling, PLLC</div>
+    <div class="form-title">Consultation Call Notes</div>
+    <div class="form-subtitle">15-Minute Prospective Client — Clinician Working Document</div>
+  </div>
+
+  <!-- Meta -->
+  <div class="meta-row">
+    <div class="meta-field">
+      <div class="meta-label">Date</div>
+      <input class="meta-input" type="text" id="meta-date" placeholder="—">
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Time</div>
+      <input class="meta-input" type="text" placeholder="—">
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Prospective Client (initials or pseudonym)</div>
+      <input class="meta-input" type="text" placeholder="—">
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+
+    <!-- Section 1 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <span class="section-title">Opening Frame</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="q-note">Script: "I have about 15 minutes with you today. My goal is to learn a little about what's bringing you in and make sure we're a good fit. I'll ask a few questions, and you'll have time to ask me anything too."</div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <span class="section-title">What's Bringing Them In</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What's prompting you to reach out for therapy right now — what's feeling most pressing?</div>
+        <textarea class="lg" placeholder="Notes…"></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">How long has this been going on, and have you tried addressing it before?</div>
+        <textarea placeholder="Notes…"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <span class="section-title">History &amp; Current Context</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Have you been in therapy before? If so, what worked — and what didn't?</div>
+        <textarea placeholder="Notes…"></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Are you currently seeing any other mental health providers, or taking medication for mental health?</div>
+        <textarea class="sm" placeholder="Notes…"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <span class="section-title">Logistics &amp; Fit</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Are you looking for in-person sessions, telehealth, or either?</div>
+        <textarea class="sm" placeholder="Notes…"></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Do you have a sense of how frequently you'd want to meet?</div>
+        <textarea class="sm" placeholder="Weekly / biweekly / flexible…"></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What insurance are you using, or are you looking at private pay?</div>
+        <textarea class="sm" placeholder="Payer, plan details…"></textarea>
+      </div>
+    </div>
+
+    <!-- Safety -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <span class="section-title">Safety Screen</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="safety-block">
+        <div class="q-label">Are you having any thoughts of harming yourself or others right now?</div>
+        <textarea class="sm" placeholder="Response and clinical impression…"></textarea>
+        <div class="safety-note">⚑ If yes — assess fully and document before proceeding with any fit discussion. Do not skip.</div>
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <span class="section-title">Their Questions + Clinical Impressions</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="q-block">
+        <div class="q-label">What questions do you have for me about how I work or what to expect?</div>
+        <textarea placeholder="Questions asked, how you responded…"></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Clinical impression / overall sense of fit</div>
+        <textarea class="lg" placeholder="Presenting themes, energy, clinical read, anything notable…"></textarea>
+      </div>
+    </div>
+
+    <!-- Fit signals -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <span class="section-title">Fit Signals Observed</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="fit-grid">
+        <label class="fit-item">
+          <input type="checkbox">
+          <div>
+            <div class="fit-item-label">Identity / pattern work</div>
+            <div class="fit-item-sub">Questioning old patterns, self-trust</div>
+          </div>
+        </label>
+        <label class="fit-item">
+          <input type="checkbox">
+          <div>
+            <div class="fit-item-label">Life transition / inflection point</div>
+            <div class="fit-item-sub">Career, relationship, identity shift</div>
+          </div>
+        </label>
+        <label class="fit-item">
+          <input type="checkbox">
+          <div>
+            <div class="fit-item-label">ACT / IFS alignment</div>
+            <div class="fit-item-sub">Values, parts work, defusion</div>
+          </div>
+        </label>
+        <label class="fit-item">
+          <input type="checkbox">
+          <div>
+            <div class="fit-item-label">Scope concern flagged</div>
+            <div class="fit-item-sub">Crisis, psychosis, ED, substance</div>
+          </div>
+        </label>
+        <label class="fit-item">
+          <input type="checkbox">
+          <div>
+            <div class="fit-item-label">Insurance confirmed</div>
+            <div class="fit-item-sub">Premera or Regence via Headway</div>
+          </div>
+        </label>
+        <label class="fit-item">
+          <input type="checkbox">
+          <div>
+            <div class="fit-item-label">Other concern noted</div>
+            <div class="fit-item-sub">See impressions above</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Outcome -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">08</span>
+        <span class="section-title">Outcome</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="outcome-row">
+        <label class="outcome-btn">
+          <input type="radio" name="outcome" value="yes">
+          <span class="outcome-btn-label">✓ Good Fit</span>
+          <span class="outcome-btn-sub">Moving forward</span>
+        </label>
+        <label class="outcome-btn">
+          <input type="radio" name="outcome" value="referred">
+          <span class="outcome-btn-label">→ Referred Out</span>
+          <span class="outcome-btn-sub">Clinical or logistical</span>
+        </label>
+        <label class="outcome-btn">
+          <input type="radio" name="outcome" value="pending">
+          <span class="outcome-btn-label">◌ Pending</span>
+          <span class="outcome-btn-sub">Following up</span>
+        </label>
+      </div>
+      <div style="margin-top: 14px;">
+        <textarea class="sm" placeholder="Referral provided / next step / follow-up note…"></textarea>
+      </div>
+    </div>
+
+    <!-- Follow-up -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-number">09</span>
+        <span class="section-title">Follow-Up Actions</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="followup-grid">
+        <div class="q-block">
+          <div class="q-label">Send portal invite via Sessions Health</div>
+          <textarea class="sm" placeholder="Sent / pending / N/A…"></textarea>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Insurance verification needed</div>
+          <textarea class="sm" placeholder="Payer / action needed…"></textarea>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Referral details</div>
+          <textarea class="sm" placeholder="Where / what provided…"></textarea>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Other follow-up</div>
+          <textarea class="sm" placeholder="Notes…"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- Footer -->
+  <div class="footer no-print">
+    <div class="footer-brand">Tended Path Counseling, PLLC — Bethany Sherman, LMHC</div>
+    <div class="btn-group">
+      <button class="btn btn-outline" onclick="clearForm()">Clear</button>
+      <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+  // Auto-fill today's date
+  const d = new Date();
+  const formatted = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('meta-date').value = formatted;
+
+  // Clear form
+  function clearForm() {
+    if (!confirm('Clear all fields?')) return;
+    document.querySelectorAll('textarea').forEach(t => t.value = '');
+    document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('.meta-input').forEach(i => {
+      if (i.id !== 'meta-date') i.value = '';
+    });
+  }
+
+  // Outcome button visual feedback
+  document.querySelectorAll('.outcome-btn input').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.outcome-btn').forEach(b => b.style.borderColor = '');
+    });
+  });
+</script>
+
+</body>
+</html>
