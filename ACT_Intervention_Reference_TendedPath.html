@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACT Intervention Reference — Tended Path Counseling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #1b1d27;
+    --ink-mid:    #242733;
+    --ink-light:  #2e3147;
+    --ink-card:   #252838;
+    --gold:       #d79f55;
+    --gold-dim:   #a87a3a;
+    --gold-glow:  rgba(215,159,85,0.10);
+    --gold-tint:  rgba(215,159,85,0.06);
+    --gold-border:rgba(215,159,85,0.28);
+    --text:       #c4c1bb;
+    --text-dim:   #80807a;
+    --text-bright:#e6e2da;
+    --border:     rgba(255,255,255,0.07);
+    --blue:       rgba(100,140,190,0.35);
+    --blue-bg:    rgba(100,140,190,0.07);
+    --rust:       rgba(180,100,80,0.40);
+    --rust-bg:    rgba(180,100,80,0.07);
+    --teal:       rgba(80,160,150,0.38);
+    --teal-bg:    rgba(80,160,150,0.07);
+    --green:      rgba(100,160,100,0.38);
+    --green-bg:   rgba(100,160,100,0.07);
+    --purple:     rgba(150,110,190,0.38);
+    --purple-bg:  rgba(150,110,190,0.07);
+    --mauve:      rgba(170,120,150,0.38);
+    --mauve-bg:   rgba(170,120,150,0.07);
+    --slate:      rgba(120,140,170,0.38);
+    --slate-bg:   rgba(120,140,170,0.07);
+    --sidebar-w:  260px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 18px; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--ink-mid);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-brand .practice {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-brand .doc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+
+  .sidebar-nav { padding: 16px 0; flex: 1; }
+
+  .nav-section {
+    padding: 8px 24px 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 10px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1.3;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-link:hover { color: var(--text-bright); background: var(--gold-tint); }
+  .nav-link.active { color: var(--gold); background: var(--gold-tint); }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 56px 56px 100px;
+    max-width: 1100px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-label::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 40px;
+    background: var(--gold-dim);
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .hero-note {
+    background: var(--gold-tint);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 20px;
+    font-size: 14.5px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    padding: 16px 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--ink-card);
+    color: var(--text-dim);
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.03em;
+  }
+
+  .filter-btn:hover { border-color: var(--gold-border); color: var(--text-bright); }
+  .filter-btn.active { background: var(--gold-glow); border-color: var(--gold-border); color: var(--gold); }
+
+  .filter-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── SECTION HEADING ─── */
+  .process-section { margin-bottom: 12px; }
+
+  .process-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .process-heading .ph-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .process-heading h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text-bright);
+  }
+
+  .process-heading .ph-count {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  /* ─── CARD GRID ─── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+
+  /* ─── INTERVENTION CARD ─── */
+  .card {
+    background: var(--ink-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .card:hover {
+    border-color: rgba(215,159,85,0.2);
+    transform: translateY(-1px);
+  }
+
+  .card-top {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .card-accent {
+    width: 3px;
+    border-radius: 2px;
+    align-self: stretch;
+    flex-shrink: 0;
+    min-height: 20px;
+  }
+
+  .card-header { flex: 1; }
+
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .card-tag .tag-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.25;
+  }
+
+  .card-body { padding: 14px 18px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
+  .card-section-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  /* ─── DOC LANGUAGE BOX ─── */
+  .doc-box {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 5px;
+    padding: 11px 13px;
+    position: relative;
+  }
+
+  .doc-text {
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: #9fa8b5;
+    font-style: italic;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(215,159,85,0.12);
+    border: 1px solid var(--gold-border);
+    border-radius: 3px;
+    color: var(--gold-dim);
+    font-size: 10px;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+    line-height: 1.6;
+  }
+
+  .copy-btn:hover { background: var(--gold-glow); color: var(--gold); }
+  .copy-btn.copied { color: #80c080; border-color: rgba(100,180,100,0.4); background: rgba(100,180,100,0.08); }
+
+  .card-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-style: italic;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  /* ─── HIDDEN CARDS ─── */
+  .card.hidden { display: none; }
+  .process-section.hidden { display: none; }
+
+  /* ─── SEARCH ─── */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--ink-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-bright);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px 10px 36px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-input:focus { border-color: var(--gold-border); }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  /* ─── DRIFT NOTE ─── */
+  .drift-note {
+    background: rgba(180,100,80,0.07);
+    border-left: 3px solid rgba(180,100,80,0.4);
+    border-radius: 0 5px 5px 0;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: #c8a090;
+    font-style: italic;
+    line-height: 1.65;
+    margin-top: 6px;
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    .sidebar, .filter-bar, .copy-btn { display: none; }
+    .main { margin-left: 0; padding: 30px; }
+    body { display: block; background: white; color: #222; }
+    .card { break-inside: avoid; border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="practice">Tended Path Counseling</div>
+    <div class="doc-title">ACT Intervention Reference</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section">Filter by Process</div>
+    <button class="nav-link active" onclick="filterByNav('all')">
+      <span class="nav-dot" style="background:#d79f55"></span> All Interventions
+    </button>
+    <button class="nav-link" onclick="filterByNav('foundational')">
+      <span class="nav-dot" style="background:#888"></span> Foundational / Relational
+    </button>
+    <button class="nav-link" onclick="filterByNav('defusion')">
+      <span class="nav-dot" style="background:#6a9fcc"></span> Cognitive Defusion
+    </button>
+    <button class="nav-link" onclick="filterByNav('acceptance')">
+      <span class="nav-dot" style="background:#c07868"></span> Acceptance
+    </button>
+    <button class="nav-link" onclick="filterByNav('present')">
+      <span class="nav-dot" style="background:#5aaa98"></span> Present-Moment Awareness
+    </button>
+    <button class="nav-link" onclick="filterByNav('self')">
+      <span class="nav-dot" style="background:#9a7cc0"></span> Self-as-Context
+    </button>
+    <button class="nav-link" onclick="filterByNav('values')">
+      <span class="nav-dot" style="background:#c08850"></span> Values Clarification
+    </button>
+    <button class="nav-link" onclick="filterByNav('action')">
+      <span class="nav-dot" style="background:#6aaa6a"></span> Committed Action
+    </button>
+    <button class="nav-link" onclick="filterByNav('ifs')">
+      <span class="nav-dot" style="background:#a07898"></span> IFS-Integrated
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    Documentation language is editable —<br>
+    click Copy to grab any phrase<br><br>
+    Bethany Sherman, LMHC · April 2026
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">Clinical Reference</div>
+    <h1>ACT Intervention<br><em>Reference Guide</em></h1>
+    <div class="hero-sub">With documentation language for each intervention</div>
+    <div class="hero-note">
+      Active listening is a clinical intervention. So is silence that holds space for a client to stay with discomfort rather than flee it. So is following the client's narrative with curiosity rather than redirecting. The problem is usually not that you did nothing — it is that ACT interventions often <em>feel like conversation</em> until you have the vocabulary to name what was mechanically happening. This reference is that vocabulary.
+    </div>
+  </section>
+
+  <!-- FILTER + SEARCH -->
+  <div class="filter-bar">
+    <div class="search-wrap" style="flex: 1; min-width: 200px;">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" type="text" placeholder="Search interventions…" oninput="searchCards(this.value)" id="searchInput">
+    </div>
+    <button class="filter-btn active" data-filter="all" onclick="filterCards('all', this)">
+      <span class="filter-dot" style="background:#d79f55"></span> All
+    </button>
+    <button class="filter-btn" data-filter="foundational" onclick="filterCards('foundational', this)">
+      <span class="filter-dot" style="background:#888"></span> Foundational
+    </button>
+    <button class="filter-btn" data-filter="defusion" onclick="filterCards('defusion', this)">
+      <span class="filter-dot" style="background:#6a9fcc"></span> Defusion
+    </button>
+    <button class="filter-btn" data-filter="acceptance" onclick="filterCards('acceptance', this)">
+      <span class="filter-dot" style="background:#c07868"></span> Acceptance
+    </button>
+    <button class="filter-btn" data-filter="present" onclick="filterCards('present', this)">
+      <span class="filter-dot" style="background:#5aaa98"></span> Present Moment
+    </button>
+    <button class="filter-btn" data-filter="self" onclick="filterCards('self', this)">
+      <span class="filter-dot" style="background:#9a7cc0"></span> Self-as-Context
+    </button>
+    <button class="filter-btn" data-filter="values" onclick="filterCards('values', this)">
+      <span class="filter-dot" style="background:#c08850"></span> Values
+    </button>
+    <button class="filter-btn" data-filter="action" onclick="filterCards('action', this)">
+      <span class="filter-dot" style="background:#6aaa6a"></span> Action
+    </button>
+    <button class="filter-btn" data-filter="ifs" onclick="filterCards('ifs', this)">
+      <span class="filter-dot" style="background:#a07898"></span> IFS
+    </button>
+  </div>
+
+  <div class="empty-state" id="emptyState">No interventions match your search.</div>
+
+  <!-- ══════════ FOUNDATIONAL ══════════ -->
+  <div class="process-section" data-section="foundational">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#888"></span>
+      <h2>Foundational &amp; Relational</h2>
+      <span class="ph-count">These are clinical interventions. Name them.</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="foundational" data-name="reflective listening validation">
+        <div class="card-top">
+          <div class="card-accent" style="background:#888"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#888"><span class="tag-dot" style="background:#888"></span>Foundational</div>
+            <div class="card-name">Reflective Listening &amp; Validation</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Reflecting content and affect back to the client without redirecting or interpreting. Naming what seems present — "it sounds like you felt invisible in that moment." Tracking avoidance patterns through what the client does and doesn't bring up. Validating that the client's response makes sense given their history or context.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist provided reflective listening and validation, supporting client's exploration of [experience/theme]. Client demonstrated increased articulation of [internal state / pattern] and reported feeling understood within the therapeutic relationship.</div>
+            </div>
+          </div>
+          <div class="card-note">Validation is not agreement — it is communicating that the client's internal experience is understandable. This distinction matters in documentation for clients with trauma or attachment disruption.</div>
+        </div>
+      </div>
+
+      <div class="card" data-process="foundational" data-name="functional assessment exploration">
+        <div class="card-top">
+          <div class="card-accent" style="background:#888"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#888"><span class="tag-dot" style="background:#888"></span>Foundational</div>
+            <div class="card-name">Functional Assessment / Exploration</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Asking what a behavior, thought, or feeling is doing — what function it serves. "When you avoid that conversation, what happens?" Tracking antecedents, consequences, and the workability of current patterns. Following the narrative with questions about outcome rather than content.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist conducted functional exploration of [symptom/behavior/avoidance pattern], identifying antecedents, consequences, and the workability of client's current response. Client demonstrated emerging awareness of the function [behavior] serves in maintaining [symptom/distress].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="foundational" data-name="socratic questioning collaborative inquiry">
+        <div class="card-top">
+          <div class="card-accent" style="background:#888"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#888"><span class="tag-dot" style="background:#888"></span>Foundational</div>
+            <div class="card-name">Collaborative Inquiry (Socratic)</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Open questions that invite the client to examine their own experience rather than receiving therapist interpretation. "What do you make of that?" / "What would it mean if that were true?" / "Has that always been the case?" Therapist follows the client's reasoning rather than steering toward a predetermined insight.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist used collaborative inquiry to facilitate client's exploration of [thought/belief/pattern], supporting self-directed insight. Client identified [connection/awareness] and articulated its relationship to [presenting concern/values/behavior].</div>
+            </div>
+          </div>
+          <div class="drift-note">ACT-specific note: collaborative inquiry stays curious about function and workability — not accuracy. If you find yourself asking "is that thought really true," that's CBT drift. The ACT reframe is "does holding that thought work for the life you want?"</div>
+        </div>
+      </div>
+
+      <div class="card" data-process="foundational" data-name="psychoeducation">
+        <div class="card-top">
+          <div class="card-accent" style="background:#888"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#888"><span class="tag-dot" style="background:#888"></span>Foundational</div>
+            <div class="card-name">Psychoeducation</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Providing brief, transparent information about the model, process, or diagnosis — when the client asks, or when confusion about treatment direction warrants it. ACT is minimally didactic. Information is offered experientially where possible. Not more than 2–3 minutes of direct teaching per session.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist provided psychoeducation regarding [topic: ACT model / experiential avoidance / the relationship between avoidance and symptom maintenance]. Client verbalized understanding and connected information to their own experience of [presenting concern].</div>
+            </div>
+          </div>
+          <div class="card-note">In notes, only document psychoeducation that was clinically purposeful and that the client engaged with. "Provided psychoeducation" without specificity is weak documentation.</div>
+        </div>
+      </div>
+
+      <div class="card" data-process="foundational" data-name="homework review between session">
+        <div class="card-top">
+          <div class="card-accent" style="background:#888"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#888"><span class="tag-dot" style="background:#888"></span>Foundational</div>
+            <div class="card-name">Between-Session Practice Review</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Reviewing assigned practice, self-monitoring, or committed actions from the prior session. Exploring what happened — with curiosity, not judgment — when things didn't go as planned. Reinforcing what did work. Connecting between-session experience back to the treatment goals.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist reviewed between-session [practice / committed action / self-monitoring]. Client reported [completed / partially completed / did not attempt]; barriers included [barrier]. Session explored what interfered and identified [adjustment / alternative strategy] for the coming week.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ DEFUSION ══════════ -->
+  <div class="process-section" data-section="defusion">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#6a9fcc"></span>
+      <h2>Cognitive Defusion</h2>
+      <span class="ph-count">Changing the relationship to thoughts, not the thoughts themselves</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="defusion" data-name="naming the story narrative">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6a9fcc"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6a9fcc"><span class="tag-dot" style="background:#6a9fcc"></span>Defusion</div>
+            <div class="card-name">Naming the Story</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Giving the client's dominant fused thought-pattern a name, collaboratively. "There's the 'I'm fundamentally broken' story." / "That sounds like the 'I'm too much for people' story." Once named, the story can be noticed as a recurring narrative rather than experienced as literal truth.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist introduced cognitive defusion via narrative labeling, collaboratively identifying client's recurrent cognitive story ["[story name]"]. Client practiced noticing the story as a pattern rather than a fact, demonstrating reduced fusion with its literal content.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="defusion" data-name="thanking the mind observer language">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6a9fcc"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6a9fcc"><span class="tag-dot" style="background:#6a9fcc"></span>Defusion</div>
+            <div class="card-name">Thanking the Mind</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Responding to an anxious or self-critical thought with "Thanks, mind" — warmly, not dismissively. Acknowledges the mind's protective intent while stepping back from the content. Works best when the therapeutic relationship can hold the lightness of it without the client feeling mocked.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist introduced defusion technique of acknowledging the mind's commentary without engagement ("thanking the mind"); client practiced responding to [specific thought] with observer-stance language, reporting reduced urgency and increased behavioral flexibility in relation to the thought.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="defusion" data-name="physicalization externalize thought">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6a9fcc"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6a9fcc"><span class="tag-dot" style="background:#6a9fcc"></span>Defusion</div>
+            <div class="card-name">Physicalization of Thought</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Asking the client to give the thought a physical form: "If that thought were an object, what would it look like? How big? What color? What weight?" Externalizes the thought spatially, creating experiential distance. Can be paired with "what would it be like to just carry it rather than fight it?"</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist guided client in physicalizing the thought [or: cognitive content "___"], externalizing it as a tangible object. Client reported increased psychological distance from the thought and reduced experiential fusion with its literal content.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="defusion" data-name="leaves stream clouds metaphor observer">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6a9fcc"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6a9fcc"><span class="tag-dot" style="background:#6a9fcc"></span>Defusion</div>
+            <div class="card-name">Leaves on a Stream / Observing Thoughts</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Brief mindfulness-based defusion exercise: client imagines sitting by a stream, placing each thought on a leaf and watching it float by. Clouds passing across the sky is an equivalent. Trains the observer stance — noticing thoughts without being swept away by them.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated mindfulness-based defusion exercise (leaves on a stream), guiding client to observe thoughts as passing events rather than directives. Client practiced the observer stance and reported [response: increased detachment / difficulty staying present / noticing pull toward certain thoughts].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="defusion" data-name="passengers bus metaphor">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6a9fcc"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6a9fcc"><span class="tag-dot" style="background:#6a9fcc"></span>Defusion</div>
+            <div class="card-name">Passengers on the Bus</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Client is the bus driver; thoughts and feelings are passengers who comment, threaten, or try to take the wheel. The driver can keep driving in a values direction even with loud passengers — they don't have to obey them or make them leave first. Particularly effective for clients who feel controlled by their thoughts.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist introduced the Passengers on the Bus metaphor to illustrate cognitive defusion and values-based action; client connected the metaphor to their experience of [specific thought/urge] and identified [values-consistent direction] as the driving destination.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="defusion" data-name="workability question thought">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6a9fcc"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6a9fcc"><span class="tag-dot" style="background:#6a9fcc"></span>Defusion</div>
+            <div class="card-name">Workability Question</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"When you hold that thought tightly and let it direct your behavior — does that work for the life you want?" Shifts from truth-evaluation to workability-evaluation. The thought's accuracy is irrelevant; its function is what matters. Key ACT reframe that applies across all six processes.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist used workability questioning to evaluate the function of [thought/belief/rule] in client's life, shifting from accuracy-evaluation to values-based assessment. Client identified that holding [thought] rigidly has limited [functioning domain] and explored alternative relationship to the thought.</div>
+            </div>
+          </div>
+          <div class="drift-note">This is the intervention to reach for when you've drifted into CBT thought-challenging. "Is that thought accurate?" → back to "does holding it work?"</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ ACCEPTANCE ══════════ -->
+  <div class="process-section" data-section="acceptance">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#c07868"></span>
+      <h2>Acceptance &amp; Willingness</h2>
+      <span class="ph-count">Opening to experience rather than defending against it</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="acceptance" data-name="expanding making room emotion">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c07868"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c07868"><span class="tag-dot" style="background:#c07868"></span>Acceptance</div>
+            <div class="card-name">Expanding Around the Feeling</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Guiding the client to make room for a difficult feeling rather than reducing or eliminating it. "Can you see if there's enough space inside you to let that feeling be there, without fighting it?" Often paired with physicalization — size, shape, temperature, texture — to create relationship with the feeling rather than distance from it.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated acceptance-based intervention, guiding client to expand awareness around [emotion/sensation] rather than suppress or escape it. Client practiced making room for [feeling] and reported [reduced urgency / increased tolerance / difficulty staying present — specify].</div>
+            </div>
+          </div>
+          <div class="card-note">Document what the client actually experienced — "increased tolerance" and "difficulty staying present" are both clinically meaningful responses.</div>
+        </div>
+      </div>
+
+      <div class="card" data-process="acceptance" data-name="cost of avoidance what does it cost">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c07868"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c07868"><span class="tag-dot" style="background:#c07868"></span>Acceptance</div>
+            <div class="card-name">Exploring the Cost of Avoidance</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"Has avoiding [feeling/situation] ever made it smaller — or has it made your life smaller?" Tracking the behavioral cost of the avoidance: what the client has stopped doing, given up, or lost in service of not feeling something. Creates the conditions for willingness without arguing against the avoidance directly.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist explored functional costs of client's avoidance of [internal state/situation], identifying behavioral restriction in [domain: occupational / social / relational]. Client articulated awareness that avoidance of [experience] has contributed to [functional limitation], increasing motivation for willingness-based alternatives.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="acceptance" data-name="urge surfing riding the wave sensation">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c07868"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c07868"><span class="tag-dot" style="background:#c07868"></span>Acceptance</div>
+            <div class="card-name">Urge Surfing</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Observing an urge (to avoid, use, escape, act impulsively) as a wave — noticing it rise, crest, and fall without acting on it. The client practices riding the urge with curiosity and breath rather than suppressing or following it. Relevant for impulsivity, compulsive behavior, cravings, self-harm urges.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist introduced urge surfing as an acceptance-based strategy for managing [urge type]; client practiced observing the urge as a transient wave rather than a directive, developing capacity to tolerate the urge without behavioral response.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="acceptance" data-name="willingness scale creative hopelessness">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c07868"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c07868"><span class="tag-dot" style="background:#c07868"></span>Acceptance</div>
+            <div class="card-name">Willingness Exploration / Creative Hopelessness</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Gently following the client's description of what they've tried to feel better and where it's gotten them. Not arguing against their strategies — following the experience with curiosity. "What has trying not to feel that way cost you?" The client arrives at the limit of the control agenda through their own reflection.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist explored client's prior attempts to manage [symptom/emotion] through control strategies, collaboratively examining workability. Client articulated awareness that [control strategy] has not reduced suffering and has produced secondary costs including [cost], increasing openness to acceptance-based alternatives.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="acceptance" data-name="physicalizing sensation body feeling">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c07868"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c07868"><span class="tag-dot" style="background:#c07868"></span>Acceptance</div>
+            <div class="card-name">Physicalizing Sensation</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Asking the client to describe a difficult emotion or sensation in physical terms: size, shape, texture, weight, location, temperature, color, movement. The act of describing defuses the feeling's urgency and creates a different relationship to it — curious rather than avoidant or overwhelmed.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist guided client in somatic and acceptance-based physicalizing of [emotion/sensation], exploring its physical qualities to facilitate non-defensive contact. Client demonstrated [increased tolerance / shift from avoidance to curiosity / difficulty locating sensation — specify].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ PRESENT MOMENT ══════════ -->
+  <div class="process-section" data-section="present">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#5aaa98"></span>
+      <h2>Present-Moment Awareness</h2>
+      <span class="ph-count">Attentional flexibility — contact with now</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="present" data-name="mindfulness brief in-session practice">
+        <div class="card-top">
+          <div class="card-accent" style="background:#5aaa98"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#5aaa98"><span class="tag-dot" style="background:#5aaa98"></span>Present Moment</div>
+            <div class="card-name">Brief In-Session Mindfulness Practice</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">2–5 minutes of guided present-moment awareness practice embedded in session: breath-anchored attention, noticing body sensations, returning from distraction without judgment. Used to ground the client before or after difficult content, or to model present-moment contact as a skill.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated brief mindfulness practice [approx. X minutes], anchoring client's attention to present-moment experience via breath and body awareness. Client demonstrated [engaged / able to return from distraction / struggled with sustained attention — specify] and reported [response].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="present" data-name="grounding sensory here and now">
+        <div class="card-top">
+          <div class="card-accent" style="background:#5aaa98"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#5aaa98"><span class="tag-dot" style="background:#5aaa98"></span>Present Moment</div>
+            <div class="card-name">Grounding / Orienting to the Present</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Sensory grounding techniques when the client is dissociated, flooded, or highly activated: "What can you feel under you right now?" / "Notice five things in the room." / "What do you hear?" Brings the client back into the window of tolerance so clinical work can continue. Distinct from purely stabilization-oriented grounding — here it is in service of present-moment contact.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist used grounding and sensory orienting techniques to facilitate return to present-moment awareness following activation around [topic/content]. Client demonstrated return to window of tolerance and was able to [re-engage with session content / identify current sensory experience].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="present" data-name="noticing the process in session here">
+        <div class="card-top">
+          <div class="card-accent" style="background:#5aaa98"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#5aaa98"><span class="tag-dot" style="background:#5aaa98"></span>Present Moment</div>
+            <div class="card-name">Noticing What's Happening Right Now</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"What's happening for you right now, as we talk about this?" / "I notice you went quiet — what's present?" Drawing the client's attention to live, in-the-moment experience rather than narrative or memory. Uses the session itself as the ground for present-moment practice. One of the most underused ACT interventions — it's always available.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated present-moment awareness by directing client's attention to live in-session experience as [topic/affect] arose. Client identified [emotion/sensation/thought] in real time and practiced staying with it rather than narrating away from it.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="present" data-name="assigned mindfulness between sessions practice">
+        <div class="card-top">
+          <div class="card-accent" style="background:#5aaa98"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#5aaa98"><span class="tag-dot" style="background:#5aaa98"></span>Present Moment</div>
+            <div class="card-name">Assigned Between-Session Mindfulness Practice</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Collaboratively identifying a brief, specific practice for the client to use between sessions: morning breath anchor, mindful walk, brief body scan before sleep. The practice should be specific and achievable — "notice one moment of sensory contact each day" is more useful than "meditate for 20 minutes."</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist assigned between-session mindfulness practice [specify: brief breath anchor / body scan / mindful daily activity] to build present-moment awareness and generalize in-session skills. Client verbalized understanding of the practice and identified [when/how they will use it].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ SELF-AS-CONTEXT ══════════ -->
+  <div class="process-section" data-section="self">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#9a7cc0"></span>
+      <h2>Self-as-Context</h2>
+      <span class="ph-count">The observer self — distinct from the content of experience</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="self" data-name="observer exercise continuity">
+        <div class="card-top">
+          <div class="card-accent" style="background:#9a7cc0"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#9a7cc0"><span class="tag-dot" style="background:#9a7cc0"></span>Self-as-Context</div>
+            <div class="card-name">The Observer Exercise</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Guided meditation tracking the continuity of the observing "I" across changing experiences, ages, roles, and moods. "Notice that there's a part of you that has been watching your experience your whole life. That part hasn't changed — even though your thoughts, feelings, and roles have." Builds access to a stable perspective that contains but is not fused with content.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated the Observer Exercise, guiding client to access the continuous observing self distinct from changing thoughts, emotions, and self-descriptions. Client demonstrated [ability to access observer perspective / difficulty separating self from content — specify] and reported [response].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="self" data-name="chessboard sky weather metaphor">
+        <div class="card-top">
+          <div class="card-accent" style="background:#9a7cc0"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#9a7cc0"><span class="tag-dot" style="background:#9a7cc0"></span>Self-as-Context</div>
+            <div class="card-name">Chessboard / Sky Metaphors</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">The chessboard: pieces (thoughts, feelings, roles) move and battle; the board is always there. The sky: weather (internal states) passes; the sky itself remains unchanged. Introduced when clients are highly identified with a feeling or diagnosis ("I am depressed" / "I am this anxiety"). Offers an alternative relationship to the content of experience.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist introduced [Chessboard / Sky and Weather] metaphor to illustrate the distinction between self-as-context and self-as-content; client connected the metaphor to their experience of over-identification with [emotion/diagnosis/role] and practiced describing their experience from the observer perspective.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="self" data-name="identity work self-concept fusion">
+        <div class="card-top">
+          <div class="card-accent" style="background:#9a7cc0"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#9a7cc0"><span class="tag-dot" style="background:#9a7cc0"></span>Self-as-Context</div>
+            <div class="card-name">Identity-Level Exploration</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Exploring who the client is beyond and including their presenting narrative, diagnosis, or role. "Who are you when you're not managing your anxiety?" / "Is there a version of you that exists separate from that story?" Particularly relevant for clients whose sense of self is organized around their symptoms, a former identity, or a role that is ending.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated identity-level exploration, supporting client in differentiating self-concept from [symptom / diagnosis / role] with which they have been fused. Client identified [aspect of self] as existing independently of [fused content], demonstrating early access to a more flexible self-concept.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ VALUES ══════════ -->
+  <div class="process-section" data-section="values">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#c08850"></span>
+      <h2>Values Clarification</h2>
+      <span class="ph-count">Chosen directions — not destinations, not rules</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="values" data-name="values clarification exercise VLQ bulls eye">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c08850"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c08850"><span class="tag-dot" style="background:#c08850"></span>Values</div>
+            <div class="card-name">Formal Values Clarification Exercise</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Structured exploration of valued life directions across domains (relationships, work, health, personal growth, community, etc.) using the VLQ, Bulls-Eye Values Survey, or a collaborative domain-mapping conversation. Distinguishes values from goals: "What kind of person do you want to be in this relationship?" vs. "What do you want to happen?"</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated formal values clarification [specify: VLQ / Bulls-Eye / domain mapping], identifying [domain] as a core area of importance. Client articulated [specific value] as a chosen direction, distinguishing it from [goal / rule / obligation], and connected it to current behavioral patterns and treatment goals.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="values" data-name="obituary funeral what would people say">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c08850"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c08850"><span class="tag-dot" style="background:#c08850"></span>Values</div>
+            <div class="card-name">Obituary / Funeral Exercise</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"What would you want people to say about you at the end of your life?" / "Who do you want to have been?" Evocative and often emotionally activating — hold the space for what comes up. The gap between the imagined eulogy and the client's current life is often where values work finds its traction. Can be done as in-session writing or guided visualization.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist guided client through obituary/legacy values exercise; client identified [specific valued qualities / relationships / contributions] as important to who they want to be. Exercise evoked [emotional response] and surfaced awareness of the gap between current behavior and valued direction in [domain].</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="values" data-name="connecting suffering values what hurts">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c08850"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c08850"><span class="tag-dot" style="background:#c08850"></span>Values</div>
+            <div class="card-name">Connecting Suffering to Values</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"The things that hurt us most are connected to what we care about most." When the client is in pain about something — a relationship, a failure, a loss — following that pain to the value underneath it. "What does the fact that this hurts so much tell you about what matters to you?" Reframes suffering as evidence of values, not pathology.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated values identification through exploration of client's pain around [presenting concern], connecting the intensity of distress to the underlying value of [value]. Client demonstrated emerging awareness of [value] as a guiding direction and expressed motivation to act in its service despite discomfort.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="values" data-name="inherited chosen values distinguishing">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c08850"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c08850"><span class="tag-dot" style="background:#c08850"></span>Values</div>
+            <div class="card-name">Distinguishing Chosen from Inherited Values</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"If no one ever knew you were living this way, would you still choose it?" / "Does this feel chosen, or like something you're supposed to want?" Gently exploring whether a stated value is genuinely chosen or is an inherited expectation, obligation, or protective rule. Particularly relevant for clients doing identity-level work with family system or cultural enmeshment.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist and client explored the origins of stated value [value], distinguishing between inherited expectations and genuinely chosen direction. Client identified [chosen value] as self-authored, distinct from [inherited rule/obligation from family/cultural context], supporting development of an autonomous values foundation for committed action.</div>
+            </div>
+          </div>
+          <div class="card-note">Preferred language: "inherited values" rather than "imposed values" — preserves cultural acknowledgment and IFS legacy burden framing.</div>
+        </div>
+      </div>
+
+      <div class="card" data-process="values" data-name="values behavior gap awareness">
+        <div class="card-top">
+          <div class="card-accent" style="background:#c08850"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#c08850"><span class="tag-dot" style="background:#c08850"></span>Values</div>
+            <div class="card-name">Values–Behavior Gap Awareness</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Once values are identified, mapping where the client's current behavior is and isn't aligned with those values. Done with curiosity and compassion — this is not a guilt exercise. The gap provides direction, not evidence of failure. "Here's what you've said matters. Here's where your behavior is. What gets in the way?"</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated exploration of the discrepancy between client's identified value of [value] and current behavioral pattern of [pattern], identifying [barrier] as the primary obstacle. Client demonstrated self-awareness of the gap without excessive self-criticism and expressed motivation to close it through committed action.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ COMMITTED ACTION ══════════ -->
+  <div class="process-section" data-section="action">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#6aaa6a"></span>
+      <h2>Committed Action</h2>
+      <span class="ph-count">Values-based behavior — with or without readiness</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="action" data-name="committed action planning values step">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6aaa6a"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6aaa6a"><span class="tag-dot" style="background:#6aaa6a"></span>Committed Action</div>
+            <div class="card-name">Values-Based Action Planning</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Collaboratively identifying a specific, achievable action in service of a named value. Naming the value → naming the action → anticipating the barriers → planning how to respond (not eliminate) the barriers → setting a timeframe. The goal is flexible, persistent engagement — not perfect execution.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist and client collaboratively developed a values-based action plan in the domain of [domain], with client committing to [specific action] by [timeframe]. Anticipated barriers identified: [barrier]. Client identified ACT-based response strategy of [defusion / acceptance / present-moment grounding] for managing barriers without abandoning the committed action.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="action" data-name="barrier exploration what gets in the way">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6aaa6a"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6aaa6a"><span class="tag-dot" style="background:#6aaa6a"></span>Committed Action</div>
+            <div class="card-name">Barrier Exploration &amp; Response Planning</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">When a committed action was not completed: exploring with curiosity, not judgment, what showed up. What thoughts, feelings, circumstances intervened? Was the barrier an ACT process issue (fusion, avoidance) or a practical obstacle? Adjusts the plan based on what actually happened — not a failure, a data point.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist and client explored barriers to completion of committed action [action], identifying [barrier type: cognitive fusion with / experiential avoidance of / practical obstacle]. Session adjusted the action plan to [modification] and reinforced the workability framework for responding to future barriers without behavioral withdrawal.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="action" data-name="relapse response planning setback">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6aaa6a"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6aaa6a"><span class="tag-dot" style="background:#6aaa6a"></span>Committed Action</div>
+            <div class="card-name">Relapse Response Planning</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Developing a specific plan for when the client gets pulled off course — not if. What does it feel like when they're slipping back into avoidance or fusion? What is the first sign? What is the specific first step back? Identifying criteria for returning to treatment. Normalizing relapse as part of flexible, values-based living — not moral failure.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist and client developed a relapse response plan, identifying early warning indicators of [avoidance pattern / fusion / behavioral withdrawal] and a specific first step for re-engaging with values-based action. Client articulated criteria for returning to treatment and expressed willingness to use that resource without self-judgment.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="action" data-name="behavioral activation values engagement">
+        <div class="card-top">
+          <div class="card-accent" style="background:#6aaa6a"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#6aaa6a"><span class="tag-dot" style="background:#6aaa6a"></span>Committed Action</div>
+            <div class="card-name">ACT-Frame Behavioral Activation</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Reconnecting with meaningful, values-consistent activity that has been restricted by avoidance or depression. The ACT distinction from CBT behavioral activation: the goal is not to feel better in order to act. The goal is to act in service of what matters, bringing the feelings along for the ride. "You don't have to wait until you feel ready."</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Therapist facilitated ACT-informed behavioral activation, supporting client in identifying and committing to values-consistent activity [activity] previously restricted by [avoidance/depression/anxiety]. Client demonstrated willingness to engage in the activity in the presence of [emotional barrier] rather than waiting for distress to resolve first.</div>
+            </div>
+          </div>
+          <div class="card-note">Document that this is values-directed, not symptom-contingent — that distinction protects the clinical rationale for 90837 and demonstrates ACT-specific mechanism.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ IFS-INTEGRATED ══════════ -->
+  <div class="process-section" data-section="ifs">
+    <div class="process-heading">
+      <span class="ph-dot" style="background:#a07898"></span>
+      <h2>IFS-Integrated</h2>
+      <span class="ph-count">Clinical synthesis — label as such in notes</span>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" data-process="ifs" data-name="parts identification noticing parts">
+        <div class="card-top">
+          <div class="card-accent" style="background:#a07898"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#a07898"><span class="tag-dot" style="background:#a07898"></span>IFS-Integrated</div>
+            <div class="card-name">Parts Identification &amp; Naming</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Noticing and naming internal parts with curiosity: "It sounds like there's a part of you that really doesn't want to try again." / "What does that critical voice feel like inside?" Introduces IFS language without requiring the client to have formal IFS literacy. Creates separation between the client and the part — reducing fusion and increasing the client's capacity to observe their own experience.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Using an IFS-informed lens, therapist facilitated parts identification, supporting client in naming [part: critical / protective / avoidant / grieving] and developing curiosity about its role. Client demonstrated differentiation from the part, reducing fusion with [thought/feeling/urge] and increasing observational capacity.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="ifs" data-name="protective function exploring parts manager firefighter">
+        <div class="card-top">
+          <div class="card-accent" style="background:#a07898"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#a07898"><span class="tag-dot" style="background:#a07898"></span>IFS-Integrated</div>
+            <div class="card-name">Exploring the Protective Function of a Part</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"What is that part afraid would happen if it stopped doing its job?" / "What is it trying to protect you from?" Gets behind the behavior or thought to its protective intent. Particularly useful when committed action consistently stalls — often a manager or firefighter is blocking because of what it fears will happen if the client moves toward a value.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Using an IFS-informed approach, therapist explored the protective function of client's [behavior/avoidance/self-critical pattern], identifying the underlying fear of [feared outcome]. Understanding the part's protective intent reduced client's self-judgment and opened space for exploring alternative ways the underlying concern could be addressed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-process="ifs" data-name="self energy access unblending">
+        <div class="card-top">
+          <div class="card-accent" style="background:#a07898"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#a07898"><span class="tag-dot" style="background:#a07898"></span>IFS-Integrated</div>
+            <div class="card-name">Accessing Self-Energy / Unblending</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">"Can you find a place inside you that can be curious about that part rather than merged with it?" / "Even a little bit of distance from the critic — is that available?" Supporting the client in differentiating from a blended part and accessing the observing, compassionate Self. Directly parallels ACT self-as-context work — the two frameworks reinforce each other here.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Using an IFS-informed approach, therapist supported client in unblending from [part] and accessing Self-energy, demonstrated by increased curiosity and reduced reactivity toward the part. This parallel process to ACT self-as-context supported client's capacity to observe their experience rather than be governed by it.</div>
+            </div>
+          </div>
+          <div class="card-note">IFS Self-energy and ACT self-as-context are overlapping constructs. You can document either framework, or note both — just be consistent within a client's chart.</div>
+        </div>
+      </div>
+
+      <div class="card" data-process="ifs" data-name="inherited legacy values burden parts">
+        <div class="card-top">
+          <div class="card-accent" style="background:#a07898"></div>
+          <div class="card-header">
+            <div class="card-tag" style="color:#a07898"><span class="tag-dot" style="background:#a07898"></span>IFS-Integrated</div>
+            <div class="card-name">Legacy Burden / Inherited Values Exploration</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-section-label">In session</div>
+            <div class="card-desc">Exploring how family-of-origin or cultural messages have been internalized as burdens or rules a part is carrying. "Where did you first learn that?" / "Does that rule feel like yours, or like something you inherited?" Connects IFS legacy burden concept to ACT values clarification — helping the client distinguish chosen values from inherited expectations carried by parts.</div>
+          </div>
+          <div>
+            <div class="card-section-label">Documentation language</div>
+            <div class="doc-box">
+              <button class="copy-btn" onclick="copyDoc(this)">Copy</button>
+              <div class="doc-text">Using an IFS-informed approach, therapist explored inherited messages or legacy burdens contributing to client's [belief/rule/self-concept], tracing their origin to [family/cultural context]. Client identified the burden as external in origin rather than self-authored, supporting differentiation and movement toward chosen values.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+  let activeFilter = 'all';
+
+  function filterCards(filter, btn) {
+    activeFilter = filter;
+    document.getElementById('searchInput').value = '';
+
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.nav-link').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${filter}'`));
+    });
+
+    applyFilters('', filter);
+  }
+
+  function filterByNav(filter) {
+    activeFilter = filter;
+    document.getElementById('searchInput').value = '';
+
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+    });
+
+    document.querySelectorAll('.nav-link').forEach(b => {
+      const onclick = b.getAttribute('onclick') || '';
+      b.classList.toggle('active', onclick.includes(`'${filter}'`));
+    });
+
+    applyFilters('', filter);
+  }
+
+  function searchCards(query) {
+    applyFilters(query, activeFilter);
+  }
+
+  function applyFilters(query, filter) {
+    const q = query.toLowerCase().trim();
+    let anyVisible = false;
+
+    document.querySelectorAll('.process-section').forEach(section => {
+      const sectionProcess = section.getAttribute('data-section');
+      const sectionMatch = filter === 'all' || sectionProcess === filter;
+
+      let sectionHasVisible = false;
+
+      section.querySelectorAll('.card').forEach(card => {
+        const cardProcess = card.getAttribute('data-process');
+        const cardName = card.getAttribute('data-name') || '';
+        const cardText = card.textContent.toLowerCase();
+
+        const processMatch = filter === 'all' || cardProcess === filter;
+        const searchMatch = !q || cardName.includes(q) || cardText.includes(q);
+
+        if (processMatch && searchMatch) {
+          card.classList.remove('hidden');
+          sectionHasVisible = true;
+          anyVisible = true;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      section.classList.toggle('hidden', !sectionHasVisible);
+    });
+
+    document.getElementById('emptyState').style.display = anyVisible ? 'none' : 'block';
+  }
+
+  function copyDoc(btn) {
+    const docText = btn.nextElementSibling.textContent.trim();
+    navigator.clipboard.writeText(docText).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1800);
+    }).catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = docText;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+</script>
+</body>
+</html>

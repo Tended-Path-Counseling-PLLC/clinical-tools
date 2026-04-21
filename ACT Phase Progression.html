@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACT Therapy Arc — Tended Path Counseling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1b1d27;
+    --ink-mid:   #242733;
+    --ink-light: #2e3147;
+    --ink-card:  #252838;
+    --gold:      #d79f55;
+    --gold-dim:  #a87a3a;
+    --gold-glow: rgba(215,159,85,0.12);
+    --gold-tint: rgba(215,159,85,0.07);
+    --cream:     #ede8e1;
+    --warm:      #f7f4f0;
+    --text:      #c8c5bf;
+    --text-dim:  #888580;
+    --text-bright: #e8e4dd;
+    --border:    rgba(255,255,255,0.07);
+    --border-gold: rgba(215,159,85,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 18px; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--ink-mid);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-brand .practice {
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-brand .doc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+
+  .sidebar-nav { padding: 20px 0; flex: 1; }
+
+  .nav-section {
+    padding: 6px 24px 2px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1.3;
+  }
+
+  .nav-link:hover {
+    color: var(--text-bright);
+    background: var(--gold-tint);
+  }
+
+  .nav-link.active { color: var(--gold); background: var(--gold-tint); }
+
+  .nav-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gold-dim);
+    min-width: 18px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    max-width: 900px;
+    padding: 72px 64px 120px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    margin-bottom: 80px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-label::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 48px;
+    background: var(--gold-dim);
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 21px;
+    font-weight: 300;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  .hero-meta {
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    background: var(--gold-tint);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .callout-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .callout p {
+    font-size: 15.5px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* ─── SECTION HEADINGS ─── */
+  .section-block { margin-bottom: 80px; }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text-bright);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  /* ─── PHASE HEADERS ─── */
+  .phase-header {
+    display: flex;
+    align-items: stretch;
+    background: var(--ink-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 36px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .phase-num {
+    background: linear-gradient(160deg, #2a2d3e, var(--ink-mid));
+    border-right: 1px solid var(--border-gold);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+  }
+
+  .phase-num .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 46px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .phase-num .phase-word {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .phase-info {
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .phase-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .phase-sessions {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .phase-sub {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-dim);
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* ─── SUBSECTION LABELS ─── */
+  .sub-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin: 28px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ─── BODY TEXT ─── */
+  p {
+    font-size: 16.5px;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  p strong { color: var(--text-bright); font-weight: 500; }
+  p em { color: var(--text); }
+
+  /* ─── BULLETS ─── */
+  ul {
+    list-style: none;
+    margin-bottom: 14px;
+  }
+
+  ul li {
+    font-size: 16.5px;
+    line-height: 1.75;
+    color: var(--text);
+    padding: 5px 0 5px 22px;
+    position: relative;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+  }
+
+  ul li strong { color: var(--text-bright); font-weight: 500; }
+
+  ul.quotes li::before { content: '"'; background: none; color: var(--gold-dim); font-size: 20px; top: 4px; left: 0; font-family: 'Cormorant Garamond', serif; }
+  ul.quotes li { padding-left: 28px; font-style: italic; color: var(--text-dim); }
+
+  /* ─── HEX TAGS ─── */
+  .hex-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-glow);
+    border: 1px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 6px 14px;
+    margin: 4px 6px 4px 0;
+    font-size: 13.5px;
+    color: var(--gold);
+  }
+
+  .hex-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+
+  .hex-tags { margin: 10px 0 20px; }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 20px 0 28px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  thead tr { background: var(--ink-card); }
+
+  thead th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--border-gold);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:hover { background: var(--gold-tint); }
+
+  tbody td {
+    padding: 14px 16px;
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tbody td:first-child { color: var(--text-bright); font-weight: 500; }
+  tbody td:last-child { color: var(--text-dim); font-style: italic; font-size: 14px; }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 60px 0;
+  }
+
+  /* ─── SOURCES ─── */
+  .sources {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-style: italic;
+    margin-top: 60px;
+  }
+
+  /* ─── DRIFT NOTE ─── */
+  .drift-note {
+    background: rgba(180, 100, 80, 0.08);
+    border-left: 3px solid rgba(180, 100, 80, 0.5);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 15px;
+    color: #c8a090;
+  }
+
+  .drift-note strong { color: #d4a898; }
+
+  /* ─── IFS NOTE ─── */
+  .ifs-note {
+    background: rgba(100, 130, 170, 0.07);
+    border-left: 3px solid rgba(100, 130, 170, 0.35);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 15px;
+    color: #9aacbf;
+  }
+
+  .ifs-note .ifs-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6a8aaa;
+    margin-bottom: 6px;
+  }
+
+  .ifs-note p { color: #9aacbf; font-style: italic; margin: 0; font-size: 15px; }
+
+  /* ─── SESSION COUNT TABLE ─── */
+  .session-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .session-cell {
+    background: var(--ink-card);
+    padding: 20px 22px;
+  }
+
+  .session-cell .sc-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 6px; }
+  .session-cell .sc-range { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--text-bright); }
+  .session-cell .sc-desc { font-size: 13.5px; color: var(--text-dim); margin-top: 4px; line-height: 1.55; }
+
+  /* ─── PRINT ─── */
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 40px; }
+    body { display: block; background: white; color: #222; }
+  }
+
+  /* ─── SCROLL SPY ─── */
+  .phase-anchor { display: block; position: relative; top: -80px; visibility: hidden; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="practice">Tended Path Counseling</div>
+    <div class="doc-title">ACT Therapy Arc</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section">Overview</div>
+    <a class="nav-link" href="#overview"><span class="nav-num">—</span> The Shape of ACT</a>
+    <a class="nav-link" href="#hexaflex"><span class="nav-num">—</span> Six Core Processes</a>
+
+    <div class="nav-section">Phases</div>
+    <a class="nav-link" href="#phase1"><span class="nav-num">1</span> Intake &amp; Assessment</a>
+    <a class="nav-link" href="#phase2"><span class="nav-num">2</span> Creative Hopelessness</a>
+    <a class="nav-link" href="#phase3"><span class="nav-num">3</span> Defusion &amp; Acceptance</a>
+    <a class="nav-link" href="#phase4"><span class="nav-num">4</span> Self-as-Context</a>
+    <a class="nav-link" href="#phase5"><span class="nav-num">5</span> Values Clarification</a>
+    <a class="nav-link" href="#phase6"><span class="nav-num">6</span> Committed Action</a>
+    <a class="nav-link" href="#integration"><span class="nav-num">↻</span> Integration</a>
+    <a class="nav-link" href="#termination"><span class="nav-num">T</span> Termination</a>
+
+    <div class="nav-section">Reference</div>
+    <a class="nav-link" href="#duration"><span class="nav-num">—</span> Session Count</a>
+  </div>
+
+  <div class="sidebar-footer">
+    Bethany Sherman, LMHC<br>
+    Internal clinical reference<br>
+    April 2026
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">Clinical Reference</div>
+    <h1>ACT Therapy:<br><em>A Session-by-Session Arc</em></h1>
+    <div class="hero-sub">From Intake Through Termination</div>
+    <div class="hero-meta">Tended Path Counseling &nbsp;·&nbsp; Bethany Sherman, LMHC &nbsp;·&nbsp; April 2026</div>
+  </section>
+
+  <!-- PREFATORY NOTES -->
+  <div class="callout">
+    <div class="callout-label">A note on structure</div>
+    <p>ACT does not have a rigid phase sequence. The six hexaflex processes are present throughout treatment — what changes is which process is foregrounded, and why. The arc described here reflects the logic and typical sequencing of ACT as described by Hayes, Strosahl &amp; Wilson (2012) and Luoma, Hayes &amp; Walser (2007), not a lock-step protocol. Clinical judgment, client presentation, and the therapeutic relationship always take precedence.</p>
+  </div>
+
+  <div class="callout" style="margin-top: 12px;">
+    <div class="callout-label">Where synthesis and inference appear</div>
+    <p>Well-established content from the ACT literature is presented without qualification. Where the framing reflects clinical synthesis, integration with IFS, or application to specific presentations, it is marked as such. IFS integration notes are clinical synthesis — not drawn from an established published ACT/IFS protocol.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- OVERVIEW -->
+  <section class="section-block" id="overview">
+    <span class="phase-anchor"></span>
+    <h2>The Shape of ACT Treatment</h2>
+    <p>ACT is a transdiagnostic, process-based therapy. Its goal is not symptom reduction per se — it is to increase <strong>psychological flexibility</strong>: the ability to contact the present moment fully, and to persist in or change behavior in service of what matters. Symptoms may decrease as a consequence, but that is not the primary mechanism or target.</p>
+    <p>The treatment arc moves broadly from establishing safety and context (Phase 1), through undermining unworkable control strategies (Phase 2), toward building the internal capacities — defusion, acceptance, self-as-context, present-moment awareness — that allow values-based committed action to become sustainable (Phases 3 through 6). Termination is explicitly framed as part of the clinical work, not an administrative endpoint.</p>
+  </section>
+
+  <!-- HEXAFLEX TABLE -->
+  <section class="section-block" id="hexaflex">
+    <span class="phase-anchor"></span>
+    <h2>The Six Core Processes</h2>
+    <p style="margin-bottom: 20px;">The hexaflex processes are not sequential — they operate simultaneously, with different processes foregrounded at different phases of treatment.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Process</th>
+            <th>What it addresses</th>
+            <th>Opposite (inflexibility)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Cognitive Defusion</td><td>Reducing the literal, excessive influence of language and thought</td><td>Cognitive Fusion — thoughts treated as literal truth</td></tr>
+          <tr><td>Acceptance</td><td>Opening to experience without unnecessary defense</td><td>Experiential Avoidance — suppressing or escaping internal states</td></tr>
+          <tr><td>Present-Moment Awareness</td><td>Flexible, non-judgmental contact with now</td><td>Preoccupation with past or future; autopilot</td></tr>
+          <tr><td>Self-as-Context</td><td>Stable observer perspective; self distinct from content</td><td>Self-as-Content — fused with thoughts, roles, stories</td></tr>
+          <tr><td>Values</td><td>Chosen directions; who the client wants to be</td><td>Value avoidance or acting from externally imposed values</td></tr>
+          <tr><td>Committed Action</td><td>Building patterns of behavior aligned with values</td><td>Behavioral inertia, avoidance, impulsivity</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PHASE 1 -->
+  <section class="section-block" id="phase1">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">1</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Intake and Assessment</div>
+        <div class="phase-sessions">Sessions 1–2</div>
+        <div class="phase-sub">Functional understanding, safety, therapeutic alliance</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Establish safety, rapport, and the therapeutic frame</li>
+      <li>Conduct a <strong>functional assessment</strong> — not just diagnostic (what is the client doing, and what function does it serve?)</li>
+      <li>Map the client's primary areas of suffering and the control strategies they have used to manage it</li>
+      <li>Begin to orient the client to ACT's model of change without full didactic explanation</li>
+      <li>Identify working diagnosis and complete required clinical documentation (90791)</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>ACT assessment is functional, not primarily categorical. Beyond DSM criteria, you are asking: What does this person avoid — externally and internally? What do they do to manage their discomfort, and is it working? What have they lost or restricted in service of controlling their experience? What do they care about that they can no longer access?</p>
+    <p>This is also where you assess for psychological flexibility directly — some clients are already fairly decentered and values-oriented; others are profoundly fused and avoidant. The latter need more foundational work before values and committed action will be accessible.</p>
+    <p>The alliance itself is a clinical instrument in ACT. Early warmth, curiosity, and non-judgment model the observing stance before you ever name it.</p>
+
+    <div class="sub-label">Key Assessment Domains</div>
+    <ul>
+      <li>Presenting concerns and history — functional, not just descriptive</li>
+      <li><strong>Experiential avoidance:</strong> what internal states are being avoided, and how</li>
+      <li><strong>Cognitive fusion:</strong> which thoughts carry the most weight, most believability</li>
+      <li><strong>Behavioral restriction:</strong> what the client no longer does because of internal states</li>
+      <li>Values domain: what matters, even if currently unreachable</li>
+      <li>Prior treatment history and its effect on the client's relationship to change</li>
+      <li>Safety — SI/SH screen, crisis history, current risk</li>
+    </ul>
+
+    <div class="ifs-note">
+      <div class="ifs-label">IFS Integration — Synthesis</div>
+      <p>The intake is also an opportunity to notice what parts are present — the part that came seeking help, protective parts that might be reluctant or skeptical, and any early indication of exile-level pain. You are not doing parts work in session 1; you are attending.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="section-block" id="phase2">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">2</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Creative Hopelessness</div>
+        <div class="phase-sessions">Sessions 2–4</div>
+        <div class="phase-sub">Undermining the unworkable change agenda</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Surface and examine the client's current approach to managing suffering</li>
+      <li>Demonstrate — through experience rather than argument — that the control agenda is not working or has hidden costs</li>
+      <li>Create enough discomfort with the status quo that willingness to try something different emerges naturally</li>
+      <li>Do this without nihilism, false reassurance, or implying the client has been doing it wrong</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>This is one of the most delicate phases in ACT and the one most frequently either skipped (in favor of jumping to values and action) or done clumsily (in a way that the client experiences as being told they are wrong or stupid for trying to feel better). The goal is not hopelessness about the client — it is creative openness to a different relationship with suffering. <strong>The word "creative" is load-bearing.</strong></p>
+    <p>The primary technique is asking the client to tell you what they have tried, and then exploring what happened. You are not arguing against their strategies — you are following their experience with them. The client arrives at the limitation of control strategies through their own reflection, not through your persuasion.</p>
+
+    <div class="sub-label">Core Questions</div>
+    <ul class="quotes">
+      <li>What have you tried to feel less [anxious / depressed / ashamed]? How has that worked — short term and over time?</li>
+      <li>If you could make this feeling go away forever, would you want to? What would you be free to do?</li>
+      <li>Has trying not to feel this way ever made it smaller, or has it made your life smaller?</li>
+    </ul>
+
+    <div class="sub-label">Useful Metaphors</div>
+    <ul>
+      <li><strong>The Tug of War with the Monster</strong> — fighting versus dropping the rope</li>
+      <li><strong>Quicksand</strong> — the more you struggle, the deeper you sink</li>
+      <li><strong>The Man in the Hole</strong> — digging harder with the same shovel</li>
+    </ul>
+
+    <div class="sub-label">Hexaflex Processes Most Active</div>
+    <div class="hex-tags">
+      <span class="hex-tag"><span class="dot"></span>Acceptance — introducing willingness as alternative to control</span>
+      <span class="hex-tag"><span class="dot"></span>Present-Moment Awareness — noticing what the struggle actually costs, right now</span>
+    </div>
+
+    <div class="ifs-note">
+      <div class="ifs-label">IFS Integration — Synthesis</div>
+      <p>From an IFS frame, creative hopelessness is partly about recognizing that protective managers have been working very hard with good intentions — and that their strategies may be creating burdens of their own. The invitation is to curiosity about those parts, not defeat. This reframe tends to land more gently with clients who would experience "your strategies aren't working" as shaming.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="section-block" id="phase3">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">3</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Defusion and Acceptance</div>
+        <div class="phase-sessions">Sessions 3–8</div>
+        <div class="phase-sub">Changing the relationship to internal experience</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Help the client experience thoughts as thoughts — not as facts, commands, or threats</li>
+      <li>Build willingness to contact difficult internal states without suppression, escape, or excessive defense</li>
+      <li>Introduce mindfulness practices that support both defusion and acceptance</li>
+      <li>Distinguish acceptance from resignation, defeat, or liking the experience</li>
+    </ul>
+
+    <div class="sub-label">Cognitive Defusion</div>
+    <p>Defusion interventions target the <em>function</em> of thoughts — specifically, the degree to which language is controlling behavior in unhelpful ways. You are not trying to change the thought's content or challenge its accuracy. You are changing the client's relationship to the thought.</p>
+    <ul>
+      <li><strong>Naming the story:</strong> "There's the 'I'm fundamentally broken' story again."</li>
+      <li><strong>Thanking the mind:</strong> "Thanks, mind" — used with warmth, not dismissively</li>
+      <li>Saying it in a silly voice or very slowly — creates experiential distance without argument</li>
+      <li>Physicalization: Where is this thought located? What does it look like?</li>
+      <li>Leaves on a stream, clouds in the sky — observing thoughts as passing events</li>
+      <li>The passengers on the bus metaphor — thoughts as passengers, client as driver</li>
+    </ul>
+
+    <div class="sub-label">Acceptance / Experiential Willingness</div>
+    <p>Acceptance in ACT is an active, chosen stance toward internal experience — not passive endurance. It is making room for feelings, sensations, memories, and urges without unnecessary defense. The clinical question underneath acceptance work is always: <em>"Is avoiding this experience costing you something that matters?"</em></p>
+    <ul>
+      <li>Expanding around the feeling rather than eliminating it</li>
+      <li>Physicalizing sensations — size, shape, weight, temperature — to defuse their urgency</li>
+      <li>The Chinese finger trap metaphor</li>
+      <li>Surf the urge — riding sensations with curiosity rather than acting on or suppressing them</li>
+    </ul>
+
+    <div class="sub-label">Mindfulness Introduction</div>
+    <p>The primary function of mindfulness in ACT is attentional flexibility — the ability to be here, noticing experience without being controlled by it. Short practices (2–3 minutes) embedded in session are more effective than assigning lengthy practices for homework.</p>
+
+    <div class="sub-label">Common Stalls at This Phase</div>
+    <ul>
+      <li>Client intellectualizes — can describe defusion beautifully but doesn't use it experientially; redirect to in-session practice</li>
+      <li>Client confuses acceptance with giving up, especially with depression or chronic pain; clarify explicitly</li>
+    </ul>
+
+    <div class="drift-note">
+      <strong>Therapist drift to watch for:</strong> Using workability questions effectively, but slipping into "let's examine whether that thought is accurate." That's CBT, not defusion. The corrective is staying with the question of function — does holding this thought tightly work for the client's life?
+    </div>
+
+    <div class="callout" style="margin-top: 20px;">
+      <div class="callout-label">Documentation note</div>
+      <p>When documenting defusion or acceptance work, the audit-ready frame is: what does this intervention allow the client to do? Not: what does it reduce? "Client practiced defusion from the thought 'I am a burden' and was able to initiate contact with a family member" — not "client challenged distorted cognition."</p>
+    </div>
+
+    <div class="ifs-note">
+      <div class="ifs-label">IFS Integration — Synthesis</div>
+      <p>Defusion and acceptance work often reveals parts — and clients sometimes experience a frightened or overwhelmed part during acceptance exercises. Having an IFS frame available allows you to name what's happening ("It sounds like a part of you really doesn't want to let that feeling in — which makes sense. Can we get curious about that part?") rather than pushing through. This can actually deepen acceptance rather than derailing it.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="section-block" id="phase4">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">4</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Self-as-Context</div>
+        <div class="phase-sessions">Sessions 5–9</div>
+        <div class="phase-sub">Building the stable observing self</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Help the client distinguish between the observer of experience and the content of experience</li>
+      <li>Build access to a stable, continuous perspective that contains thoughts, feelings, and stories without being identical to them</li>
+      <li>Reduce identity fusion — particularly important for clients with chronic depression, trauma history, or rigid self-concept</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>Self-as-context is the conceptually deepest process in ACT, and often the one that produces the most durable change for clients doing identity-level work. The observer self is the "I" that has been present throughout the client's life — across roles, moods, ages, experiences. It is not a different self; it is the perspective from which all experience is witnessed.</p>
+    <p><strong>Self-as-content</strong> is the fused, over-identified position — "I am anxious," "I am broken," "I am the trauma that happened to me." <strong>Self-as-context</strong> is the riverbank, stable and containing, while thoughts and feelings are the river and its contents. (Note: directionality matters — self-as-context is the bank, not the river.)</p>
+
+    <div class="sub-label">Key Exercises and Metaphors</div>
+    <ul>
+      <li><strong>The Observer Exercise</strong> — guided meditation tracking the stable "I" across changing experiences</li>
+      <li><strong>The Chessboard Metaphor</strong> — pieces (thoughts, feelings) move; the board is always there</li>
+      <li><strong>The Sky and Weather Metaphor</strong> — weather changes; the sky remains</li>
+      <li>"Notice that you are noticing" — simple in-session pointing to the observer</li>
+      <li>Continuity of self across time: "Who was aware of your 10-year-old self's experiences? The same 'I' that is here now."</li>
+    </ul>
+
+    <div class="sub-label">Presentations That Warrant Extra Care</div>
+    <ul>
+      <li><strong>Dissociative presentations</strong> — the observer exercise can feel destabilizing; ground first, go slowly</li>
+      <li><strong>Complex trauma with disrupted identity</strong> — a continuous self may feel foreign; start with small, concrete examples</li>
+      <li><strong>Clients in acute grief</strong> — "who am I without my role" may compound loss; hold both</li>
+    </ul>
+
+    <div class="ifs-note">
+      <div class="ifs-label">IFS Integration — Synthesis</div>
+      <p>Self-as-context and IFS Self-energy are overlapping constructs that complement each other directly. Both describe a stable, observing, compassionate center distinct from any particular part or internal state. Clients who have difficulty accessing self-as-context through ACT's observer exercises sometimes find IFS language more accessible. The two models reinforce each other here without tension.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 5 -->
+  <section class="section-block" id="phase5">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">5</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Values Clarification</div>
+        <div class="phase-sessions">Sessions 6–12</div>
+        <div class="phase-sub">Finding direction from the inside out</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Help the client identify chosen values — <strong>directions, not destinations</strong> — that are genuinely their own</li>
+      <li>Distinguish values from goals, rules, obligations, and inherited expectations</li>
+      <li>Connect the client's suffering to their values (the things that hurt us most are connected to what we care about most)</li>
+      <li>Build motivation for committed action that does not depend on feeling ready or comfortable</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>Values clarification is often the most transformative phase for clients doing identity-level work. It is also where the most significant clinical errors occur — specifically, when clients present values that are actually avoidance strategies in disguise ("I value peace" = I avoid conflict), or when therapists accept socially desirable values without exploring whether they are genuinely chosen.</p>
+    <p>Values in ACT are ongoing directions — they cannot be achieved or completed, only lived. This is a crucial distinction. A goal is "I want to reconnect with my daughter." The value underneath it might be "being a present and loving parent." The value persists even if the goal becomes unattainable.</p>
+
+    <div class="sub-label">Key Values Clarification Exercises</div>
+    <ul>
+      <li><strong>Funeral / obituary exercise</strong> — what do you want people to say? Who do you want to have been?</li>
+      <li>Valued Living Questionnaire (VLQ) or Bulls-Eye Values Survey — structured domain mapping</li>
+      <li>The 80th birthday letter</li>
+      <li>"What would you do if you knew you couldn't fail — and if your anxiety/depression came with you?"</li>
+      <li>Guided experiential writing about a peak experience — what values were expressed?</li>
+    </ul>
+
+    <div class="sub-label">Distinguishing Genuine Values from Inherited or Avoidance-Based Ones</div>
+    <ul class="quotes">
+      <li>If no one ever knew you were living this way, would you still choose it?</li>
+      <li>Does this feel chosen, or does it feel like something you're supposed to want?</li>
+      <li>Is this something that genuinely matters to you, or is it a rule you've been following?</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Preferred framing — inherited vs. imposed values</div>
+      <p>"Inherited values" is more clinically and culturally accurate than "imposed values." It preserves the acknowledgment that family and cultural transmission are real — sometimes beautiful, sometimes constraining — and resonates with the IFS concept of legacy burdens. It avoids implying that family systems are simply oppressive.</p>
+    </div>
+
+    <div class="sub-label">Common Stalls at This Phase</div>
+    <ul>
+      <li>Client cannot access values — often a sign of significant fusion or depression; work with whatever tiny flickers of caring are still present</li>
+      <li>Client's values are all relational or other-directed — explore what the client cares about for themselves, gently</li>
+      <li>Client becomes overwhelmed by the gap between where they are and their values — this is grief work, and it is appropriate; don't bypass it</li>
+    </ul>
+
+    <div class="ifs-note">
+      <div class="ifs-label">IFS Integration — Synthesis</div>
+      <p>Some clients' stated values are voices of managers or internalized expectations from family systems. Helping the client listen for the difference between a value that comes from the core self versus one that comes from a protective part is nuanced, identity-level clinical work. The IFS language of legacy burdens maps directly onto inherited values.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 6 -->
+  <section class="section-block" id="phase6">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">6</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Committed Action</div>
+        <div class="phase-sessions">Sessions 8–ongoing</div>
+        <div class="phase-sub">Building behavioral patterns from values</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Help the client develop and sustain patterns of behavior in service of their values — <strong>even in the presence of difficult internal states</strong></li>
+      <li>Build psychological flexibility in action: persist, shift, or change behavior as circumstances require, without abandoning values</li>
+      <li>Identify and work through barriers (internal and external) that interrupt values-based action</li>
+      <li>Develop skills for handling relapse and getting back on track without shame spirals</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>Committed action is not willpower — it is flexible, values-anchored behavior across contexts. The primary distinction from behavioral activation in CBT is that the goal is not to feel better in order to act; the goal is to act in service of what matters, <em>bringing whatever internal states are present along for the ride.</em></p>
+    <p>Committed action requires defusion, acceptance, and self-as-context to be sufficiently developed — otherwise, barriers will reliably pull the client off course and the committed action assignments will fail, which can deepen shame and hopelessness. This is why committed action, though present in early sessions, cannot be the primary early focus.</p>
+
+    <div class="sub-label">Structure of Committed Action Work</div>
+    <ul>
+      <li>Identify the value being served</li>
+      <li>Name a specific goal or action step in that direction</li>
+      <li>Anticipate the internal barriers (thoughts, feelings, urges) that will show up</li>
+      <li>Plan how to respond to those barriers using ACT processes — not eliminate them</li>
+      <li>Set a time frame; review the following session</li>
+      <li>If the action was not taken: explore with curiosity, not judgment — what showed up? What would have helped?</li>
+    </ul>
+
+    <div class="sub-label">Common Barriers and ACT Responses</div>
+    <ul>
+      <li><strong>"I'll do it when I feel better"</strong> — defusion from the feeling-first assumption; values don't require readiness</li>
+      <li><strong>"I tried and it didn't work"</strong> — clarify what "working" means; was the action taken? Was it values-aligned?</li>
+      <li><strong>"What's the point"</strong> — fusion with hopelessness; acceptance of the feeling while reconnecting with values</li>
+      <li><strong>Avoidance disguised as planning</strong> — gently name the pattern, don't shame it</li>
+    </ul>
+
+    <div class="ifs-note">
+      <div class="ifs-label">IFS Integration — Synthesis</div>
+      <p>When committed action consistently stalls, it is often because a protective part — a manager or firefighter — is blocking. The IFS question is not "how do I push through this barrier?" but "what is this part afraid would happen if the client moved toward this value?" Getting the answer often unlocks the block more effectively than behavioral intervention alone.</p>
+    </div>
+  </section>
+
+  <!-- INTEGRATION -->
+  <section class="section-block" id="integration">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num" style="font-size:36px;">↻</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Integration Throughout</div>
+        <div class="phase-sessions">All phases</div>
+        <div class="phase-sub">Ongoing ACT processes woven through the arc</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Present-Moment Awareness</div>
+    <p>Mindfulness and present-moment contact are not a "phase" — they are the medium through which all other ACT work occurs. In-session, the therapist models present-moment awareness through attention, silence, and willingness to notice what is happening in the room.</p>
+    <p>As treatment matures, present-moment awareness becomes less about formal practices and more about a general orientation — the client spontaneously notices when they have gone to autopilot, catastrophizing, or avoidance, and can return to the present without it being a dramatic event.</p>
+
+    <div class="sub-label">Psychoeducation</div>
+    <p>ACT is minimally didactic — you are not teaching the hexaflex to clients. However, brief, transparent explanations of the model are appropriate when clients ask how or why you are doing something. The key is to keep psychoeducation experiential whenever possible: <em>try it rather than talk about it.</em></p>
+  </section>
+
+  <!-- TERMINATION -->
+  <section class="section-block" id="termination">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num" style="font-size:32px; letter-spacing:-1px;">T</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Termination</div>
+        <div class="phase-sessions">Final 3–4 sessions</div>
+        <div class="phase-sub">Consolidation, self-as-guide, and the transition</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Consolidate gains — not just "look how far you've come" but "what do you now know about <em>how</em> to do this?"</li>
+      <li>Transfer the therapeutic function to the client's own ACT skills and values compass</li>
+      <li>Normalize setbacks and build a specific relapse-response plan</li>
+      <li>Address the relational meaning of ending — for both client and therapist</li>
+      <li>Frame termination itself as an act of committed action and values-based living</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>ACT termination is values-forward. The question is not "are you symptom-free?" but <strong>"do you know how to live in service of what matters, even when things are hard?"</strong> A client who leaves treatment with persistent anxiety but who can carry it into valued living has succeeded in ACT. A client who leaves symptom-free only because life has been smooth has not yet been tested.</p>
+    <p>The termination phase should explicitly review the client's own ACT processes — which defusion techniques were most useful? What does acceptance feel like now versus when treatment began? What are their clearest values? What committed actions will they continue?</p>
+
+    <div class="sub-label">Relapse Response Planning</div>
+    <ul>
+      <li>Name the specific thoughts, feelings, and behaviors that signal the client is getting pulled back into avoidance or fusion</li>
+      <li>Identify what "getting back on track" looks like — specific, not vague</li>
+      <li>Establish criteria for returning to treatment ("if X happens, I will reach out within Y days")</li>
+      <li>Normalize return to treatment — it is not a failure; it is self-aware use of a resource</li>
+    </ul>
+
+    <div class="sub-label">The Termination Relationship</div>
+    <p>The ending of the therapeutic relationship has genuine weight. The client may have grief, anxiety, ambivalence, or relief — and all of those are welcome in the room. The therapist's task is to model the same willingness to contact that experience fully — without rushing toward reassurance or closure.</p>
+    <p>Termination handled with presence and care is itself a model of ACT: making contact with difficulty, staying with what matters, and acting from values even when it is uncomfortable.</p>
+
+    <div class="sub-label">Criteria for Readiness to Terminate</div>
+    <ul>
+      <li>Client demonstrates functional flexibility across multiple life domains</li>
+      <li>Client can identify and use at least 2–3 ACT processes independently when distress arises</li>
+      <li>Client's values are explicit and accessible — they know what they are orienting toward</li>
+      <li>Client has a working relapse-response plan</li>
+      <li>Termination is collaborative and agreed upon, not unilateral</li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SESSION COUNT -->
+  <section class="section-block" id="duration">
+    <span class="phase-anchor"></span>
+    <h2>Session Count and Duration</h2>
+    <p>ACT research has been conducted in formats ranging from single sessions to 40+ sessions. In standard outpatient private practice:</p>
+
+    <div class="session-grid">
+      <div class="session-cell">
+        <div class="sc-label">Brief / Focused</div>
+        <div class="sc-range">8–16</div>
+        <div class="sc-desc">Specific phobia, adjustment disorder, single domain</div>
+      </div>
+      <div class="session-cell">
+        <div class="sc-label">Moderate Complexity</div>
+        <div class="sc-range">16–30</div>
+        <div class="sc-desc">GAD, MDD with adequate premorbid functioning, life transition</div>
+      </div>
+      <div class="session-cell">
+        <div class="sc-label">Complex / Open-Ended</div>
+        <div class="sc-range">30+</div>
+        <div class="sc-desc">Chronic depression, trauma history, identity-level work, attachment disruption</div>
+      </div>
+    </div>
+
+    <p>Billing code <strong>90837</strong> (53+ minutes) is most appropriate for ACT given the experiential, process-based nature of the work. Shorter sessions (90834 / 90832) may be appropriate in stabilization phases or toward the end of treatment.</p>
+  </section>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <strong style="color: var(--text-dim); font-style: normal;">Primary sources:</strong> Hayes, Strosahl &amp; Wilson (2012), <em>Acceptance and Commitment Therapy,</em> 2nd ed. &nbsp;|&nbsp; Luoma, Hayes &amp; Walser (2007), <em>Learning ACT</em> &nbsp;|&nbsp; Stoddard &amp; Afari (2014), <em>The Big Book of ACT Metaphors</em> &nbsp;|&nbsp; Flaxman, Blackledge &amp; Bond (2011), <em>Acceptance and Commitment Therapy: Distinctive Features.</em> IFS integration notes reflect clinical synthesis and are not drawn from an established published ACT/IFS protocol.<br><br>
+    Tended Path Counseling, PLLC &nbsp;·&nbsp; Internal clinical reference, not for distribution &nbsp;·&nbsp; April 2026
+  </div>
+
+</main>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACT Clinical Question Bank — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:         #242733;
+    --ink-mid:     #2d3146;
+    --gold:        #d79f55;
+    --gold-faint:  rgba(215,159,85,0.09);
+    --gold-border: rgba(215,159,85,0.22);
+    --warm-white:  #f7f4f0;
+    --stone:       #c0c2cc;
+    --stone-deep:  #7a7c8a;
+    --border:      rgba(255,255,255,0.07);
+
+    /* Process colors */
+    --defusion:    #5a7fa8;  --defusion-f:  rgba(90,127,168,0.10);  --defusion-b:  rgba(90,127,168,0.22);
+    --acceptance:  #5a8f7a;  --acceptance-f:rgba(90,143,122,0.10);  --acceptance-b:rgba(90,143,122,0.22);
+    --present:     #8a7a5a;  --present-f:   rgba(138,122,90,0.10);  --present-b:   rgba(138,122,90,0.22);
+    --self:        #7a5a8a;  --self-f:      rgba(122,90,138,0.10);  --self-b:      rgba(122,90,138,0.22);
+    --values:      --gold;
+    --values-c:    #d79f55;  --values-f:    rgba(215,159,85,0.10);  --values-b:    rgba(215,159,85,0.22);
+    --action:      #8a5a5a;  --action-f:    rgba(138,90,90,0.10);   --action-b:    rgba(138,90,90,0.22);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    background: var(--ink);
+    color: var(--warm-white);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media print {
+    .topbar, .process-nav { display: none !important; }
+    .main { padding-top: 24px; }
+    .process-section { display: block !important; break-inside: avoid; margin-bottom: 32px; }
+    body { background: white; color: #242733; }
+    .process-card { border: 1px solid #ccc !important; background: white !important; }
+    .question-item { border-color: #ddd !important; }
+    .question-text { color: #242733 !important; }
+    .question-note { color: #666 !important; }
+    .group-label { color: #666 !important; }
+    .process-title { color: #242733 !important; }
+    .process-subtitle { color: #666 !important; }
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(36,39,51,0.96);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 13px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 55%);
+  }
+  .topbar-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 400;
+    color: var(--warm-white); letter-spacing: 0.01em;
+  }
+  .topbar-brand em { color: var(--gold); font-style: italic; }
+  .topbar-sub {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--stone-deep);
+  }
+  .print-btn {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--stone-deep);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 8px; padding: 7px 16px;
+    cursor: pointer; transition: color 0.2s, border-color 0.2s;
+  }
+  .print-btn:hover { color: var(--warm-white); border-color: rgba(255,255,255,0.22); }
+
+  /* ── PROCESS NAV ── */
+  .process-nav {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    padding: 18px 36px 0;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .nav-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.03);
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--stone-deep);
+    cursor: pointer; text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .nav-pill:hover { background: rgba(255,255,255,0.07); color: var(--warm-white); }
+  .nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .nav-pill[data-p="defusion"]   .nav-dot { background: var(--defusion); }
+  .nav-pill[data-p="acceptance"] .nav-dot { background: var(--acceptance); }
+  .nav-pill[data-p="present"]    .nav-dot { background: var(--present); }
+  .nav-pill[data-p="self"]       .nav-dot { background: var(--self); }
+  .nav-pill[data-p="values"]     .nav-dot { background: var(--values-c); }
+  .nav-pill[data-p="action"]     .nav-dot { background: var(--action); }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 36px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .main { grid-template-columns: 1fr; padding: 20px 18px 60px; }
+    .process-nav { padding: 14px 18px 0; }
+    .topbar { padding: 12px 18px; }
+  }
+
+  /* ── PROCESS CARDS ── */
+  .process-card {
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.025);
+    overflow: hidden;
+    animation: fadeUp 0.35s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .process-card:nth-child(2) { animation-delay: 0.05s; }
+  .process-card:nth-child(3) { animation-delay: 0.10s; }
+  .process-card:nth-child(4) { animation-delay: 0.15s; }
+  .process-card:nth-child(5) { animation-delay: 0.20s; }
+  .process-card:nth-child(6) { animation-delay: 0.25s; }
+
+  .process-header {
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .process-accent {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .process-card[data-p="defusion"]   .process-accent { background: var(--defusion); }
+  .process-card[data-p="acceptance"] .process-accent { background: var(--acceptance); }
+  .process-card[data-p="present"]    .process-accent { background: var(--present); }
+  .process-card[data-p="self"]       .process-accent { background: var(--self); }
+  .process-card[data-p="values"]     .process-accent { background: var(--values-c); }
+  .process-card[data-p="action"]     .process-accent { background: var(--action); }
+
+  .process-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .process-card[data-p="defusion"]   .process-label { color: var(--defusion); }
+  .process-card[data-p="acceptance"] .process-label { color: var(--acceptance); }
+  .process-card[data-p="present"]    .process-label { color: var(--present); }
+  .process-card[data-p="self"]       .process-label { color: var(--self); }
+  .process-card[data-p="values"]     .process-label { color: var(--values-c); }
+  .process-card[data-p="action"]     .process-label { color: var(--action); }
+
+  .process-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 400;
+    color: var(--warm-white); letter-spacing: 0.01em;
+    line-height: 1.15; margin-bottom: 6px;
+  }
+  .process-subtitle {
+    font-size: 14px; font-weight: 300;
+    color: var(--stone-deep); line-height: 1.5;
+  }
+
+  /* ── QUESTION GROUPS ── */
+  .process-body { padding: 16px 22px 20px; }
+
+  .question-group { margin-bottom: 18px; }
+  .question-group:last-child { margin-bottom: 0; }
+
+  .group-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--stone-deep); margin-bottom: 8px;
+    padding-left: 2px;
+  }
+
+  .question-item {
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+    position: relative;
+  }
+  .question-item:last-child { margin-bottom: 0; }
+  .question-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+  .question-item.highlighted {
+    border-color: rgba(255,255,255,0.12);
+  }
+  .process-card[data-p="defusion"]   .question-item.highlighted { background: var(--defusion-f);  border-color: var(--defusion-b); }
+  .process-card[data-p="acceptance"] .question-item.highlighted { background: var(--acceptance-f); border-color: var(--acceptance-b); }
+  .process-card[data-p="present"]    .question-item.highlighted { background: var(--present-f);   border-color: var(--present-b); }
+  .process-card[data-p="self"]       .question-item.highlighted { background: var(--self-f);      border-color: var(--self-b); }
+  .process-card[data-p="values"]     .question-item.highlighted { background: var(--values-f);    border-color: var(--values-b); }
+  .process-card[data-p="action"]     .question-item.highlighted { background: var(--action-f);    border-color: var(--action-b); }
+
+  .question-text {
+    font-size: 15.5px; font-weight: 400;
+    color: var(--warm-white); line-height: 1.55;
+  }
+  .question-item.highlighted .question-text { font-weight: 500; }
+
+  .question-note {
+    font-size: 13px; font-weight: 300;
+    color: var(--stone-deep); line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  /* ── STARRED INDICATOR ── */
+  .star {
+    display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    vertical-align: middle; margin-right: 7px; margin-bottom: 1px;
+    flex-shrink: 0;
+  }
+  .process-card[data-p="defusion"]   .star { background: var(--defusion); }
+  .process-card[data-p="acceptance"] .star { background: var(--acceptance); }
+  .process-card[data-p="present"]    .star { background: var(--present); }
+  .process-card[data-p="self"]       .star { background: var(--self); }
+  .process-card[data-p="values"]     .star { background: var(--values-c); }
+  .process-card[data-p="action"]     .star { background: var(--action); }
+
+  .question-item.core .question-text::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    vertical-align: middle; margin-right: 7px; margin-bottom: 1px;
+  }
+  .process-card[data-p="defusion"]   .question-item.core .question-text::before { background: var(--defusion); }
+  .process-card[data-p="acceptance"] .question-item.core .question-text::before { background: var(--acceptance); }
+  .process-card[data-p="present"]    .question-item.core .question-text::before { background: var(--present); }
+  .process-card[data-p="self"]       .question-item.core .question-text::before { background: var(--self); }
+  .process-card[data-p="values"]     .question-item.core .question-text::before { background: var(--values-c); }
+  .process-card[data-p="action"]     .question-item.core .question-text::before { background: var(--action); }
+
+  /* ── LEGEND ── */
+  .legend {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 20px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    font-size: 12px; color: var(--stone-deep);
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .legend-dot.plain { background: var(--stone-deep); opacity: 0.4; }
+  .legend-text { font-size: 12px; color: var(--stone-deep); }
+  .legend-note { font-size: 12px; color: var(--stone-deep); margin-left: auto; font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div>
+    <div class="topbar-brand">ACT <em>Clinical Question Bank</em></div>
+    <div class="topbar-sub" style="margin-top:3px;">Tended Path Counseling · Bethany Sherman, LMHC</div>
+  </div>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</header>
+
+<nav class="process-nav">
+  <a class="nav-pill" data-p="defusion"   href="#defusion">  <span class="nav-dot"></span> Defusion</a>
+  <a class="nav-pill" data-p="acceptance" href="#acceptance"><span class="nav-dot"></span> Acceptance</a>
+  <a class="nav-pill" data-p="present"    href="#present">   <span class="nav-dot"></span> Present Moment</a>
+  <a class="nav-pill" data-p="self"       href="#self">      <span class="nav-dot"></span> Self-as-Context</a>
+  <a class="nav-pill" data-p="values"     href="#values">    <span class="nav-dot"></span> Values</a>
+  <a class="nav-pill" data-p="action"     href="#action">    <span class="nav-dot"></span> Committed Action</a>
+</nav>
+
+<main class="main">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot"></div><div class="legend-text">Colored dot = anchor question — particularly useful as a starting point or when stuck</div></div>
+    <div class="legend-item"><div class="legend-dot plain"></div><div class="legend-text">Click any question to highlight it</div></div>
+    <div class="legend-note">Adapt language freely — these are starting points, not scripts</div>
+  </div>
+
+  <!-- DEFUSION -->
+  <div class="process-card" data-p="defusion" id="defusion">
+    <div class="process-header">
+      <div class="process-accent"></div>
+      <div class="process-label">Cognitive Defusion</div>
+      <div class="process-title">Unhooking from Thoughts</div>
+      <div class="process-subtitle">Shifting the client's relationship to thoughts — from fused belief to observed content</div>
+    </div>
+    <div class="process-body">
+
+      <div class="question-group">
+        <div class="group-label">Noticing Fusion</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you have that thought, what do you notice happening in your body — and what do you find yourself doing?</div>
+          <div class="question-note">Opens the thought-behavior link without challenging content</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">How long have you had this thought? Is it new, or has it been with you for a while?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When that thought shows up, does it feel like a fact, or does it feel more like something your mind is telling you?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What does your mind say would happen if you didn't act on that thought?</div>
+          <div class="question-note">Surfaces the secondary belief driving fusion</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Workability</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you follow what that thought is telling you, does it tend to move you toward the life you want — or away from it?</div>
+          <div class="question-note">Core workability frame — not "is it true?" but "is it useful?"</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What has it cost you to hold onto that story so tightly?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If you believed that thought a little less — not that it's wrong, just less — what might you do differently?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Creating Distance</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What if you didn't have to argue with that thought or make it go away — what if you could just notice it was there?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Can you say that thought out loud, but put "I'm noticing I'm having the thought that..." in front of it?</div>
+          <div class="question-note">Classic defusion exercise — slows the automaticity of fusion</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Where do you think that thought came from? Does it remind you of anything you were taught, or something you heard a lot growing up?</div>
+          <div class="question-note">Bridges defusion and inherited values / parts work</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACCEPTANCE -->
+  <div class="process-card" data-p="acceptance" id="acceptance">
+    <div class="process-header">
+      <div class="process-accent"></div>
+      <div class="process-label">Acceptance &amp; Willingness</div>
+      <div class="process-title">Making Room</div>
+      <div class="process-subtitle">Openness to internal experience without unnecessary struggle or suppression</div>
+    </div>
+    <div class="process-body">
+
+      <div class="question-group">
+        <div class="group-label">Exploring Avoidance</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What are you doing to try to get rid of that feeling — and how is that working for you over time?</div>
+          <div class="question-note">Surfaces the experiential avoidance cycle without pathologizing it</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">How much energy does it take to keep that feeling at bay?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What do you usually do when that feeling starts to come up? What happens after?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Has trying to not feel that way ever actually made it go away for good?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Introducing Willingness</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What would it mean to let that feeling be there — not because you like it, but because fighting it isn't working?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If you knew this feeling wouldn't hurt you — even though it's uncomfortable — would you be willing to let it stay a little longer?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">On a scale of 0 to 10, how willing are you right now to make room for that — not to feel good about it, but to stop the war with it?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Window of Tolerance</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Right now, where do you notice that feeling in your body — and what does it feel like physically?</div>
+          <div class="question-note">Anchors emotional experience somatically before asking for willingness</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Can you stay with that sensation for just a moment without trying to change it — just notice it, like you're watching it from the outside?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What's the difference between the feeling itself and the story about what the feeling means?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRESENT MOMENT -->
+  <div class="process-card" data-p="present" id="present">
+    <div class="process-header">
+      <div class="process-accent"></div>
+      <div class="process-label">Present-Moment Awareness</div>
+      <div class="process-title">Coming Back to Now</div>
+      <div class="process-subtitle">Flexible, non-judgmental contact with the here and now</div>
+    </div>
+    <div class="process-body">
+
+      <div class="question-group">
+        <div class="group-label">Noticing Drift</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Where did your mind just go? What are you noticing right now?</div>
+          <div class="question-note">Gentle re-anchor when the client drifts into past or future</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you think about that situation, are you mostly in the past — replaying it — or in the future — anticipating what might happen?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What's happening for you right now, in this moment — not the story about it, just what's present?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Grounding in Session</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Can you take a breath and just notice what you're feeling right here, right now — in your body, in this chair?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If you could set aside the past and the future just for a moment — what's actually true right now?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What do you notice when you slow down and just let yourself be here?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Between-Session Application</div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you notice yourself getting pulled into that worry spiral, what could you do to bring yourself back to right now?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What would it feel like to spend even five minutes just being where you are — without your phone, without planning the next thing?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What's one moment this week when you felt actually present — not in your head?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SELF-AS-CONTEXT -->
+  <div class="process-card" data-p="self" id="self">
+    <div class="process-header">
+      <div class="process-accent"></div>
+      <div class="process-label">Self-as-Context</div>
+      <div class="process-title">The Observing Self</div>
+      <div class="process-subtitle">The stable perspective that can witness thoughts and feelings without being defined by them</div>
+    </div>
+    <div class="process-body">
+
+      <div class="question-group">
+        <div class="group-label">Introducing the Observer</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">There's a part of you that's aware that you're having these thoughts and feelings right now. Can you notice that part — the one that's watching?</div>
+          <div class="question-note">Direct entry into observer perspective</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">You've had so many thoughts and feelings over the years — and yet something in you has been there through all of them. What do you make of that?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Who is the "I" that's aware of all of this — the anxiety, the thoughts, the memories? Can you locate that?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Identity and Fusion with Content</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">You've said "I am anxious" — what's it like to try "I'm noticing anxiety" instead? Does that feel any different?</div>
+          <div class="question-note">Languaging shift — from identity fusion to observer stance</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If that story about yourself isn't who you are — if it's just a story your mind is telling — who are you underneath it?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Is the part of you that's struggling the same part that's aware of the struggle?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Parts Language (IFS bridge)</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">It sounds like there's a part of you that believes that, and maybe another part that's not so sure. What does the less certain part say?</div>
+          <div class="question-note">Natural bridge from self-as-context into IFS multiplicity</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If that inner critic is a part of you — not all of you — what might it be trying to protect you from?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What would it be like to get a little distance from that part — to look at it, rather than through it?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VALUES -->
+  <div class="process-card" data-p="values" id="values">
+    <div class="process-header">
+      <div class="process-accent"></div>
+      <div class="process-label">Values Clarification</div>
+      <div class="process-title">What Matters</div>
+      <div class="process-subtitle">Identifying freely chosen, intrinsic directions — not goals, not rules, not what others expect</div>
+    </div>
+    <div class="process-body">
+
+      <div class="question-group">
+        <div class="group-label">Surfacing Values</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you imagine a version of your life that feels genuinely meaningful — not perfect, just real — what's in it?</div>
+          <div class="question-note">Open-ended entry; avoids leading toward achievement or outcomes</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What do you want to stand for? Not what you want to have or accomplish — but what kind of person do you want to be?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Think of a time when you felt most like yourself — most alive or most right. What was happening? What was present?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What would you regret not having done, or not having been, if you looked back at your life from the end of it?</div>
+          <div class="question-note">Useful for clients who struggle to articulate values forward-facing</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Distinguishing Values from Rules</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you say that's important to you — does it feel like something you genuinely want, or something you feel like you should want?</div>
+          <div class="question-note">Inherited values check — critical for clients with enmeshed family systems</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Whose voice does that sound like? Is that coming from you, or from somewhere else?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If no one would ever know — no praise, no judgment — would you still choose that?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Values and Pain</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What does the fact that this hurts tell you about what matters to you?</div>
+          <div class="question-note">Pain as a values compass — particularly powerful in grief or relational distress</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">You wouldn't be this hurt if you didn't care. What is it you care about here?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMMITTED ACTION -->
+  <div class="process-card" data-p="action" id="action">
+    <div class="process-header">
+      <div class="process-accent"></div>
+      <div class="process-label">Committed Action</div>
+      <div class="process-title">Moving Toward</div>
+      <div class="process-subtitle">Building patterns of behavior that carry values into daily life — even in the presence of discomfort</div>
+    </div>
+    <div class="process-body">
+
+      <div class="question-group">
+        <div class="group-label">From Values to Action</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">Given what matters to you, what's one small step you could take this week — not to feel better, but to move toward something that counts?</div>
+          <div class="question-note">Values-anchored action — explicitly not contingent on mood or readiness</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What would the person you want to be do in this situation?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">If anxiety or fear showed up when you tried to do that — and it probably would — could you do it anyway?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Avoidance and Barriers</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What gets in the way every time you try to move in that direction? Is it a feeling, a thought, a situation — or some combination?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What would you have to be willing to feel in order to take that step?</div>
+          <div class="question-note">Connects committed action back to acceptance — the two processes work together</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What's the cost of waiting until you feel ready?</div>
+        </div>
+      </div>
+
+      <div class="question-group">
+        <div class="group-label">Building Momentum</div>
+        <div class="question-item core" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">What's the smallest possible version of that step — something so small it would be hard to talk yourself out of?</div>
+          <div class="question-note">Useful when clients feel overwhelmed or perfectionistic about change</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">How will you know, at the end of this week, that you moved toward what matters — even just a little?</div>
+        </div>
+        <div class="question-item" onclick="this.classList.toggle('highlighted')">
+          <div class="question-text">When you did something this week that felt right — something aligned — what did that feel like? Can we build more of that?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Smooth scroll for nav pills
+  document.querySelectorAll('.nav-pill').forEach(pill => {
+    pill.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(pill.dataset.p);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

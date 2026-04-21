@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Narrative Therapy Question Bank — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #242733;
+    --gold:    #d79f55;
+    --gold-lt: #e8c08a;
+    --cream:   #ede8e1;
+    --warm:    #f7f4f0;
+    --mid:     #6b6f7c;
+    --border:  #d6d1c9;
+    --highlight-bg: #fdf4e3;
+    --highlight-border: #d79f55;
+    --anchor-bg: #f0e8d8;
+  }
+
+  html { font-size: 16px; background: var(--warm); color: var(--ink); }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--ink);
+    color: var(--warm);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header-left {}
+  .practice-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--warm);
+    line-height: 1.15;
+  }
+  .header-subtitle {
+    font-size: 13px;
+    color: #a8acb8;
+    margin-top: 5px;
+    font-weight: 300;
+  }
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn-print {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 4px;
+    padding: 9px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-print:hover { background: var(--gold-lt); }
+  .btn-clear {
+    background: transparent;
+    color: #a8acb8;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 9px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-clear:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── INTRO BAND ── */
+  .intro-band {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 40px;
+    font-size: 13.5px;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+  .intro-band strong { color: var(--ink); font-weight: 500; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 160px);
+  }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    background: var(--ink);
+    padding: 28px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #666b7a;
+    padding: 0 22px 12px;
+  }
+  .nav-item {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 11px 22px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #b0b5c3;
+    cursor: pointer;
+    transition: all 0.18s;
+    border-left: 3px solid transparent;
+    line-height: 1.3;
+  }
+  .nav-item:hover { color: var(--warm); background: rgba(255,255,255,0.05); }
+  .nav-item.active {
+    color: var(--gold);
+    border-left-color: var(--gold);
+    background: rgba(215,159,85,0.08);
+    font-weight: 500;
+  }
+  .nav-divider {
+    height: 1px;
+    background: #333744;
+    margin: 14px 22px;
+  }
+  .nav-meta {
+    padding: 8px 22px;
+    font-size: 11px;
+    color: #555b6a;
+    font-style: italic;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    padding: 40px 48px 60px;
+    max-width: 820px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header {
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .section-desc {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.6;
+    max-width: 600px;
+  }
+  .section-desc em { font-style: italic; }
+
+  /* ── QUESTION GROUPS ── */
+  .q-group {
+    margin-bottom: 32px;
+  }
+  .q-group-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── QUESTIONS ── */
+  .q-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+  .q-item:hover { background: #edeae4; }
+  .q-item.highlighted {
+    background: var(--highlight-bg);
+    border-color: var(--highlight-border);
+  }
+  .q-item.anchor {
+    background: var(--anchor-bg);
+    border-left: 3px solid var(--gold);
+  }
+  .q-item.anchor.highlighted {
+    background: #f5e8cc;
+    border-color: var(--gold);
+    border-left-width: 3px;
+  }
+
+  .q-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    margin-top: 7px;
+    transition: background 0.15s;
+  }
+  .q-item.highlighted .q-dot { background: var(--gold); }
+  .q-item.anchor .q-dot { background: var(--gold); }
+
+  .q-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    flex: 1;
+  }
+  .q-item.anchor .q-text { font-weight: 500; }
+
+  .anchor-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(215,159,85,0.12);
+    border-radius: 3px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  /* ── CLINICAL NOTE CALLOUT ── */
+  .callout {
+    background: #f0f0f5;
+    border-left: 3px solid var(--ink);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .callout strong { font-weight: 500; }
+  .callout.gold-note {
+    background: var(--anchor-bg);
+    border-left-color: var(--gold);
+  }
+
+  /* ── TIPS ── */
+  .tip-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .tip-card {
+    flex: 1;
+    min-width: 200px;
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-size: 13px;
+    color: var(--mid);
+    border: 1px solid var(--border);
+  }
+  .tip-card strong {
+    display: block;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  /* ── PLACEHOLDER BADGE ── */
+  .placeholder {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--gold);
+    font-size: 11.5px;
+    font-weight: 500;
+    font-style: italic;
+    border-radius: 3px;
+    padding: 1px 6px;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .sidebar, .site-header .header-actions { display: none !important; }
+    .layout { grid-template-columns: 1fr; }
+    .main { padding: 20px; max-width: 100%; }
+    .section { display: block !important; }
+    .section-header { page-break-after: avoid; }
+    .q-group { page-break-inside: avoid; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-left">
+    <div class="practice-label">Tended Path Counseling — Clinical Reference</div>
+    <div class="header-title">Narrative Therapy Question Bank</div>
+    <div class="header-subtitle">Clinician use only &nbsp;·&nbsp; Click any question to highlight &nbsp;·&nbsp; Anchor questions marked</div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-clear" onclick="clearHighlights()">Clear Highlights</button>
+    <button class="btn-print" onclick="window.print()">Print</button>
+  </div>
+</header>
+
+<!-- INTRO -->
+<div class="intro-band">
+  <strong>How to use this bank:</strong> Click any question to highlight it for in-session reference. <strong>Anchor questions</strong> are high-yield entry points — good starting places when you're finding your footing in a technique. <span class="placeholder">[problem]</span> is a placeholder for the externalized name the client has given the problem. Replace it with whatever language the client uses.
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Core Practices</div>
+    <button class="nav-item active" onclick="showSection('externalizing', this)">Externalizing the Problem</button>
+    <button class="nav-item" onclick="showSection('mapping', this)">Mapping the Influence</button>
+    <button class="nav-item" onclick="showSection('unique', this)">Unique Outcomes</button>
+    <button class="nav-item" onclick="showSection('reauthoring', this)">Re-authoring</button>
+    <button class="nav-item" onclick="showSection('scaffolding', this)">Scaffolding Conversations</button>
+    <div class="nav-divider"></div>
+    <div class="sidebar-label">Deepening Practices</div>
+    <button class="nav-item" onclick="showSection('witnessing', this)">Definitional Ceremony</button>
+    <button class="nav-item" onclick="showSection('documents', this)">Therapeutic Documents</button>
+    <button class="nav-item" onclick="showSection('opening', this)">Opening Space</button>
+    <div class="nav-divider"></div>
+    <div class="nav-meta">NT / ACT–IFS integration notes included in each section</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- SECTION: EXTERNALIZING -->
+    <div id="externalizing" class="section active">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 1</div>
+        <div class="section-title">Externalizing the Problem</div>
+        <div class="section-desc">
+          The foundational move of Narrative Therapy: separating the person from the problem. <em>"The person is not the problem — the problem is the problem."</em> Externalization opens space between the client's identity and the difficulty, making it possible to examine the problem rather than inhabit it. This overlaps meaningfully with ACT defusion and IFS "unblending."
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> Externalization isn't just a naming exercise — it's an invitation to shift the ontological relationship with the problem. The client begins to locate the problem as something with influence over them, rather than something they <em>are</em>. Hold the metaphor lightly; follow the client's language.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Naming and Locating the Problem</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If this thing you've been carrying had a name — not a clinical label, but a name that fit how it actually feels — what would you call it?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">When did <span class="placeholder">[problem]</span> first show up in your life?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If <span class="placeholder">[problem]</span> were a character or a presence — not a person necessarily, but something with a quality or texture — what would it be like?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Where does <span class="placeholder">[problem]</span> tend to live in your body, when it shows up?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Does <span class="placeholder">[problem]</span> come and go, or does it feel like it's always there in some form?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Understanding Its Voice and Agenda</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does <span class="placeholder">[problem]</span> tell you about who you are?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does <span class="placeholder">[problem]</span> want you to believe about yourself? About your future?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">How does <span class="placeholder">[problem]</span> recruit you into its way of seeing things?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does <span class="placeholder">[problem]</span> make it hard to see or remember about yourself?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">When <span class="placeholder">[problem]</span> has the most influence, what does it get you to do? What does it steer you away from?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there anything <span class="placeholder">[problem]</span> has tried to convince you is permanently true about you?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Relational Effects</div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">How has <span class="placeholder">[problem]</span> affected your relationships with people you care about?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Has <span class="placeholder">[problem]</span> gotten between you and anyone important to you?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What do you imagine others see when <span class="placeholder">[problem]</span> is running the show?</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>ACT/IFS bridge:</strong> Externalization language maps naturally onto IFS ("the part that carries shame") and ACT defusion ("the story your mind is telling you"). You don't need to switch frameworks — just notice where the language overlaps and let it deepen.
+      </div>
+    </div>
+
+    <!-- SECTION: MAPPING THE INFLUENCE -->
+    <div id="mapping" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 2</div>
+        <div class="section-title">Mapping the Influence</div>
+        <div class="section-desc">
+          After externalizing, Narrative Therapy maps the problem's reach — how much territory it occupies across the client's life. This includes relative influence mapping: where the problem has power, where the client has power, and what has changed over time. It builds a precise picture before looking for openings.
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> White and Epston originally called this "relative influence questioning" — mapping both the influence of the problem on the person <em>and</em> the influence of the person on the problem. Both directions matter. Don't just catalog losses; look for where the client's influence is also present.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Scope and Territory</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">In what areas of your life has <span class="placeholder">[problem]</span> had the most influence?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Has <span class="placeholder">[problem]</span> always had this much territory, or has its hold grown or shrunk over time?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Are there areas of your life where <span class="placeholder">[problem]</span> hasn't been able to get a foothold?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">On a scale from 0 to 10, how much influence does <span class="placeholder">[problem]</span> have over your day-to-day life right now? Where was that number five years ago?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Costs and Constraints</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What has <span class="placeholder">[problem]</span> cost you?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What has <span class="placeholder">[problem]</span> kept you from doing or becoming?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does <span class="placeholder">[problem]</span> require of you to maintain its grip?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What have you had to give up or set aside because of <span class="placeholder">[problem]</span>?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who else in your life has been affected by <span class="placeholder">[problem]</span>'s presence?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">History and Context</div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Were there times when <span class="placeholder">[problem]</span> had even more influence than it does now? What was different then?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Looking back, what conditions seemed to give <span class="placeholder">[problem]</span> the most room to grow?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Did <span class="placeholder">[problem]</span> seem to come from somewhere specific — a relationship, a period of time, a set of messages you received?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">How do the stories you've been told — by family, culture, or experience — help keep <span class="placeholder">[problem]</span> in place?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Client's Influence on the Problem</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Have there been times when you've pushed back against <span class="placeholder">[problem]</span>, even a little? What did that look like?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What do you know about <span class="placeholder">[problem]</span> that it maybe doesn't want you to know?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Are there things you've learned to do — or not do — that limit how much space <span class="placeholder">[problem]</span> gets?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: UNIQUE OUTCOMES -->
+    <div id="unique" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 3</div>
+        <div class="section-title">Unique Outcomes</div>
+        <div class="section-desc">
+          Unique outcomes (also called "sparkling moments" or "exceptions") are moments when the dominant problem story did not fully determine what happened. They are often small, overlooked, or dismissed by the client as flukes — which is exactly why they matter. These are the raw material of re-authoring.
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> Don't rush to the meaning of unique outcomes before establishing what happened. The landscape of action (facts, sequence, who/what/when) comes first. Only then move into the landscape of identity (what it means, what it says about the person). Premature meaning-making is thin; thick description builds lasting alternative stories.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Finding the Exception</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Have there been times — even brief ones — when <span class="placeholder">[problem]</span> expected to take over, but didn't get everything it wanted?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">When was the last time you did something that <span class="placeholder">[problem]</span> wouldn't have predicted?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Tell me about a moment when <span class="placeholder">[problem]</span> showed up, but you still managed to do something that mattered to you.</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Was there a time you almost went along with <span class="placeholder">[problem]</span>'s pull — but didn't go all the way?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there anyone in your life who has seen you stand outside of what <span class="placeholder">[problem]</span> usually pulls you toward?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Can you think of a time — even years ago — when you acted in a way that was closer to who you want to be?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Grounding the Moment (Landscape of Action)</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Walk me through that — what actually happened, step by step?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What did you do in that moment? What did you say, or not say?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who else was there, or connected to that moment in some way?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What was happening right before you made that choice or took that step?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What prepared you, even without knowing it, for that moment?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Making It Significant</div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is this the kind of thing you typically dismiss or explain away? What if you didn't?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does it tell you that this happened — even once?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If I took this moment seriously — as a data point about who you are — what would it point toward?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: RE-AUTHORING -->
+    <div id="reauthoring" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 4</div>
+        <div class="section-title">Re-authoring</div>
+        <div class="section-desc">
+          Re-authoring is the process of building an alternative, preferred story — one that is grounded in the client's actual experience, not invented. It thickens the alternative narrative by linking unique outcomes into a coherent story of identity, values, and agency. This is where NT does its deepest work.
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> The alternative story must be <em>claimed</em> by the client, not assigned by the therapist. Your role is to ask questions that draw it forward, not to name it for them. Rushing to "so you're actually a resilient person" collapses the process. Let the client arrive at the description through their own words.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Naming the Quality or Value</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would you call this quality — the one that showed up in that moment?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does that moment say about what matters to you — about what you're trying to protect or move toward?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If you were to give a name to the version of you that showed up in that moment, what would it be?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Does what you just described fit with anything you already know to be true about yourself — or is it a surprise?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Where else in your life has this quality shown up, even quietly?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Tracing the Alternative Story Back</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">When you think about who taught you — directly or indirectly — to care about the things you care about, who comes to mind?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Have there been other moments in your life — maybe much earlier — where this same quality was present?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would the person you were at age ten have to say about the moment you just described?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there a version of this story that goes further back than <span class="placeholder">[problem]</span> — a story that <span class="placeholder">[problem]</span> interrupted?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Extending the Story Forward</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If you were to write the next chapter of your life from inside this story — not the one <span class="placeholder">[problem]</span> would write — what would be in it?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would it look like to give this quality more room in the coming weeks?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What small step might be consistent with this story — something <span class="placeholder">[problem]</span> wouldn't expect?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who else in your life might notice if you began living more from this story?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What might need to shift — in how you see yourself, or in what you do — for this story to have more weight than <span class="placeholder">[problem]</span>'s story?</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>ACT/IFS bridge:</strong> Re-authoring maps onto committed action in ACT — moving toward values-consistent behavior — and onto IFS unburdening of exiled parts. The preferred story isn't a cognitive reframe; it's an identity-level shift. Helping the client claim it in their own words makes it durable.
+      </div>
+    </div>
+
+    <!-- SECTION: SCAFFOLDING CONVERSATIONS -->
+    <div id="scaffolding" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 5</div>
+        <div class="section-title">Scaffolding Conversations</div>
+        <div class="section-desc">
+          Michael White's scaffolding framework distinguishes between the <em>landscape of action</em> (what happened — events, sequences, steps) and the <em>landscape of identity/consciousness</em> (what it means — intentions, values, beliefs, identity conclusions). Good re-authoring moves through both levels, not just one.
+        </div>
+      </div>
+
+      <div class="tip-row">
+        <div class="tip-card">
+          <strong>Landscape of Action</strong>
+          Events, steps, sequences, who/what/when. What actually happened. Grounds the unique outcome in concrete experience.
+        </div>
+        <div class="tip-card">
+          <strong>Landscape of Identity</strong>
+          Intentions, values, beliefs, desires, hopes. What the event means about who the person is. The "so what" of the unique outcome.
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Landscape of Action Questions</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Walk me through what happened — in order. What came first?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What did you do? What did you say, or choose not to say?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who else was involved — even indirectly?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What led up to that moment? What made it possible?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What happened after? What changed, even slightly?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If someone had been watching — a bystander who cared about you — what would they have seen?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Landscape of Identity Questions</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does it say about you as a person that you were able to do that?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does that action tell you about what you care about — what you value or want to protect?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does this moment suggest about what you believe — about yourself, about others, about what's possible?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If this quality had a name — something that reflected the intention behind what you did — what would it be?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Does this fit with who you've always known yourself to be underneath, or is it showing you something new?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does this say about what kind of life you want to be living?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Double-Listening / Opening Space</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">I'm noticing something in what you just said — would it be okay to stay with it a moment?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">There's a word you used — <em>[word]</em> — and I'm curious what you mean by it.</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there more to that than you've been able to put into words yet?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">You said that almost as a throwaway — but I want to come back to it.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Clinical note:</strong> "Double listening" — attending simultaneously to the problem story and the glimmers of the alternative story — is a core NT therapist stance. It means holding both tracks: what <span class="placeholder">[problem]</span> says is true, and what else is also true about this person's experience.
+      </div>
+    </div>
+
+    <!-- SECTION: DEFINITIONAL CEREMONY -->
+    <div id="witnessing" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 6</div>
+        <div class="section-title">Definitional Ceremony &amp; Outsider Witness</div>
+        <div class="section-desc">
+          Narrative Therapy uses real or imagined witnesses to thicken the alternative story. In formal settings this involves outsider witness groups; in individual therapy, you can work with imagined or remembered witnesses — people whose attention and perspective would make the preferred story more real and lasting.
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> The outsider witness practice is not about getting external validation — it's about using relationship as a vehicle for identity consolidation. The imagined witness holds something the client may not yet be able to hold alone. You are also, in some sense, functioning as a witnessing presence. How you respond to disclosures of the preferred story matters.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Identifying Meaningful Witnesses</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who in your life — past or present — would be least surprised to hear what you're discovering about yourself?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there someone — living or not — whose witnessing of this shift would feel most meaningful to you?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who in your life has seen glimmers of this version of you, even if you dismissed it at the time?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there anyone you wish could see you doing this work right now?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Has anyone — a teacher, a friend, an unlikely person — ever said something to you that pointed toward this quality you're naming now?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Imagined Witnessing</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If [person] could see you here today, doing this work — what do you imagine they would say?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would it mean to you if [person] knew about this shift?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What might [person] notice that you haven't let yourself fully see yet?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Imagine you're telling [person] about what happened — how does your voice change? What do you emphasize?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What does it do to you — to your sense of yourself — to imagine being seen this way?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Carrying the Witness Forward</div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there someone in your life you'd want to share this with — not to explain it, but just to have a witness?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">How might it change things to let [person] see this version of you?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there a conversation you've been putting off that might look different if you were coming from this story?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: THERAPEUTIC DOCUMENTS -->
+    <div id="documents" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 7</div>
+        <div class="section-title">Therapeutic Documents &amp; Letters</div>
+        <div class="section-desc">
+          Narrative Therapy has a rich tradition of therapeutic letters, declarations, and certificates that make the preferred story tangible. In individual practice, these can be collaboratively written or prompted in session and given as a concrete artifact. They extend the session into the client's everyday life.
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> Research by White and Epston suggested that a therapeutic letter can have the impact of several sessions — because it can be re-read. Written documents give the alternative story a physical, portable form. Even prompting the client to draft something orally in session (and then transcribing it with them) can be powerful.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Letter Prompts — From the Client's Preferred Self</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If the version of you who is living more freely from <span class="placeholder">[problem]</span>'s grip could write a letter to your current self — what would it say?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would you want your future self to remember about this moment in your life?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If you wrote a letter to the you from five years ago — knowing what you know now — what would you want them to hear?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would you want to say to someone earlier in this same struggle — someone you've never met?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Declarations and Statements of Position</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If you were writing a declaration about where you stand in relation to <span class="placeholder">[problem]</span> right now — what would it say?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What is your official position on <span class="placeholder">[problem]</span>? Has that position changed?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there anything you want to say to <span class="placeholder">[problem]</span> directly — on paper, in your own words?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What do you want to put on record about who you are — outside of what <span class="placeholder">[problem]</span> has said about you?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Certificates and Recognition</div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If we were marking this moment — the one where you stepped outside of <span class="placeholder">[problem]</span>'s story — what would we call it?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What milestone deserves recognition that you've been too close to see?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there a skill, capacity, or quality you've developed in this period that you want to name — and keep?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: OPENING SPACE -->
+    <div id="opening" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Practice 8</div>
+        <div class="section-title">Opening Space &amp; Deconstructive Questions</div>
+        <div class="section-desc">
+          These questions slow things down and create room for complexity. They deconstruct taken-for-granted assumptions — including cultural narratives, inherited beliefs, and conclusions the client has drawn about themselves that may have gone unexamined. Particularly useful early in NT work and when dominant stories feel especially rigid.
+        </div>
+      </div>
+
+      <div class="callout gold-note">
+        <strong>Clinical note:</strong> Deconstructive questioning isn't the same as challenging or disputing. It's an invitation to look at the architecture of a belief — where it came from, who benefits from it, whether the client actually endorses it. The tone should feel curious and spacious, not confrontational.
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Tracing the Source of Beliefs</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Where did you first learn to see yourself that way?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who first told you that about yourself? Do you think they were right?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is that a conclusion you arrived at on your own, or one that was handed to you?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If someone who loved you had been the author of that story about you — would they have written it differently?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Do you fully agree with that conclusion, or is there a part of you that pushes back on it?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Cultural and Contextual Deconstruction</div>
+        <div class="q-item anchor" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Are there messages you've received — from your family, culture, or community — that have made <span class="placeholder">[problem]</span> harder to escape?</div>
+          <div class="anchor-badge">Anchor</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Who benefits from you seeing yourself this way?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Are there broader stories — about gender, success, worth, belonging — that seem to be feeding <span class="placeholder">[problem]</span>?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If you'd grown up with different messages about yourself, what might have been different?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would it mean to lay down the story that was written for you — and write one you actually endorse?</div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-group-title">Curiosity and Complexifying</div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">I'm curious — how did you come to see it that way?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Is there more to that than you've put into words yet?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">If I asked someone who knew you well whether that's completely true — what would they say?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">Does that description capture everything, or is there something that doesn't quite fit inside it?</div>
+        </div>
+        <div class="q-item" onclick="toggleHighlight(this)">
+          <div class="q-dot"></div>
+          <div class="q-text">What would you lose if you stopped believing that story? What might you gain?</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>ACT/IFS bridge:</strong> Deconstructive questioning in NT overlaps with ACT's cognitive defusion work and IFS's approach to examining the origins of a part's burdens. In all three frameworks, the goal is loosening the grip of a story — not arguing against it, but creating enough distance to ask "does this still serve me?"
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleHighlight(el) {
+    el.classList.toggle('highlighted');
+  }
+
+  function clearHighlights() {
+    document.querySelectorAll('.q-item.highlighted').forEach(el => {
+      el.classList.remove('highlighted');
+    });
+  }
+</script>
+
+</body>
+</html>
