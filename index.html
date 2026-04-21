@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tended Path — Clinical Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:      #1b1d27;
+    --ink-mid:  #242733;
+    --ink-card: #252838;
+    --gold:     #d79f55;
+    --gold-dim: #a87a3a;
+    --gold-glow:rgba(215,159,85,0.10);
+    --gold-border:rgba(215,159,85,0.25);
+    --cream:    #ede8e1;
+    --text:     #c4c1bb;
+    --text-dim: #77746e;
+    --text-bright:#e6e2da;
+    --border:   rgba(255,255,255,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 40px 64px 36px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .brand-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.15;
+  }
+
+  header h1 em { font-style: italic; color: var(--gold); }
+
+  .header-meta {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    text-align: right;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 52px 64px 0;
+  }
+
+  /* ── SECTION ── */
+  .tool-section { margin-bottom: 56px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-bright);
+  }
+
+  .section-header .section-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-left: auto;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  /* ── TOOL CARD ── */
+  .tool-card {
+    background: var(--ink-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 8px 0 0 8px;
+  }
+
+  .tool-card:hover {
+    border-color: var(--gold-border);
+    transform: translateY(-2px);
+    background: #272a3a;
+  }
+
+  .tool-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+  .card-tag {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.25;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-arrow {
+    font-size: 13px;
+    color: var(--gold-dim);
+    margin-top: 6px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  /* Color variants */
+  .c-gold  .card-tag { color: var(--gold); }
+  .c-gold::before    { background: var(--gold); }
+
+  .c-blue  .card-tag { color: #6a9fcc; }
+  .c-blue::before    { background: #6a9fcc; }
+
+  .c-teal  .card-tag { color: #5aaa98; }
+  .c-teal::before    { background: #5aaa98; }
+
+  .c-sage  .card-tag { color: #8aaa78; }
+  .c-sage::before    { background: #8aaa78; }
+
+  .c-mauve .card-tag { color: #a07898; }
+  .c-mauve::before   { background: #a07898; }
+
+  .c-rust  .card-tag { color: #c07868; }
+  .c-rust::before    { background: #c07868; }
+
+  .c-gray  .card-tag { color: #888; }
+  .c-gray::before    { background: #888; }
+
+  /* ── NOTE CARD (non-linked) ── */
+  .note-card {
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    line-height: 1.65;
+    grid-column: 1 / -1;
+  }
+
+  .note-card strong { color: var(--gold-dim); font-style: normal; font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 60px;
+    padding: 24px 64px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    header, main, footer { padding-left: 24px; padding-right: 24px; }
+    header { flex-direction: column; align-items: flex-start; }
+    .header-meta { text-align: left; }
+    .section-header .section-desc { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand-label">Tended Path Counseling, PLLC</div>
+    <h1>Clinical <em>Tools Library</em></h1>
+  </div>
+  <div class="header-meta">
+    Bethany Sherman, LMHC<br>
+    Internal use only · No PHI stored
+  </div>
+</header>
+
+<main>
+
+  <!-- ── CLINICAL REFERENCE ── -->
+  <section class="tool-section">
+    <div class="section-header">
+      <span class="section-dot" style="background:var(--gold)"></span>
+      <h2>Clinical Reference</h2>
+      <span class="section-desc">Diagnostic and treatment frameworks</span>
+    </div>
+    <div class="card-grid">
+
+      <a class="tool-card c-gold" href="./dsm_diagnostic_reference_v7.html">
+        <div class="card-tag">Diagnosis</div>
+        <div class="card-name">DSM Diagnostic Reference</div>
+        <div class="card-desc">Differential navigator, full criteria panels, ICD-10 code logic, and medical necessity sections for 23+ diagnoses.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <a class="tool-card c-gold" href="./treatment_plan_builder_v2_10.html">
+        <div class="card-tag">Treatment Planning</div>
+        <div class="card-name">Treatment Plan Builder</div>
+        <div class="card-desc">Jongsma-style treatment plans across 13 diagnoses. ACT-weighted interventions, goals, and strengths reference panel.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <a class="tool-card c-blue" href="./ACT_Therapy_Arc_TendedPath.html">
+        <div class="card-tag">ACT · Framework</div>
+        <div class="card-name">ACT Therapy Arc</div>
+        <div class="card-desc">Full treatment arc from intake through termination. Phase goals, clinical focus, IFS integration notes, and therapist drift flags.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <a class="tool-card c-blue" href="./ACT_Intervention_Reference_TendedPath.html">
+        <div class="card-tag">ACT · Interventions</div>
+        <div class="card-name">ACT Intervention Reference</div>
+        <div class="card-desc">27 interventions organized by hexaflex process. In-session descriptions, copyable documentation language, and drift warnings.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── DOCUMENTATION ── -->
+  <section class="tool-section">
+    <div class="section-header">
+      <span class="section-dot" style="background:#5aaa98"></span>
+      <h2>Documentation Templates</h2>
+      <span class="section-desc">Note scaffolding and billing support</span>
+    </div>
+    <div class="card-grid">
+
+      <a class="tool-card c-teal" href="./intake_note_template.html">
+        <div class="card-tag">90791 · Intake</div>
+        <div class="card-name">Intake Note Template</div>
+        <div class="card-desc">Full 90791 intake note with medical necessity, presenting concerns, history, mental status, risk, and initial treatment plan sections.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <a class="tool-card c-teal" href="./pirp_note_template.html">
+        <div class="card-tag">90837 · Progress Note</div>
+        <div class="card-name">PIRP Progress Note</div>
+        <div class="card-desc">PIRP-format progress note template. Medical necessity, presentation, intervention, and response sections with ACT documentation framing.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <div class="note-card">
+        <strong>Documentation reminder:</strong> These templates scaffold your notes — they don't replace clinical judgment. Medical necessity lives in the coherence of the whole note, not just the MN statement. Session-specific detail must live in the body.
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PRACTICE OPERATIONS ── -->
+  <section class="tool-section">
+    <div class="section-header">
+      <span class="section-dot" style="background:#a07898"></span>
+      <h2>Practice Operations</h2>
+      <span class="section-desc">Intake, scheduling, and consultation</span>
+    </div>
+    <div class="card-grid">
+
+      <a class="tool-card c-mauve" href="./consultation_call_form.html">
+        <div class="card-tag">Consultation</div>
+        <div class="card-name">Consultation Call Form</div>
+        <div class="card-desc">Structured intake form for prospective client consultations with conversational opening script.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── CLIENT-FACING ── -->
+  <section class="tool-section">
+    <div class="section-header">
+      <span class="section-dot" style="background:#8aaa78"></span>
+      <h2>Client-Facing Worksheets</h2>
+      <span class="section-desc">Squarespace-hosted — for client use only</span>
+    </div>
+    <div class="card-grid">
+
+      <a class="tool-card c-sage" href="./act_values_squarespace.html">
+        <div class="card-tag">ACT · Values</div>
+        <div class="card-name">Values Clarification</div>
+        <div class="card-desc">Domain-based values exploration, values vs. goals distinction, inherited values reflection, and top values summary. Client save/load via JSON.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <a class="tool-card c-sage" href="./boundaries_squarespace.html">
+        <div class="card-tag">ACT / IFS · Boundaries</div>
+        <div class="card-name">Boundaries Worksheet</div>
+        <div class="card-desc">Eight boundary types, boundary spectrum, parts-based exploration, values connection, and boundary planning section.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+      <a class="tool-card c-sage" href="./emotional_identification_v3.html">
+        <div class="card-tag">Somatic · Emotion</div>
+        <div class="card-name">Emotional Identification</div>
+        <div class="card-desc">Emotion naming, body-based locating, intensity tracking, and somatic awareness prompts. Supports present-moment and acceptance work.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Tended Path Counseling, PLLC · Bethany Sherman, LMHC · Internal reference only</span>
+  <span>No client data is stored in any of these tools</span>
+</footer>
+
+</body>
+</html>
