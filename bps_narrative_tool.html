@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPS Narrative — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #242733;
+    --gold: #d79f55;
+    --gold-light: #f0ddb8;
+    --cream: #ede8e1;
+    --warm-white: #f7f4f0;
+    --muted: #8a8490;
+    --border: #d6d0c8;
+    --s1: #3a6b8a;
+    --s2: #5c7a52;
+    --s3: #7a5c7a;
+    --s4: #8a6040;
+    --s5: #3d6b6b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 32px 20px 60px;
+    font-size: 16px;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    background: var(--warm-white);
+    box-shadow: 0 6px 40px rgba(36,39,51,0.10);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    padding: 24px 40px 22px;
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent 60%);
+  }
+  .practice-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+  .doc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--warm-white);
+    letter-spacing: 0.02em;
+  }
+  .header-hint {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    font-style: italic;
+    text-align: right;
+  }
+
+  /* Layout */
+  .panels {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: 600px;
+  }
+
+  /* Left: fields */
+  .fields-panel {
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    max-height: 78vh;
+    padding: 24px 24px 32px;
+    background: #f2ede6;
+  }
+
+  .fields-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+
+  .section-divider {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin: 18px 0 12px;
+  }
+
+  .field-block { margin-bottom: 12px; }
+  .field-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .field-label span {
+    font-weight: 300;
+    text-transform: none;
+    letter-spacing: 0;
+    font-style: italic;
+    color: #b0aab4;
+    font-size: 10px;
+  }
+  input.fi, textarea.fi {
+    width: 100%;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    padding: 7px 10px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    resize: vertical;
+  }
+  input.fi:focus, textarea.fi:focus {
+    border-color: var(--gold);
+    background: #fffdf9;
+  }
+  input.fi::placeholder, textarea.fi::placeholder {
+    color: #c0bab8;
+    font-style: italic;
+    font-size: 13px;
+  }
+  textarea.fi { min-height: 52px; line-height: 1.55; }
+  textarea.fi.sm { min-height: 38px; }
+
+  /* Right: preview */
+  .preview-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 28px 32px 28px;
+    background: var(--warm-white);
+  }
+
+  .preview-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .preview-text {
+    flex: 1;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--ink);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    padding: 20px 22px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 480px;
+    overflow-y: auto;
+  }
+
+  /* highlight unfilled blanks */
+  .preview-text .blank {
+    color: var(--gold);
+    font-style: italic;
+    border-bottom: 1px dashed var(--gold);
+    font-size: 14px;
+  }
+
+  /* Buttons */
+  .preview-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    align-items: center;
+  }
+
+  .btn {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 1px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--gold); color: var(--ink); }
+  .btn-primary:hover { background: #c4902a; }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .copy-confirm {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--s2);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-style: italic;
+  }
+  .copy-confirm.show { opacity: 1; }
+
+  /* ── PIRP Section ── */
+  .pirp-section {
+    border-top: 3px solid var(--ink);
+  }
+  .pirp-header {
+    background: var(--ink);
+    padding: 20px 40px 18px;
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .pirp-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--s5), transparent 60%);
+  }
+  .pirp-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--warm-white);
+    letter-spacing: 0.02em;
+  }
+  .pirp-subtitle {
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+  .pirp-hint {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Checkboxes */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    padding: 4px 0;
+  }
+  .check-grid label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--ink);
+    cursor: pointer;
+    line-height: 1.3;
+  }
+  .check-grid input[type="checkbox"] {
+    accent-color: var(--gold);
+    cursor: pointer;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--ink);
+    padding: 13px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+  .footer-note {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="practice-name">Tended Path Counseling, PLLC</div>
+      <div class="doc-title">BPS Narrative Generator</div>
+    </div>
+    <div class="header-hint">Fill fields left → copy narrative right</div>
+  </div>
+
+  <div class="panels">
+
+    <!-- LEFT: Fields -->
+    <div class="fields-panel">
+      <div class="fields-title">Fill in the blanks</div>
+
+      <div class="section-divider">Biological</div>
+
+      <div class="field-block">
+        <div class="field-label">Age</div>
+        <input class="fi" id="f-age" type="text" placeholder="e.g. 34">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Gender <span>optional</span></div>
+        <input class="fi" id="f-gender" type="text" placeholder="e.g. woman / he/him / leave blank">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Chief Complaint</div>
+        <textarea class="fi sm" id="f-complaint" placeholder="In client's words or brief summary…"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Duration</div>
+        <input class="fi" id="f-duration" type="text" placeholder="e.g. approximately 6 months">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Onset / Precipitant</div>
+        <input class="fi" id="f-onset" type="text" placeholder="e.g. job loss / no clear precipitant identified">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Medical History</div>
+        <input class="fi" id="f-medical" type="text" placeholder="e.g. hypothyroidism / no significant history">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Medications</div>
+        <input class="fi" id="f-meds" type="text" placeholder="e.g. levothyroxine 50mcg / none">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Substance Use</div>
+        <input class="fi" id="f-substances" type="text" placeholder="e.g. social alcohol use / denied">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Sleep / Appetite / Energy</div>
+        <textarea class="fi sm" id="f-vegetative" placeholder="e.g. disrupted sleep, appetite decreased, energy low…"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Family Psych History</div>
+        <input class="fi" id="f-family" type="text" placeholder="e.g. maternal depression / not reported">
+      </div>
+
+      <div class="section-divider">Psychological</div>
+
+      <div class="field-block">
+        <div class="field-label">Prior MH Treatment</div>
+        <textarea class="fi sm" id="f-mh-history" placeholder="e.g. individual therapy 2018–2020, CBT / no prior treatment"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Trauma History <span>brief / as disclosed</span></div>
+        <textarea class="fi sm" id="f-trauma" placeholder="e.g. childhood emotional neglect / not explored in depth at intake"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Current Symptoms</div>
+        <textarea class="fi" id="f-symptoms" placeholder="e.g. persistent worry, cognitive rumination, behavioral avoidance…"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Adaptive Coping</div>
+        <input class="fi" id="f-adaptive" type="text" placeholder="e.g. exercise, journaling, connection with close friends">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Maladaptive Patterns <span>optional</span></div>
+        <input class="fi" id="f-maladaptive" type="text" placeholder="e.g. overwork, social withdrawal / leave blank if none">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Functional Impact</div>
+        <input class="fi" id="f-functioning" type="text" placeholder="e.g. impacted / relatively intact">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Domains Affected</div>
+        <input class="fi" id="f-domains" type="text" placeholder="e.g. occupational and relational domains">
+      </div>
+
+      <div class="section-divider">Social</div>
+
+      <div class="field-block">
+        <div class="field-label">Living Situation</div>
+        <input class="fi" id="f-living" type="text" placeholder="e.g. lives alone with a small but close support network">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Relationship / Family Context</div>
+        <textarea class="fi sm" id="f-relationships" placeholder="e.g. divorced, two adult children, estranged from family of origin…"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Employment</div>
+        <input class="fi" id="f-employment" type="text" placeholder="e.g. employed as a project manager">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Cultural / Spiritual / Identity <span>optional</span></div>
+        <input class="fi" id="f-cultural" type="text" placeholder="e.g. not explored in depth at intake">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Legal History</div>
+        <input class="fi" id="f-legal" type="text" placeholder="e.g. denied / pending divorce proceedings">
+      </div>
+
+      <div class="section-divider">Risk &amp; Clinical</div>
+
+      <div class="field-block">
+        <div class="field-label">Risk Summary</div>
+        <textarea class="fi sm" id="f-risk" placeholder="e.g. no current or historical SI, NSSI, or HI reported"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Risk Level</div>
+        <input class="fi" id="f-risklevel" type="text" placeholder="e.g. minimal / low / moderate / high">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Protective Factors</div>
+        <input class="fi" id="f-protective" type="text" placeholder="e.g. strong social support, future orientation, engaged in treatment">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Diagnostic Impressions</div>
+        <textarea class="fi sm" id="f-diagnosis" placeholder="e.g. Generalized Anxiety Disorder (F41.1)…"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Client Strengths</div>
+        <input class="fi" id="f-strengths" type="text" placeholder="e.g. insight, motivation, capacity for self-reflection">
+      </div>
+      <div class="field-block">
+        <div class="field-label">Treatment Focus</div>
+        <textarea class="fi sm" id="f-treatment" placeholder="e.g. individual ACT-oriented therapy weekly, targeting psychological flexibility and values-based action…"></textarea>
+      </div>
+      <div class="field-block">
+        <div class="field-label">Referrals / Care Coordination</div>
+        <input class="fi" id="f-referrals" type="text" placeholder="e.g. no additional referrals indicated at this time">
+      </div>
+    </div>
+
+    <!-- RIGHT: Preview -->
+    <div class="preview-panel">
+      <div class="preview-label">
+        <span>Narrative Preview</span>
+      </div>
+      <div class="preview-text" id="preview"></div>
+      <div class="preview-actions">
+        <button class="btn btn-primary" onclick="copyNarrative()">Copy to Clipboard</button>
+        <button class="btn btn-outline" onclick="clearAll()">Clear All</button>
+        <span class="copy-confirm" id="copy-confirm">Copied ✓</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════ PIRP SECTION ════════════ -->
+  <div class="pirp-section">
+
+    <div class="pirp-header">
+      <div>
+        <div class="pirp-subtitle">Intake Session Note</div>
+        <div class="pirp-title">PIRP Note Generator</div>
+      </div>
+      <div class="pirp-hint">Diagnosis and referrals auto-pull from BPS fields above</div>
+    </div>
+
+    <div class="panels">
+
+      <!-- LEFT: PIRP Fields -->
+      <div class="fields-panel">
+        <div class="fields-title">Fill in the blanks</div>
+
+        <div class="section-divider">P — Presentation</div>
+
+        <div class="field-block">
+          <div class="field-label">Client Presentation &amp; Engagement</div>
+          <textarea class="fi" id="p-presentation" placeholder="e.g. Client presented as engaged and forthcoming, making good eye contact and volunteering information readily. Some visible tension when discussing family history…"></textarea>
+        </div>
+        <div class="field-block">
+          <div class="field-label">MSE Note <span>brief — or note "see MSE in chart"</span></div>
+          <input class="fi" id="p-mse" type="text" placeholder="e.g. See MSE documentation in chart. / Alert, oriented x4; euthymic affect…">
+        </div>
+
+        <div class="section-divider">I — Intervention</div>
+
+        <div class="field-block">
+          <div class="field-label">Areas Covered <span>check all that apply</span></div>
+          <div class="check-grid">
+            <label><input type="checkbox" class="pirp-check" value="presenting concerns and reason for seeking treatment"> Presenting concerns</label>
+            <label><input type="checkbox" class="pirp-check" value="psychiatric and mental health history"> Mental health history</label>
+            <label><input type="checkbox" class="pirp-check" value="medical history and current medications"> Medical history / meds</label>
+            <label><input type="checkbox" class="pirp-check" value="substance use history"> Substance use</label>
+            <label><input type="checkbox" class="pirp-check" value="trauma history (as disclosed)"> Trauma history</label>
+            <label><input type="checkbox" class="pirp-check" value="family history"> Family history</label>
+            <label><input type="checkbox" class="pirp-check" value="social and developmental history"> Social / developmental history</label>
+            <label><input type="checkbox" class="pirp-check" value="risk assessment (SI, HI, NSSI)"> Risk assessment</label>
+            <label><input type="checkbox" class="pirp-check" value="safety planning"> Safety planning</label>
+            <label><input type="checkbox" class="pirp-check" value="informed consent and practice policies"> Informed consent / policies</label>
+            <label><input type="checkbox" class="pirp-check" value="initial treatment goals"> Initial treatment goals</label>
+            <label><input type="checkbox" class="pirp-check" value="telehealth informed consent"> Telehealth consent</label>
+          </div>
+        </div>
+        <div class="field-block">
+          <div class="field-label">Additional Intervention Notes <span>optional</span></div>
+          <textarea class="fi sm" id="p-intervention-extra" placeholder="e.g. Psychoeducation provided re: ACT model. Explored client's previous therapy experience and preferences…"></textarea>
+        </div>
+
+        <div class="section-divider">R — Response</div>
+
+        <div class="field-block">
+          <div class="field-label">Client Response to Session</div>
+          <textarea class="fi" id="p-response" placeholder="e.g. Client responded openly to the assessment process and expressed relief at having a space to explore these concerns. Showed insight into patterns and appeared motivated for treatment. Noted some hesitation when discussing early family dynamics — will monitor pacing…"></textarea>
+        </div>
+
+        <div class="section-divider">P — Plan</div>
+
+        <div class="field-block">
+          <div class="field-label">Session Frequency</div>
+          <input class="fi" id="p-frequency" type="text" placeholder="e.g. weekly / biweekly to start">
+        </div>
+        <div class="field-block">
+          <div class="field-label">Modality</div>
+          <input class="fi" id="p-modality" type="text" placeholder="e.g. individual therapy via telehealth / in-person">
+        </div>
+        <div class="field-block">
+          <div class="field-label">Next Session Focus</div>
+          <textarea class="fi sm" id="p-next" placeholder="e.g. Begin values exploration; continue building therapeutic alliance; revisit trauma history at a pace comfortable for client…"></textarea>
+        </div>
+        <div class="field-block">
+          <div class="field-label">Diagnosis <span>auto-filled from BPS — edit if needed</span></div>
+          <textarea class="fi sm" id="p-diagnosis-pirp" placeholder="Pulls from BPS Diagnostic Impressions field…"></textarea>
+        </div>
+        <div class="field-block">
+          <div class="field-label">Referrals / Coordination <span>auto-filled from BPS — edit if needed</span></div>
+          <input class="fi" id="p-referrals-pirp" type="text" placeholder="Pulls from BPS Referrals field…">
+        </div>
+      </div>
+
+      <!-- RIGHT: PIRP Preview -->
+      <div class="preview-panel">
+        <div class="preview-label">
+          <span>PIRP Preview</span>
+        </div>
+        <div class="preview-text" id="pirp-preview"></div>
+        <div class="preview-actions">
+          <button class="btn btn-primary" onclick="copyPIRP()">Copy to Clipboard</button>
+          <button class="btn btn-outline" onclick="clearPIRP()">Clear PIRP</button>
+          <span class="copy-confirm" id="pirp-copy-confirm">Copied ✓</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /pirp-section -->
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-brand">Tended Path Counseling, PLLC — Bethany Sherman, LMHC #LH70011579</div>
+    <div class="footer-note">No PHI is stored or transmitted.</div>
+  </div>
+
+</div>
+
+<script>
+  const fields = [
+    'f-age','f-gender','f-complaint','f-duration','f-onset',
+    'f-medical','f-meds','f-substances','f-vegetative','f-family',
+    'f-mh-history','f-trauma','f-symptoms','f-adaptive','f-maladaptive',
+    'f-functioning','f-domains','f-living','f-relationships','f-employment',
+    'f-cultural','f-legal','f-risk','f-risklevel','f-protective',
+    'f-diagnosis','f-strengths','f-treatment','f-referrals'
+  ];
+
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', buildPreview);
+  });
+
+  function val(id, fallback) {
+    const el = document.getElementById(id);
+    const v = el ? el.value.trim() : '';
+    return v || fallback;
+  }
+
+  function buildPreview() {
+    const age      = val('f-age', '[age]');
+    const rawGender = document.getElementById('f-gender').value.trim();
+    const genderInsert = rawGender ? ` ${rawGender}` : '';
+    const complaint   = val('f-complaint', '[chief complaint]');
+    const duration    = val('f-duration', '[duration]');
+    const onset       = val('f-onset', '[onset / precipitant]');
+    const medical     = val('f-medical', '[medical history]');
+    const meds        = val('f-meds', '[medications]');
+    const substances  = val('f-substances', '[substance use]');
+    const vegetative  = val('f-vegetative', '[sleep, appetite, and energy summary]');
+    const family      = val('f-family', '[family psychiatric history]');
+
+    const mhHistory   = val('f-mh-history', '[prior mental health treatment]');
+    const trauma      = val('f-trauma', '[trauma history as disclosed]');
+    const symptoms    = val('f-symptoms', '[current symptom domains]');
+    const adaptive    = val('f-adaptive', '[adaptive coping strategies]');
+    const rawMalad    = document.getElementById('f-maladaptive').value.trim();
+    const maladInsert = rawMalad ? ` alongside ${rawMalad}` : '';
+    const functioning = val('f-functioning', '[impacted / relatively intact]');
+    const domains     = val('f-domains', '[affected domains]');
+
+    const living        = val('f-living', '[living situation]');
+    const relationships = val('f-relationships', '[relationship and family context]');
+    const employment    = val('f-employment', '[employment status and role]');
+    const rawCultural   = document.getElementById('f-cultural').value.trim();
+    const culturalInsert = rawCultural ? rawCultural : 'not explored in depth at intake';
+    const legal         = val('f-legal', '[legal history]');
+
+    const risk        = val('f-risk', '[SI, HI, and NSSI summary]');
+    const riskLevel   = val('f-risklevel', '[minimal / low / moderate / high]');
+    const protective  = val('f-protective', '[protective factors]');
+    const diagnosis   = val('f-diagnosis', '[diagnostic impressions]');
+    const strengths   = val('f-strengths', '[client strengths]');
+    const treatment   = val('f-treatment', '[treatment approach and goals]');
+    const referrals   = val('f-referrals', '[referrals or no additional referrals indicated at this time]');
+
+    const narrative =
+`Client is a ${age}-year-old${genderInsert} presenting with ${complaint}. Symptoms have been present for ${duration} and appear to have been precipitated by ${onset}. Medically, client reports ${medical}; current medications include ${meds}. Substance use history is ${substances}. Sleep, appetite, and energy are ${vegetative}. Family psychiatric history is notable for ${family}.
+
+Psychologically, client carries a history of ${mhHistory}. Trauma history includes ${trauma}. Current presentation is characterized by ${symptoms}. Coping has included ${adaptive}${maladInsert}. Functioning is ${functioning} across ${domains}.
+
+Socially, client ${living}. ${relationships} Client is ${employment}. Cultural, spiritual, and identity context: ${culturalInsert}. Legal history: ${legal}.
+
+Risk history is notable for ${risk}. Current risk is assessed as ${riskLevel}. Protective factors include ${protective}.
+
+Clinically, client's presentation is consistent with ${diagnosis}. Key strengths include ${strengths}. Initial treatment will focus on ${treatment}, with ${referrals}.`;
+
+    document.getElementById('preview').textContent = narrative;
+  }
+
+  function copyNarrative() {
+    const text = document.getElementById('preview').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const el = document.getElementById('copy-confirm');
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2000);
+    });
+  }
+
+  function clearAll() {
+    if (!confirm('Clear all fields?')) return;
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    buildPreview();
+  }
+
+  // Initialize preview on load
+  buildPreview();
+
+  // ── PIRP ──
+  const pirpFields = [
+    'p-presentation','p-mse','p-intervention-extra',
+    'p-response','p-frequency','p-modality','p-next',
+    'p-diagnosis-pirp','p-referrals-pirp'
+  ];
+
+  pirpFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', buildPIRP);
+  });
+
+  document.querySelectorAll('.pirp-check').forEach(cb => {
+    cb.addEventListener('change', buildPIRP);
+  });
+
+  // Auto-pull diagnosis and referrals from BPS into PIRP fields
+  ['f-diagnosis','f-referrals'].forEach(id => {
+    const src = document.getElementById(id);
+    if (!src) return;
+    src.addEventListener('input', () => {
+      if (id === 'f-diagnosis') {
+        const pirpDx = document.getElementById('p-diagnosis-pirp');
+        if (pirpDx && !pirpDx.dataset.edited) pirpDx.value = src.value;
+      }
+      if (id === 'f-referrals') {
+        const pirpRef = document.getElementById('p-referrals-pirp');
+        if (pirpRef && !pirpRef.dataset.edited) pirpRef.value = src.value;
+      }
+      buildPIRP();
+    });
+  });
+
+  // Mark PIRP fields as manually edited so auto-pull stops overwriting
+  ['p-diagnosis-pirp','p-referrals-pirp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => { el.dataset.edited = 'true'; buildPIRP(); });
+  });
+
+  function pirpVal(id, fallback) {
+    const el = document.getElementById(id);
+    const v = el ? el.value.trim() : '';
+    return v || fallback;
+  }
+
+  function buildPIRP() {
+    const presentation = pirpVal('p-presentation', '[client presentation and engagement quality]');
+    const mse          = pirpVal('p-mse', '[MSE — see chart]');
+    const extra        = document.getElementById('p-intervention-extra').value.trim();
+
+    const checked = Array.from(document.querySelectorAll('.pirp-check:checked')).map(c => c.value);
+    let interventionLine = '';
+    if (checked.length === 0) {
+      interventionLine = 'Intake assessment conducted. Areas covered: [select areas above].';
+    } else if (checked.length === 1) {
+      interventionLine = `Intake assessment conducted. Areas covered: ${checked[0]}.`;
+    } else {
+      const last = checked[checked.length - 1];
+      const rest = checked.slice(0, -1).join(', ');
+      interventionLine = `Intake assessment conducted. Areas covered included ${rest}, and ${last}.`;
+    }
+    const extraLine = extra ? ` ${extra}` : '';
+
+    const response  = pirpVal('p-response', '[client response to session — engagement, affect, notable observations]');
+    const frequency = pirpVal('p-frequency', '[session frequency]');
+    const modality  = pirpVal('p-modality', '[modality]');
+    const next      = pirpVal('p-next', '[next session focus]');
+    const diagnosis = pirpVal('p-diagnosis-pirp', '[diagnosis — see BPS summary in chart]');
+    const referrals = pirpVal('p-referrals-pirp', '[referrals / no additional referrals indicated]');
+
+    const pirp =
+`P: ${presentation} ${mse}
+
+I: ${interventionLine}${extraLine}
+
+R: ${response}
+
+P: Diagnosis: ${diagnosis}. Client will be seen ${frequency} for individual therapy via ${modality}. Next session will focus on ${next}. ${referrals}.`;
+
+    document.getElementById('pirp-preview').textContent = pirp;
+  }
+
+  function copyPIRP() {
+    const text = document.getElementById('pirp-preview').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const el = document.getElementById('pirp-copy-confirm');
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2000);
+    });
+  }
+
+  function clearPIRP() {
+    if (!confirm('Clear PIRP fields?')) return;
+    pirpFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ''; delete el.dataset.edited; }
+    });
+    document.querySelectorAll('.pirp-check').forEach(cb => cb.checked = false);
+    buildPIRP();
+  }
+
+  buildPIRP();
+</script>
+</body>
+</html>

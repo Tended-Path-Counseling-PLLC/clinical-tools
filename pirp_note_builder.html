@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIRP Note Builder — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #242733;
+  --gold: #d79f55;
+  --gold-light: #f0ddb8;
+  --cream: #ede8e1;
+  --warm-white: #f7f4f0;
+  --muted: #8a8490;
+  --border: #d6d0c8;
+  --field-bg: #fff;
+  --c-found: #888888;
+  --c-defuse: #6a9fcc;
+  --c-accept: #c07868;
+  --c-present: #5aaa98;
+  --c-self: #9a7cc0;
+  --c-values: #c08850;
+  --c-action: #6aaa6a;
+  --c-ifs: #a07898;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  font-family:'Jost',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  font-size:16px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── HEADER ── */
+.header {
+  background:var(--ink);
+  padding:18px 32px 16px;
+  position:relative;
+  flex-shrink:0;
+}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent 60%);}
+.header-row{display:flex;align-items:baseline;justify-content:space-between;gap:20px;}
+.practice-tag{font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:var(--gold-light);margin-bottom:3px;}
+.doc-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--warm-white);}
+.header-hint{font-size:12px;font-weight:300;color:var(--muted);font-style:italic;}
+
+/* ── SERVICE BAR ── */
+.service-bar {
+  background:#1e2130;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:10px 32px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 24px;
+  align-items:center;
+  flex-shrink:0;
+}
+.sb-field{display:flex;align-items:center;gap:7px;}
+.sb-label{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.sb-input,.sb-select{
+  font-family:'Jost',sans-serif;font-size:13px;color:var(--warm-white);
+  background:transparent;border:none;border-bottom:1px solid rgba(215,159,85,0.3);
+  padding:2px 4px;outline:none;transition:border-color .15s;
+}
+.sb-input{width:130px;} .sb-input:focus,.sb-select:focus{border-bottom-color:var(--gold);}
+.sb-select{cursor:pointer;-webkit-appearance:none;appearance:none;color:var(--warm-white);padding-right:14px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238a8490'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 2px center;}
+.sb-select option{background:#242733;color:#f7f4f0;}
+
+/* ── MAIN LAYOUT ── */
+.main{display:grid;grid-template-columns:380px 1fr;flex:1;overflow:hidden;min-height:0;}
+
+/* ── LEFT PANEL ── */
+.left-panel{
+  overflow-y:auto;height:calc(100vh - 115px);
+  background:#f2ede6;
+  border-right:1px solid var(--border);
+}
+
+.section-block{border-bottom:1px solid var(--border);}
+.section-header{
+  background:var(--ink);
+  padding:9px 16px;
+  display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:10;
+}
+.section-letter{
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;
+  color:var(--gold);line-height:1;
+}
+.section-title{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);}
+.section-subtitle{font-size:11px;font-weight:300;color:var(--muted);margin-left:auto;font-style:italic;}
+.section-body{padding:14px 16px;}
+
+/* ── FORM ELEMENTS ── */
+.fl{font-size:11px;font-weight:500;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fi,.fs{
+  width:100%;font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:var(--ink);
+  background:var(--warm-white);border:1px solid var(--border);border-radius:1px;
+  padding:7px 10px;outline:none;transition:border-color .15s;
+}
+.fi:focus,.fs:focus{border-color:var(--gold);}
+textarea.fi{resize:vertical;min-height:52px;line-height:1.6;font-size:14px;}
+textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-size:13px;}
+.fs{cursor:pointer;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a8490'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+
+.fb{margin-bottom:12px;}
+.fb:last-child{margin-bottom:0;}
+
+/* ── RADIO / CHECKBOX GROUPS ── */
+.radio-group,.check-group{display:flex;flex-wrap:wrap;gap:5px 12px;padding:3px 0;}
+.radio-group label,.check-group label{
+  display:flex;align-items:center;gap:5px;font-size:13px;font-weight:300;cursor:pointer;
+}
+.radio-group input,.check-group input{accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
+.notes-row{margin-top:6px;}
+.notes-row input{
+  width:100%;font-family:'Jost',sans-serif;font-size:13px;font-weight:300;
+  color:var(--ink);background:var(--warm-white);border:1px solid var(--border);
+  border-radius:1px;padding:5px 9px;outline:none;transition:border-color .15s;
+}
+.notes-row input:focus{border-color:var(--gold);}
+.notes-row input::placeholder{color:#bbb5b0;font-style:italic;}
+
+.mse-row{margin-bottom:10px;}
+.mse-row:last-child{margin-bottom:0;}
+
+/* divider */
+.sub-divider{
+  font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);border-top:1px solid var(--border);padding-top:10px;margin:12px 0 8px;
+}
+
+/* ── INTERVENTION PICKER ── */
+.filter-strip{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.filt{
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.08em;
+  padding:4px 10px;border-radius:20px;border:1px solid var(--border);
+  cursor:pointer;background:var(--warm-white);color:var(--muted);transition:all .12s;
+}
+.filt:hover{border-color:var(--gold);color:var(--gold);}
+.filt.active{background:var(--ink);color:var(--warm-white);border-color:var(--ink);}
+
+.int-grid{display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto;
+  border:1px solid var(--border);border-radius:1px;background:var(--warm-white);}
+.int-item{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  cursor:pointer;transition:background .1s;border-bottom:1px solid #ede8e1;
+  font-size:13px;font-weight:300;color:var(--ink);
+}
+.int-item:last-child{border-bottom:none;}
+.int-item:hover{background:#fffdf9;}
+.int-item.selected{background:#f0f7f0;color:#3a6a3a;}
+.int-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.int-process{font-size:10px;font-weight:500;letter-spacing:.08em;margin-left:auto;white-space:nowrap;opacity:.6;}
+.int-item.hidden{display:none;}
+
+/* ── SELECTED INTERVENTIONS ── */
+.selected-int-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.sel-int{
+  background:var(--warm-white);border:1px solid var(--border);border-radius:1px;
+  overflow:hidden;
+}
+.sel-int-header{
+  display:flex;align-items:center;gap:7px;padding:6px 10px;
+  border-bottom:1px solid var(--border);
+}
+.sel-int-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sel-int-name{font-size:12px;font-weight:500;letter-spacing:.04em;flex:1;}
+.sel-int-remove{
+  font-size:11px;color:var(--muted);cursor:pointer;padding:1px 5px;
+  border:1px solid var(--border);border-radius:1px;background:transparent;
+  transition:all .1s;
+}
+.sel-int-remove:hover{border-color:#c07868;color:#c07868;}
+.sel-int textarea{
+  width:100%;font-family:'Jost',sans-serif;font-size:13px;font-weight:300;
+  color:var(--ink);background:#fffdf9;border:none;padding:8px 10px;
+  resize:vertical;min-height:48px;outline:none;line-height:1.6;
+}
+.sel-int textarea:focus{background:#fffef5;}
+.sel-int-sub{
+  padding:4px 10px;font-size:10px;font-weight:500;letter-spacing:.10em;
+  text-transform:uppercase;color:var(--muted);background:#f5f1ec;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.sel-int-sub.r-sub{ background:#eef4ee; color:#4a6e4a; }
+
+.no-int-msg{font-size:13px;color:var(--muted);font-style:italic;padding:6px 2px;}
+
+/* ── RIGHT PANEL ── */
+.right-panel{
+  overflow-y:auto;height:calc(100vh - 115px);
+  background:var(--warm-white);
+  padding:24px 28px;
+  display:flex;flex-direction:column;gap:16px;
+}
+
+.preview-section{
+  border:1px solid var(--border);border-radius:1px;overflow:hidden;
+  flex-shrink:0;
+}
+.preview-section-header{
+  background:var(--ink);padding:8px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ps-label{
+  font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;
+  letter-spacing:.04em;color:var(--warm-white);
+}
+.ps-copy{
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:500;
+  letter-spacing:.10em;text-transform:uppercase;
+  background:transparent;border:1px solid rgba(215,159,85,.4);
+  color:var(--gold-light);padding:4px 12px;cursor:pointer;border-radius:1px;
+  transition:all .12s;
+}
+.ps-copy:hover{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.ps-copy.flash{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.preview-text{
+  padding:14px 16px;font-size:14px;font-weight:300;line-height:1.85;
+  color:var(--ink);white-space:pre-wrap;word-break:break-word;
+  min-height:60px;background:var(--field-bg);
+}
+.preview-text .blank{color:var(--gold);font-style:italic;}
+
+.copy-all-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:var(--ink);border-radius:1px;margin-top:4px;
+}
+.copy-all-brand{font-size:11px;color:var(--muted);}
+.copy-all-group{display:flex;gap:10px;align-items:center;}
+.btn-ca{
+  font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:.10em;
+  text-transform:uppercase;padding:9px 20px;border-radius:1px;cursor:pointer;border:none;transition:all .15s;
+}
+.btn-gold{background:var(--gold);color:var(--ink);}
+.btn-gold:hover{background:#c4902a;}
+.btn-outline{background:transparent;border:1px solid rgba(215,159,85,.35);color:var(--muted);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.copy-confirm{font-size:12px;color:#5c7a52;font-style:italic;opacity:0;transition:opacity .3s;}
+.copy-confirm.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-row">
+    <div>
+      <div class="practice-tag">Tended Path Counseling, PLLC</div>
+      <div class="doc-title">PIRP Note Builder</div>
+    </div>
+    <div class="header-hint">Click interventions → edit in place → copy by section</div>
+  </div>
+</div>
+
+<!-- SERVICE BAR -->
+<div class="service-bar">
+  <div class="sb-field">
+    <span class="sb-label">Date</span>
+    <input class="sb-input" id="sb-date" type="text" style="width:150px">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">CPT</span>
+    <select class="sb-select" id="sb-cpt" onchange="build()">
+      <option value="90837">90837 — 53+ min</option>
+      <option value="90834">90834 — 38–52 min</option>
+      <option value="90832">90832 — 16–37 min</option>
+    </select>
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">Duration</span>
+    <input class="sb-input" id="sb-duration" type="text" placeholder="min" style="width:60px" oninput="build()">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">Start</span>
+    <input class="sb-input" id="sb-start" type="text" placeholder="—" style="width:80px" oninput="build()">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">End</span>
+    <input class="sb-input" id="sb-end" type="text" placeholder="—" style="width:80px" oninput="build()">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">POS</span>
+    <select class="sb-select" id="sb-pos" onchange="build()">
+      <option value="In-Person (POS 11)">In-Person (POS 11)</option>
+      <option value="Telehealth – Video, Client Home (POS 10)">Telehealth – Video, Home (POS 10)</option>
+      <option value="Telehealth – Video, Non-Home (POS 02)">Telehealth – Video, Non-Home (POS 02)</option>
+      <option value="Telehealth – Audio Only (POS 10)">Telehealth – Audio Only (POS 10)</option>
+    </select>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+
+    <!-- P: PRESENTATION -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-letter">P</span>
+        <span class="section-title">Presentation</span>
+        <span class="section-subtitle">MSE + presenting content</span>
+      </div>
+      <div class="section-body">
+
+        <div class="mse-row">
+          <div class="fl">Appearance</div>
+          <div class="radio-group" id="rg-appearance" onchange="build()">
+            <label><input type="radio" name="appearance" value="well-groomed and appropriately dressed"> Well-groomed / appropriate</label>
+            <label><input type="radio" name="appearance" value="casually but appropriately dressed"> Casual / appropriate</label>
+            <label><input type="radio" name="appearance" value="disheveled and unkempt"> Disheveled / unkempt</label>
+          </div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Affect <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">select all that apply</span></div>
+          <div class="check-group" id="cg-affect" onchange="build()">
+            <label><input type="checkbox" value="euthymic / full range"> Euthymic / full range</label>
+            <label><input type="checkbox" value="constricted"> Constricted</label>
+            <label><input type="checkbox" value="flat"> Flat</label>
+            <label><input type="checkbox" value="labile"> Labile</label>
+            <label><input type="checkbox" value="anxious"> Anxious</label>
+            <label><input type="checkbox" value="dysphoric"> Dysphoric</label>
+            <label><input type="checkbox" value="elevated / expansive"> Elevated / expansive</label>
+            <label><input type="checkbox" value="irritable"> Irritable</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-affect" placeholder="Affect notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Mood (client-reported)</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="mood" value="good / positive"> Good / positive</label>
+            <label><input type="radio" name="mood" value="neutral / stable"> Neutral / stable</label>
+            <label><input type="radio" name="mood" value="anxious / worried"> Anxious / worried</label>
+            <label><input type="radio" name="mood" value="sad / down"> Sad / down</label>
+            <label><input type="radio" name="mood" value="stressed / overwhelmed"> Stressed / overwhelmed</label>
+            <label><input type="radio" name="mood" value="happy / elated"> Happy / elated</label>
+            <label><input type="radio" name="mood" value="mixed"> Mixed</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-mood" placeholder="Mood notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Cognition / Orientation</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="cognition" value="Alert and oriented x4"> AOx4</label>
+            <label><input type="radio" name="cognition" value="Alert; mild cognitive fog noted"> Mild cognitive fog</label>
+            <label><input type="radio" name="cognition" value="Disorganized thinking noted"> Disorganized thinking</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-cog" placeholder="Cognition notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Speech</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="speech" value="normal in rate and volume"> Normal rate / volume</label>
+            <label><input type="radio" name="speech" value="pressured"> Pressured</label>
+            <label><input type="radio" name="speech" value="slow and latent"> Slow / latent</label>
+            <label><input type="radio" name="speech" value="soft and quiet"> Soft / quiet</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-speech" placeholder="Speech notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Insight / Judgment</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="insight" value="good"> Good</label>
+            <label><input type="radio" name="insight" value="fair"> Fair</label>
+            <label><input type="radio" name="insight" value="limited"> Limited</label>
+            <label><input type="radio" name="insight" value="poor"> Poor</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-insight" placeholder="Insight / judgment notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Safety / Risk</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="safety" value="No SI or HI reported"> No SI / HI</label>
+            <label><input type="radio" name="safety" value="Passive ideation noted; safety assessed"> Passive ideation</label>
+            <label><input type="radio" name="safety" value="Active ideation noted; safety plan activated"> Active ideation</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-safety" placeholder="Risk / safety notes…" oninput="build()"></div>
+        </div>
+
+        <div class="sub-divider">Presenting Content</div>
+        <div class="fb">
+          <textarea class="fi" id="presenting-content" rows="3" placeholder="What did the client bring to session today? Key themes, concerns, or content…" oninput="build()"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- I: INTERVENTION -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-letter">I</span>
+        <span class="section-title">Intervention</span>
+        <span class="section-subtitle">click to select, edit in place</span>
+      </div>
+      <div class="section-body">
+
+        <div class="filter-strip" id="filter-strip">
+          <button class="filt active" data-filter="all" onclick="filterInts('all',this)">All</button>
+          <button class="filt" data-filter="foundational" onclick="filterInts('foundational',this)" style="border-color:var(--c-found);">Foundational</button>
+          <button class="filt" data-filter="defusion" onclick="filterInts('defusion',this)" style="border-color:var(--c-defuse);">Defusion</button>
+          <button class="filt" data-filter="acceptance" onclick="filterInts('acceptance',this)" style="border-color:var(--c-accept);">Acceptance</button>
+          <button class="filt" data-filter="present" onclick="filterInts('present',this)" style="border-color:var(--c-present);">Present Moment</button>
+          <button class="filt" data-filter="self" onclick="filterInts('self',this)" style="border-color:var(--c-self);">Self-as-Context</button>
+          <button class="filt" data-filter="values" onclick="filterInts('values',this)" style="border-color:var(--c-values);">Values</button>
+          <button class="filt" data-filter="action" onclick="filterInts('action',this)" style="border-color:var(--c-action);">Action</button>
+          <button class="filt" data-filter="ifs" onclick="filterInts('ifs',this)" style="border-color:var(--c-ifs);">IFS</button>
+        </div>
+
+        <div class="int-grid" id="int-grid"></div>
+
+        <div class="sub-divider">Selected Interventions</div>
+        <div class="selected-int-list" id="selected-int-list">
+          <div class="no-int-msg" id="no-int-msg">No interventions selected yet.</div>
+        </div>
+
+        <div class="sub-divider">Additional Intervention Notes</div>
+        <div class="fb">
+          <textarea class="fi" id="int-extra" rows="2" placeholder="Any additional context, non-ACT interventions, or session-specific details…" oninput="build()"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- R: RESPONSE -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-letter">R</span>
+        <span class="section-title">Response</span>
+      </div>
+      <div class="section-body">
+
+        <div class="mse-row">
+          <div class="fl">Engagement</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="engagement" value="Fully engaged, active participant"> Fully engaged</label>
+            <label><input type="radio" name="engagement" value="Engaged with some hesitation"> Engaged / hesitant</label>
+            <label><input type="radio" name="engagement" value="Superficially engaged"> Superficially engaged</label>
+            <label><input type="radio" name="engagement" value="Resistant / guarded"> Resistant / guarded</label>
+            <label><input type="radio" name="engagement" value="Ambivalent"> Ambivalent</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-engagement" placeholder="Engagement notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Response to Intervention</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="response" value="Receptive; demonstrated insight"> Receptive / insight</label>
+            <label><input type="radio" name="response" value="Receptive; limited insight"> Receptive / limited insight</label>
+            <label><input type="radio" name="response" value="Engaged but intellectualizing"> Intellectualizing</label>
+            <label><input type="radio" name="response" value="Resistant to reframe"> Resistant to reframe</label>
+            <label><input type="radio" name="response" value="Emotional activation — processed in session"> Emotional activation</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-response" placeholder="Response notes…" oninput="build()"></div>
+        </div>
+
+        <div class="sub-divider">Client Response Narrative</div>
+        <div class="fb">
+          <textarea class="fi" id="response-narrative" rows="3" placeholder="Additional narrative detail about how the client responded, what shifted, what stayed the same…" oninput="build()"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- P: PLAN -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-letter">P</span>
+        <span class="section-title">Plan</span>
+      </div>
+      <div class="section-body">
+
+        <div class="fb">
+          <div class="fl">Frequency Going Forward</div>
+          <div class="radio-group" style="margin-bottom:8px;" onchange="build()">
+            <label><input type="radio" name="frequency" value="weekly"> Weekly</label>
+            <label><input type="radio" name="frequency" value="every other week"> Biweekly</label>
+            <label><input type="radio" name="frequency" value="monthly"> Monthly</label>
+            <label><input type="radio" name="frequency" value="as needed"> As needed</label>
+            <label><input type="radio" name="frequency" value="transition / termination planning underway"> Termination planning</label>
+          </div>
+        </div>
+
+        <div class="fb">
+          <div class="fl">Between-Session Assignment / Goals</div>
+          <textarea class="fi" id="plan-homework" rows="2" placeholder="e.g. Practice brief breath anchor once daily; return to values worksheet before next session…" oninput="build()"></textarea>
+        </div>
+
+        <div class="fb">
+          <div class="fl">Clinical Focus for Next Session</div>
+          <textarea class="fi" id="plan-focus" rows="2" placeholder="e.g. Continue defusion work; revisit committed action from this session; begin values-behavior gap exploration…" oninput="build()"></textarea>
+        </div>
+
+        <div class="fb">
+          <div class="fl">Coordination of Care / Referrals / Collateral</div>
+          <textarea class="fi" id="plan-coordination" rows="2" placeholder="e.g. No coordination indicated. / Pending release for PCP communication…" oninput="build()"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /left-panel -->
+
+  <!-- RIGHT PANEL: PREVIEW -->
+  <div class="right-panel" id="right-panel">
+
+    <div class="preview-section">
+      <div class="preview-section-header">
+        <span class="ps-label">P — Presentation</span>
+        <button class="ps-copy" onclick="copySection('prev-p', this)">Copy</button>
+      </div>
+      <div class="preview-text" id="prev-p"></div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section-header">
+        <span class="ps-label">I — Intervention</span>
+        <button class="ps-copy" onclick="copySection('prev-i', this)">Copy</button>
+      </div>
+      <div class="preview-text" id="prev-i"></div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section-header">
+        <span class="ps-label">R — Response</span>
+        <button class="ps-copy" onclick="copySection('prev-r', this)">Copy</button>
+      </div>
+      <div class="preview-text" id="prev-r"></div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section-header">
+        <span class="ps-label">P — Plan</span>
+        <button class="ps-copy" onclick="copySection('prev-plan', this)">Copy</button>
+      </div>
+      <div class="preview-text" id="prev-plan"></div>
+    </div>
+
+    <div class="copy-all-bar">
+      <div class="copy-all-brand">Tended Path Counseling — Bethany Sherman, LMHC #LH70011579</div>
+      <div class="copy-all-group">
+        <button class="btn-ca btn-gold" onclick="copyAll()">Copy Full Note</button>
+        <button class="btn-ca btn-outline" onclick="clearAll()">Clear</button>
+        <span class="copy-confirm" id="copy-confirm">Copied ✓</span>
+      </div>
+    </div>
+
+  </div><!-- /right-panel -->
+
+</div><!-- /main -->
+
+<script>
+// ── INTERVENTION DATA ──
+const INTS = [
+  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Reflective Listening & Validation',
+   d:'Therapist provided reflective listening and validation, supporting client\'s exploration of [experience/theme]. Client demonstrated increased articulation of [internal state/pattern] and reported feeling understood within the therapeutic relationship.'},
+  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Functional Assessment',
+   d:'Therapist conducted functional exploration of [symptom/behavior/avoidance pattern], identifying antecedents, consequences, and the workability of client\'s current response. Client demonstrated emerging awareness of the function [behavior] serves in maintaining [symptom/distress].'},
+  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Collaborative Inquiry (Socratic)',
+   d:'Therapist used collaborative inquiry to facilitate client\'s exploration of [thought/belief/pattern], supporting self-directed insight. Client identified [connection/awareness] and articulated its relationship to [presenting concern/values/behavior].'},
+  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Psychoeducation',
+   d:'Therapist provided psychoeducation regarding [topic: ACT model / experiential avoidance / symptom maintenance]. Client verbalized understanding and connected information to their own experience of [presenting concern].'},
+  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Between-Session Practice Review',
+   d:'Therapist reviewed between-session [practice/committed action/self-monitoring]. Client reported [completed/partially completed/did not attempt]; barriers included [barrier if applicable]. Session explored what interfered and identified [adjustment/alternative strategy] for the coming week.'},
+  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Naming the Story',
+   d:'Therapist introduced cognitive defusion via narrative labeling, collaboratively identifying client\'s recurrent cognitive story ["[story name]"]. Client practiced noticing the story as a pattern rather than a fact, demonstrating reduced fusion with its literal content.'},
+  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Thanking the Mind',
+   d:'Therapist introduced defusion technique of acknowledging the mind\'s commentary without engagement ("thanking the mind"); client practiced responding to [specific thought] with observer-stance language, reporting reduced urgency and increased behavioral flexibility in relation to the thought.'},
+  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Physicalization of Thought',
+   d:'Therapist guided client in physicalizing the thought [cognitive content], externalizing it as a tangible object. Client reported increased psychological distance from the thought and reduced experiential fusion with its literal content.'},
+  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Leaves on a Stream',
+   d:'Therapist facilitated mindfulness-based defusion exercise (leaves on a stream), guiding client to observe thoughts as passing events rather than directives. Client practiced the observer stance and reported [increased detachment / difficulty staying present / noticing pull toward certain thoughts — specify].'},
+  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Passengers on the Bus',
+   d:'Therapist introduced the Passengers on the Bus metaphor to illustrate cognitive defusion and values-based action; client connected the metaphor to their experience of [specific thought/urge] and identified [values-consistent direction] as the driving destination.'},
+  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Workability Question',
+   d:'Therapist used workability questioning to evaluate the function of [thought/belief/rule] in client\'s life, shifting from accuracy-evaluation to values-based assessment. Client identified that holding [thought] rigidly has limited [functioning domain] and explored an alternative relationship to the thought.'},
+  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Expanding Around the Feeling',
+   d:'Therapist facilitated acceptance-based intervention, guiding client to expand awareness around [emotion/sensation] rather than suppress or escape it. Client practiced making room for [feeling] and reported [reduced urgency / increased tolerance / difficulty staying present — specify].'},
+  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Cost of Avoidance',
+   d:'Therapist explored functional costs of client\'s avoidance of [internal state/situation], identifying behavioral restriction in [domain: occupational / social / relational]. Client articulated awareness that avoidance of [experience] has contributed to [functional limitation], increasing motivation for willingness-based alternatives.'},
+  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Urge Surfing',
+   d:'Therapist introduced urge surfing as an acceptance-based strategy for managing [urge type]; client practiced observing the urge as a transient wave rather than a directive, developing capacity to tolerate the urge without behavioral response.'},
+  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Willingness / Creative Hopelessness',
+   d:'Therapist explored client\'s prior attempts to manage [symptom/emotion] through control strategies, collaboratively examining workability. Client articulated awareness that [control strategy] has not reduced suffering and has produced secondary costs including [cost], increasing openness to acceptance-based alternatives.'},
+  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Physicalizing Sensation',
+   d:'Therapist guided client in somatic and acceptance-based physicalizing of [emotion/sensation], exploring its physical qualities to facilitate non-defensive contact. Client demonstrated [increased tolerance / shift from avoidance to curiosity / difficulty locating sensation — specify].'},
+  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Brief In-Session Mindfulness',
+   d:'Therapist facilitated brief mindfulness practice [approx. X minutes], anchoring client\'s attention to present-moment experience via breath and body awareness. Client demonstrated [engaged / able to return from distraction / struggled with sustained attention — specify] and reported [response].'},
+  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Grounding / Orienting to Present',
+   d:'Therapist used grounding and sensory orienting techniques to facilitate return to present-moment awareness following activation around [topic/content]. Client demonstrated return to window of tolerance and was able to [re-engage with session content / identify current sensory experience].'},
+  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Noticing What\'s Happening Now',
+   d:'Therapist facilitated present-moment awareness by directing client\'s attention to live in-session experience as [topic/affect] arose. Client identified [emotion/sensation/thought] in real time and practiced staying with it rather than narrating away from it.'},
+  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Assigned Mindfulness Practice',
+   d:'Therapist assigned between-session mindfulness practice [specify: brief breath anchor / body scan / mindful daily activity] to build present-moment awareness and generalize in-session skills. Client verbalized understanding and identified [when/how they will use it].'},
+  {p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Observer Exercise',
+   d:'Therapist facilitated the Observer Exercise, guiding client to access the continuous observing self distinct from changing thoughts, emotions, and self-descriptions. Client demonstrated [ability to access observer perspective / difficulty separating self from content — specify] and reported [response].'},
+  {p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Chessboard / Sky Metaphors',
+   d:'Therapist introduced [Chessboard / Sky and Weather] metaphor to illustrate the distinction between self-as-context and self-as-content; client connected the metaphor to their experience of over-identification with [emotion/diagnosis/role] and practiced describing their experience from the observer perspective.'},
+  {p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Identity-Level Exploration',
+   d:'Therapist facilitated identity-level exploration, supporting client in differentiating self-concept from [symptom / diagnosis / role] with which they have been fused. Client identified [aspect of self] as existing independently of [fused content], demonstrating early access to a more flexible self-concept.'},
+  {p:'values',c:'var(--c-values)',l:'Values',n:'Formal Values Clarification',
+   d:'Therapist facilitated formal values clarification [specify: VLQ / Bulls-Eye / domain mapping], identifying [domain] as a core area of importance. Client articulated [specific value] as a chosen direction, distinguishing it from [goal / rule / obligation], and connected it to current behavioral patterns and treatment goals.'},
+  {p:'values',c:'var(--c-values)',l:'Values',n:'Obituary / Funeral Exercise',
+   d:'Therapist guided client through obituary/legacy values exercise; client identified [valued qualities / relationships / contributions] as important to who they want to be. Exercise evoked [emotional response] and surfaced awareness of the gap between current behavior and valued direction in [domain].'},
+  {p:'values',c:'var(--c-values)',l:'Values',n:'Connecting Suffering to Values',
+   d:'Therapist facilitated values identification through exploration of client\'s pain around [presenting concern], connecting the intensity of distress to the underlying value of [value]. Client demonstrated emerging awareness of [value] as a guiding direction and expressed motivation to act in its service despite discomfort.'},
+  {p:'values',c:'var(--c-values)',l:'Values',n:'Chosen vs. Inherited Values',
+   d:'Therapist and client explored the origins of stated value [value], distinguishing between inherited expectations and genuinely chosen direction. Client identified [chosen value] as self-authored, distinct from [inherited expectation from family/cultural context], supporting development of an autonomous values foundation for committed action.'},
+  {p:'values',c:'var(--c-values)',l:'Values',n:'Values–Behavior Gap',
+   d:'Therapist facilitated exploration of the discrepancy between client\'s identified value of [value] and current behavioral pattern of [pattern], identifying [barrier] as the primary obstacle. Client demonstrated self-awareness of the gap without excessive self-criticism and expressed motivation to close it through committed action.'},
+  {p:'action',c:'var(--c-action)',l:'Committed Action',n:'Values-Based Action Planning',
+   d:'Therapist and client collaboratively developed a values-based action plan in the domain of [domain], with client committing to [specific action] by [timeframe]. Anticipated barriers identified: [barrier]. Client identified ACT-based response strategy of [defusion / acceptance / present-moment grounding] for managing barriers without abandoning the committed action.'},
+  {p:'action',c:'var(--c-action)',l:'Committed Action',n:'Barrier Exploration & Response Planning',
+   d:'Therapist and client explored barriers to completion of committed action [action], identifying [barrier type: cognitive fusion / experiential avoidance / practical obstacle]. Session adjusted the action plan to [modification] and reinforced the workability framework for responding to future barriers without behavioral withdrawal.'},
+  {p:'action',c:'var(--c-action)',l:'Committed Action',n:'Relapse Response Planning',
+   d:'Therapist introduced relapse response planning, normalizing setback as part of the change process rather than evidence of failure. Client identified [early warning signs] and developed a values-based response plan for [scenario], including [specific strategy].'},
+  {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Accessing Self-Energy / Unblending',
+   d:'Using an IFS-informed approach, therapist supported client in unblending from [part] and accessing Self-energy, demonstrated by increased curiosity and reduced reactivity toward the part. This parallel process to ACT self-as-context supported client\'s capacity to observe their experience rather than be governed by it.'},
+  {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Legacy Burden / Inherited Values',
+   d:'Using an IFS-informed approach, therapist explored inherited messages or legacy burdens contributing to client\'s [belief/rule/self-concept], tracing their origin to [family/cultural context]. Client identified the burden as external in origin rather than self-authored, supporting differentiation and movement toward chosen values.'},
+  {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Parts Mapping',
+   d:'Therapist and client identified and mapped [part(s)] active in relation to [concern/situation], exploring each part\'s protective role, feared outcome, and relationship to Self. Client demonstrated increased curiosity toward [part] and reduced blending, supporting conditions for deeper internal dialogue.'},
+];
+
+// Track selected interventions
+let selectedInts = []; // array of {int, id}
+let intCounter = 0;
+let currentFilter = 'all';
+
+// ── BUILD INTERVENTION GRID ──
+function buildIntGrid() {
+  const grid = document.getElementById('int-grid');
+  grid.innerHTML = '';
+  INTS.forEach((int, idx) => {
+    const item = document.createElement('div');
+    item.className = 'int-item';
+    item.dataset.process = int.p;
+    item.dataset.idx = idx;
+    if (currentFilter !== 'all' && int.p !== currentFilter) item.classList.add('hidden');
+    item.innerHTML = `<span class="int-dot" style="background:${int.c}"></span>
+      <span>${int.n}</span>
+      <span class="int-process" style="color:${int.c}">${int.l}</span>`;
+    item.addEventListener('click', () => toggleInt(idx, item));
+    grid.appendChild(item);
+  });
+}
+
+function filterInts(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filt').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.int-item').forEach(item => {
+    item.classList.toggle('hidden', filter !== 'all' && item.dataset.process !== filter);
+  });
+}
+
+function toggleInt(idx, itemEl) {
+  const existing = selectedInts.findIndex(s => s.idx === idx);
+  if (existing > -1) {
+    // Remove
+    const id = selectedInts[existing].id;
+    selectedInts.splice(existing, 1);
+    const el = document.getElementById('sel-' + id);
+    if (el) el.remove();
+    itemEl.classList.remove('selected');
+  } else {
+    // Add
+    const id = ++intCounter;
+    selectedInts.push({idx, id});
+    itemEl.classList.add('selected');
+    addSelectedIntBlock(INTS[idx], id);
+  }
+  updateNoIntMsg();
+  build();
+}
+
+function splitDoc(doc) {
+  // Split at the first sentence boundary where "Client" (capital) begins a new sentence
+  const idx = doc.search(/\.\s+Client\s/);
+  if (idx === -1) return { therapist: doc, client: '' };
+  return {
+    therapist: doc.substring(0, idx + 1).trim(),
+    client:    doc.substring(idx + 1).trim()
+  };
+}
+
+function addSelectedIntBlock(int, id) {
+  const noMsg = document.getElementById('no-int-msg');
+  if (noMsg) noMsg.style.display = 'none';
+
+  const { therapist, client } = splitDoc(int.d);
+
+  const list = document.getElementById('selected-int-list');
+  const block = document.createElement('div');
+  block.className = 'sel-int';
+  block.id = 'sel-' + id;
+  block.innerHTML = `
+    <div class="sel-int-header">
+      <span class="sel-int-dot" style="background:${int.c}"></span>
+      <span class="sel-int-name">${int.n}</span>
+      <button class="sel-int-remove" onclick="removeIntById(${id})">Remove</button>
+    </div>
+    <div class="sel-int-sub">Therapist → I</div>
+    <textarea id="int-ta-i-${id}" oninput="build()">${therapist}</textarea>
+    <div class="sel-int-sub r-sub">Client Response → R</div>
+    <textarea id="int-ta-r-${id}" oninput="build()">${client}</textarea>`;
+  list.appendChild(block);
+}
+
+function removeIntById(id) {
+  const entry = selectedInts.find(s => s.id === id);
+  if (entry) {
+    const gridItem = document.querySelector(`.int-item[data-idx="${entry.idx}"]`);
+    if (gridItem) gridItem.classList.remove('selected');
+    selectedInts = selectedInts.filter(s => s.id !== id);
+  }
+  const el = document.getElementById('sel-' + id);
+  if (el) el.remove();
+  updateNoIntMsg();
+  build();
+}
+
+function updateNoIntMsg() {
+  const msg = document.getElementById('no-int-msg');
+  if (msg) msg.style.display = selectedInts.length === 0 ? 'block' : 'none';
+}
+
+// ── HELPERS ──
+function radio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : null;
+}
+function checks(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(c => c.value);
+}
+function note(id) { return document.getElementById(id)?.value.trim() || ''; }
+function ta(id)   { return document.getElementById(id)?.value.trim() || ''; }
+
+function listify(arr) {
+  if (!arr.length) return null;
+  if (arr.length === 1) return arr[0];
+  return arr.slice(0,-1).join(', ') + ' and ' + arr[arr.length-1];
+}
+
+// ── BUILD PREVIEW ──
+function build() {
+  buildP();
+  buildI();
+  buildR();
+  buildPlan();
+}
+
+function buildP() {
+  const appearance = radio('appearance');
+  const affects = checks('cg-affect');
+  const affectNote = note('notes-affect');
+  const mood = radio('mood');
+  const moodNote = note('notes-mood');
+  const cognition = radio('cognition');
+  const cogNote = note('notes-cog');
+  const speech = radio('speech');
+  const speechNote = note('notes-speech');
+  const insight = radio('insight');
+  const insightNote = note('notes-insight');
+  const safety = radio('safety');
+  const safetyNote = note('notes-safety');
+  const content = ta('presenting-content');
+
+  let parts = [];
+
+  if (appearance) parts.push(`Client presented as ${appearance}.`);
+
+  if (affects.length) {
+    let aff = `Affect was ${listify(affects)}.`;
+    if (affectNote) aff += ` ${affectNote}.`;
+    parts.push(aff);
+  }
+
+  if (mood) {
+    let m = `Client reported ${mood} mood.`;
+    if (moodNote) m += ` ${moodNote}.`;
+    parts.push(m);
+  }
+
+  if (cognition) {
+    let c = cognition + '.';
+    if (cogNote) c += ` ${cogNote}.`;
+    parts.push(c);
+  }
+
+  if (speech) {
+    let s = `Speech was ${speech}.`;
+    if (speechNote) s += ` ${speechNote}.`;
+    parts.push(s);
+  }
+
+  if (insight) {
+    let i = `Insight and judgment were ${insight}.`;
+    if (insightNote) i += ` ${insightNote}.`;
+    parts.push(i);
+  }
+
+  if (safety) {
+    let r = `${safety}.`;
+    if (safetyNote) r += ` ${safetyNote}.`;
+    parts.push(r);
+  }
+
+  let pText = parts.join(' ');
+  if (content) pText += (pText ? '\n\n' : '') + content;
+
+  document.getElementById('prev-p').textContent = pText || '[Complete MSE fields above]';
+}
+
+function buildI() {
+  const parts = [];
+  selectedInts.forEach(s => {
+    const ta = document.getElementById('int-ta-i-' + s.id);
+    if (ta && ta.value.trim()) parts.push(ta.value.trim());
+  });
+  const extra = ta('int-extra');
+  if (extra) parts.push(extra);
+  document.getElementById('prev-i').textContent = parts.length ? parts.join('\n\n') : '[Select interventions above]';
+}
+
+function buildR() {
+  const engagement = radio('engagement');
+  const response   = radio('response');
+  const engNote    = note('notes-engagement');
+  const resNote    = note('notes-response');
+  const narrative  = ta('response-narrative');
+
+  let parts = [];
+  if (engagement) {
+    let e = `${engagement}.`;
+    if (engNote) e += ` ${engNote}.`;
+    parts.push(e);
+  }
+  if (response) {
+    let r = `${response}.`;
+    if (resNote) r += ` ${resNote}.`;
+    parts.push(r);
+  }
+
+  // Pull client response sentences from each intervention
+  selectedInts.forEach(s => {
+    const ta = document.getElementById('int-ta-r-' + s.id);
+    if (ta && ta.value.trim()) parts.push(ta.value.trim());
+  });
+
+  if (narrative) parts.push(narrative);
+
+  document.getElementById('prev-r').textContent = parts.length ? parts.join(' ') : '[Complete response fields above]';
+}
+
+function buildPlan() {
+  const freq  = radio('frequency');
+  const hw    = ta('plan-homework');
+  const focus = ta('plan-focus');
+  const coord = ta('plan-coordination');
+
+  let parts = [];
+  if (freq) parts.push(`Client will continue ${freq}.`);
+  if (hw)   parts.push(`Between-session: ${hw}`);
+  if (focus) parts.push(`Clinical focus for next session: ${focus}`);
+  if (coord) parts.push(coord);
+
+  document.getElementById('prev-plan').textContent = parts.length ? parts.join('\n') : '[Complete plan fields above]';
+}
+
+// ── COPY ──
+function copySection(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('flash');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.classList.remove('flash'); btn.textContent = orig; }, 1800);
+  });
+}
+
+function copyAll() {
+  const sections = ['prev-p','prev-i','prev-r','prev-plan'];
+  const labels   = ['P:', 'I:', 'R:', 'P:'];
+  const text = sections.map((id, i) => `${labels[i]}\n${document.getElementById(id).textContent}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => {
+    const el = document.getElementById('copy-confirm');
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2000);
+  });
+}
+
+// ── CLEAR ──
+function clearAll() {
+  if (!confirm('Clear all fields and selections?')) return;
+
+  // Reset radios + checkboxes
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+
+  // Reset text inputs
+  document.querySelectorAll('input[type="text"].notes-row input, .notes-row input').forEach(i => i.value = '');
+  document.querySelectorAll('.notes-row input').forEach(i => i.value = '');
+
+  // Reset textareas
+  ['presenting-content','int-extra','response-narrative','plan-homework','plan-focus','plan-coordination']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+
+  // Reset interventions
+  selectedInts = [];
+  document.getElementById('selected-int-list').innerHTML = '<div class="no-int-msg" id="no-int-msg">No interventions selected yet.</div>';
+  document.querySelectorAll('.int-item').forEach(i => i.classList.remove('selected'));
+
+  build();
+}
+
+// ── INIT ──
+buildIntGrid();
+
+// Auto-fill date
+document.getElementById('sb-date').value = new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
+document.getElementById('sb-date').addEventListener('input', build);
+
+// Wire radio groups in section blocks to build
+document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => {
+  el.addEventListener('change', build);
+});
+
+build();
+</script>
+</body>
+</html>
