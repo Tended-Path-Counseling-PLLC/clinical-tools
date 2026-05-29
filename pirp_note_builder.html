@@ -196,6 +196,33 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
 .no-int-msg{font-size:13px;color:var(--muted);font-style:italic;padding:6px 2px;}
 
+/* ── SESSION VARIABLES PANEL ── */
+.vars-panel{border-bottom:1px solid var(--border);}
+.vars-toggle{
+  display:flex;align-items:center;gap:10px;padding:9px 16px;
+  background:var(--ink);cursor:pointer;user-select:none;
+  position:sticky;top:0;z-index:11;
+}
+.vars-toggle-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.vars-toggle-label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);flex:1;}
+.vars-toggle-count{font-size:10px;color:var(--gold);font-weight:500;letter-spacing:.06em;background:rgba(215,159,85,.15);padding:1px 7px;border-radius:10px;}
+.vars-toggle-arrow{font-size:10px;color:var(--muted);transition:transform .15s;display:inline-block;}
+.vars-toggle-arrow.open{transform:rotate(180deg);}
+.vars-body{padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;}
+.vars-body.collapsed{display:none;}
+.var-field{display:flex;flex-direction:column;gap:3px;}
+.var-field.full-width{grid-column:1/-1;}
+.var-label{font-size:10px;font-weight:500;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);}
+.var-input{
+  width:100%;font-family:'Jost',sans-serif;font-size:13px;font-weight:300;color:var(--ink);
+  background:var(--warm-white);border:1px solid var(--border);border-radius:1px;
+  padding:5px 8px;outline:none;transition:border-color .15s;
+}
+.var-input:focus{border-color:var(--gold);}
+.var-input::placeholder{color:#bbb5b0;font-style:italic;}
+.var-input.has-value{border-color:rgba(215,159,85,.6);background:#fffdf5;}
+.vars-foot{grid-column:1/-1;font-size:11px;color:var(--muted);font-style:italic;padding-top:2px;border-top:1px solid var(--border);margin-top:2px;}
+
 /* ── RIGHT PANEL ── */
 .right-panel{
   overflow-y:auto;height:calc(100vh - 115px);
@@ -305,6 +332,79 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
   <!-- LEFT PANEL -->
   <div class="left-panel">
+
+    <!-- SESSION VARIABLES -->
+    <div class="vars-panel">
+      <div class="vars-toggle" onclick="toggleVarsPanel()">
+        <span class="vars-toggle-dot"></span>
+        <span class="vars-toggle-label">Session Variables</span>
+        <span class="vars-toggle-count" id="vars-count" style="display:none"></span>
+        <span class="vars-toggle-arrow open" id="vars-arrow">▾</span>
+      </div>
+      <div class="vars-body" id="vars-body">
+        <div class="var-field">
+          <label class="var-label" for="var-emotion">Emotion / Feeling</label>
+          <input class="var-input" id="var-emotion" type="text" placeholder="e.g. guilt"
+            oninput="onVarChange('emotion',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-sensation">Sensation</label>
+          <input class="var-input" id="var-sensation" type="text" placeholder="e.g. tightness in chest"
+            oninput="onVarChange('sensation',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-value">Value</label>
+          <input class="var-input" id="var-value" type="text" placeholder="e.g. connection"
+            oninput="onVarChange('value',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-behavior">Behavior / Avoidance</label>
+          <input class="var-input" id="var-behavior" type="text" placeholder="e.g. withdrawal"
+            oninput="onVarChange('behavior',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-pattern">Pattern</label>
+          <input class="var-input" id="var-pattern" type="text" placeholder="e.g. avoidance loop"
+            oninput="onVarChange('pattern',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-thought">Thought / Belief</label>
+          <input class="var-input" id="var-thought" type="text" placeholder='e.g. "I am a burden"'
+            oninput="onVarChange('thought',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-topic">Topic / Theme</label>
+          <input class="var-input" id="var-topic" type="text" placeholder="e.g. relationship conflict"
+            oninput="onVarChange('topic',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-symptom">Symptom</label>
+          <input class="var-input" id="var-symptom" type="text" placeholder="e.g. panic attacks"
+            oninput="onVarChange('symptom',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-domain">Domain / Area</label>
+          <input class="var-input" id="var-domain" type="text" placeholder="e.g. relationships"
+            oninput="onVarChange('domain',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-barrier">Barrier</label>
+          <input class="var-input" id="var-barrier" type="text" placeholder="e.g. cognitive fusion"
+            oninput="onVarChange('barrier',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-part">Part (IFS)</label>
+          <input class="var-input" id="var-part" type="text" placeholder="e.g. protector part"
+            oninput="onVarChange('part',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-story">Story Name</label>
+          <input class="var-input" id="var-story" type="text" placeholder='e.g. "The Not Enough Story"'
+            oninput="onVarChange('story',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="vars-foot">Set values above — they auto-fill bracketed placeholders in interventions when selected. Unedited fields update live if you change a variable.</div>
+      </div>
+    </div>
 
     <!-- P: PRESENTATION -->
     <div class="section-block">
@@ -567,6 +667,145 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 </div><!-- /main -->
 
 <script>
+// ── SESSION VARIABLES ──
+const sessionVars = {
+  emotion:'', sensation:'', value:'', behavior:'', pattern:'',
+  thought:'', topic:'', symptom:'', domain:'', barrier:'', part:'', story:''
+};
+
+let varsPanelOpen = true;
+
+function toggleVarsPanel() {
+  varsPanelOpen = !varsPanelOpen;
+  document.getElementById('vars-body').classList.toggle('collapsed', !varsPanelOpen);
+  document.getElementById('vars-arrow').classList.toggle('open', varsPanelOpen);
+}
+
+function updateVarsCount() {
+  const count = Object.values(sessionVars).filter(Boolean).length;
+  const el = document.getElementById('vars-count');
+  if (count) { el.textContent = count + ' set'; el.style.display = ''; }
+  else { el.style.display = 'none'; }
+}
+
+// Replace bracketed placeholders with session variable values.
+// Compound patterns are handled first (more specific), then simple ones.
+function substituteVars(text) {
+  const v = sessionVars;
+
+  // Compound replacements (order matters — longest/most specific first)
+  if (v.emotion || v.sensation) {
+    const c = [v.emotion, v.sensation].filter(Boolean).join('/');
+    text = text.replaceAll('[emotion/sensation]', c);
+  }
+  if (v.symptom || v.behavior) {
+    const c = [v.symptom, v.behavior].filter(Boolean).join('/');
+    text = text.replaceAll('[symptom/behavior/avoidance pattern]', c);
+  }
+  if (v.symptom || v.emotion) {
+    const c = [v.symptom, v.emotion].filter(Boolean).join('/');
+    text = text.replaceAll('[symptom/emotion]', c);
+  }
+  if (v.emotion || v.pattern) {
+    const c = [v.emotion, v.pattern].filter(Boolean).join('/');
+    text = text.replaceAll('[internal state/pattern]', c);
+  }
+  if (v.thought) {
+    text = text.replaceAll('[thought/belief/pattern]', v.thought);
+    text = text.replaceAll('[thought/belief/rule]', v.thought);
+    text = text.replaceAll('[thought/belief]', v.thought);
+    text = text.replaceAll('[thought/urge]', v.thought);
+    text = text.replaceAll('[belief/rule/self-concept]', v.thought);
+  }
+  if (v.barrier) {
+    text = text.replaceAll('[barrier type: cognitive fusion / experiential avoidance / practical obstacle]', v.barrier);
+  }
+  if (v.domain) {
+    text = text.replaceAll('[domain: occupational / social / relational]', v.domain);
+    text = text.replaceAll('[functioning domain]', v.domain);
+  }
+  if (v.topic) {
+    text = text.replaceAll('[experience/theme]', v.topic);
+    text = text.replaceAll('[concern/situation]', v.topic);
+    text = text.replaceAll('[topic: ACT model / experiential avoidance / symptom maintenance]', v.topic);
+  }
+  if (v.emotion) {
+    text = text.replaceAll('[internal state/situation]', v.emotion);
+    text = text.replaceAll('[experience]', v.emotion);
+  }
+  if (v.behavior) {
+    text = text.replaceAll('[control strategy]', v.behavior);
+    text = text.replaceAll('[avoidance pattern]', v.behavior);
+  }
+  if (v.behavior || v.emotion) {
+    text = text.replaceAll('[urge type]', v.behavior || v.emotion);
+  }
+  if (v.symptom) {
+    text = text.replaceAll('[symptom/distress]', v.symptom);
+    text = text.replaceAll('[symptom / diagnosis / role]', v.symptom);
+  }
+  if (v.topic) {
+    text = text.replaceAll('[presenting concern]', v.topic);
+    text = text.replaceAll('[topic/affect]', v.topic);
+    text = text.replaceAll('[topic/content]', v.topic);
+  }
+  if (v.emotion) {
+    text = text.replaceAll('[emotion/diagnosis/role]', v.emotion);
+  }
+  if (v.emotion || v.sensation || v.thought) {
+    const c = [v.emotion, v.sensation, v.thought].filter(Boolean).join('/');
+    text = text.replaceAll('[emotion/sensation/thought]', c);
+  }
+
+  // Simple single-key replacements
+  const simple = [
+    ['[emotion]',          v.emotion],
+    ['[feeling]',          v.emotion],
+    ['[sensation]',        v.sensation],
+    ['[value]',            v.value],
+    ['[chosen value]',     v.value],
+    ['[specific value]',   v.value],
+    ['[behavior]',         v.behavior],
+    ['[pattern]',          v.pattern],
+    ['[thought]',          v.thought],
+    ['[specific thought]', v.thought],
+    ['[cognitive content]',v.thought],
+    ['[topic]',            v.topic],
+    ['[symptom]',          v.symptom],
+    ['[domain]',           v.domain],
+    ['[barrier]',          v.barrier],
+    ['[part]',             v.part],
+    ['[part(s)]',          v.part],
+    ['[story name]',       v.story],
+  ];
+  for (const [ph, val] of simple) {
+    if (val) text = text.replaceAll(ph, val);
+  }
+  return text;
+}
+
+// Called whenever a variable input changes.
+// Re-applies substitution to any intervention textarea that hasn't been manually edited.
+function onVarChange(key, value) {
+  sessionVars[key] = value.trim();
+  updateVarsCount();
+  selectedInts.forEach(s => {
+    const taI = document.getElementById('int-ta-i-' + s.id);
+    const taR = document.getElementById('int-ta-r-' + s.id);
+    if (taI && taI.value === s.lastGenI) {
+      const newText = substituteVars(s.origI);
+      taI.value = newText;
+      s.lastGenI = newText;
+    }
+    if (taR && taR.value === s.lastGenR) {
+      const newText = substituteVars(s.origR);
+      taR.value = newText;
+      s.lastGenR = newText;
+    }
+  });
+  build();
+}
+
 // ── INTERVENTION DATA ──
 const INTS = [
   {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Reflective Listening & Validation',
@@ -640,7 +879,10 @@ const INTS = [
 ];
 
 // Track selected interventions
-let selectedInts = []; // array of {int, id}
+// Each entry: {idx, id, origI, origR, lastGenI, lastGenR}
+// origI/origR = raw template text before any substitution
+// lastGenI/lastGenR = last generated text (used to detect manual edits)
+let selectedInts = [];
 let intCounter = 0;
 let currentFilter = 'all';
 
@@ -681,11 +923,12 @@ function toggleInt(idx, itemEl) {
     if (el) el.remove();
     itemEl.classList.remove('selected');
   } else {
-    // Add
+    // Add — create entry first so addSelectedIntBlock can populate orig/lastGen
     const id = ++intCounter;
-    selectedInts.push({idx, id});
+    const entry = {idx, id, origI:'', origR:'', lastGenI:'', lastGenR:''};
+    selectedInts.push(entry);
     itemEl.classList.add('selected');
-    addSelectedIntBlock(INTS[idx], id);
+    addSelectedIntBlock(INTS[idx], id, entry);
   }
   updateNoIntMsg();
   build();
@@ -701,11 +944,20 @@ function splitDoc(doc) {
   };
 }
 
-function addSelectedIntBlock(int, id) {
+function addSelectedIntBlock(int, id, entry) {
   const noMsg = document.getElementById('no-int-msg');
   if (noMsg) noMsg.style.display = 'none';
 
   const { therapist, client } = splitDoc(int.d);
+  // Apply current session variable substitution
+  const genI = substituteVars(therapist);
+  const genR = substituteVars(client);
+
+  // Store originals and last-generated for dirty detection
+  entry.origI = therapist;
+  entry.origR = client;
+  entry.lastGenI = genI;
+  entry.lastGenR = genR;
 
   const list = document.getElementById('selected-int-list');
   const block = document.createElement('div');
@@ -718,9 +970,9 @@ function addSelectedIntBlock(int, id) {
       <button class="sel-int-remove" onclick="removeIntById(${id})">Remove</button>
     </div>
     <div class="sel-int-sub">Therapist → I</div>
-    <textarea id="int-ta-i-${id}" oninput="build()">${therapist}</textarea>
+    <textarea id="int-ta-i-${id}" oninput="build()">${genI}</textarea>
     <div class="sel-int-sub r-sub">Client Response → R</div>
-    <textarea id="int-ta-r-${id}" oninput="build()">${client}</textarea>`;
+    <textarea id="int-ta-r-${id}" oninput="build()">${genR}</textarea>`;
   list.appendChild(block);
 }
 
@@ -740,6 +992,15 @@ function removeIntById(id) {
 function updateNoIntMsg() {
   const msg = document.getElementById('no-int-msg');
   if (msg) msg.style.display = selectedInts.length === 0 ? 'block' : 'none';
+}
+
+// ── PREVIEW HELPERS ──
+// Highlight any remaining [bracketed placeholders] in gold in the preview panels
+function setPreview(id, text, placeholder) {
+  const el = document.getElementById(id);
+  if (!text) { el.innerHTML = `<span style="color:var(--muted);font-style:italic;">${placeholder}</span>`; return; }
+  const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  el.innerHTML = escaped.replace(/\[[^\]]+\]/g, '<span class="blank">$&</span>');
 }
 
 // ── HELPERS ──
@@ -826,7 +1087,7 @@ function buildP() {
   let pText = parts.join(' ');
   if (content) pText += (pText ? '\n\n' : '') + content;
 
-  document.getElementById('prev-p').textContent = pText || '[Complete MSE fields above]';
+  setPreview('prev-p', pText, '[Complete MSE fields above]');
 }
 
 function buildI() {
@@ -837,7 +1098,7 @@ function buildI() {
   });
   const extra = ta('int-extra');
   if (extra) parts.push(extra);
-  document.getElementById('prev-i').textContent = parts.length ? parts.join('\n\n') : '[Select interventions above]';
+  setPreview('prev-i', parts.length ? parts.join('\n\n') : '', '[Select interventions above]');
 }
 
 function buildR() {
@@ -867,7 +1128,7 @@ function buildR() {
 
   if (narrative) parts.push(narrative);
 
-  document.getElementById('prev-r').textContent = parts.length ? parts.join(' ') : '[Complete response fields above]';
+  setPreview('prev-r', parts.length ? parts.join(' ') : '', '[Complete response fields above]');
 }
 
 function buildPlan() {
@@ -882,12 +1143,12 @@ function buildPlan() {
   if (focus) parts.push(`Clinical focus for next session: ${focus}`);
   if (coord) parts.push(coord);
 
-  document.getElementById('prev-plan').textContent = parts.length ? parts.join('\n') : '[Complete plan fields above]';
+  setPreview('prev-plan', parts.length ? parts.join('\n') : '', '[Complete plan fields above]');
 }
 
 // ── COPY ──
 function copySection(id, btn) {
-  const text = document.getElementById(id).textContent;
+  const text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text).then(() => {
     btn.classList.add('flash');
     const orig = btn.textContent;
@@ -899,7 +1160,7 @@ function copySection(id, btn) {
 function copyAll() {
   const sections = ['prev-p','prev-i','prev-r','prev-plan'];
   const labels   = ['P:', 'I:', 'R:', 'P:'];
-  const text = sections.map((id, i) => `${labels[i]}\n${document.getElementById(id).textContent}`).join('\n\n');
+  const text = sections.map((id, i) => `${labels[i]}\n${document.getElementById(id).innerText}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => {
     const el = document.getElementById('copy-confirm');
     el.classList.add('show');
@@ -928,11 +1189,17 @@ function clearAll() {
   document.getElementById('selected-int-list').innerHTML = '<div class="no-int-msg" id="no-int-msg">No interventions selected yet.</div>';
   document.querySelectorAll('.int-item').forEach(i => i.classList.remove('selected'));
 
+  // Reset session variables
+  Object.keys(sessionVars).forEach(k => sessionVars[k] = '');
+  document.querySelectorAll('.var-input').forEach(i => { i.value = ''; i.classList.remove('has-value'); });
+  updateVarsCount();
+
   build();
 }
 
 // ── INIT ──
 buildIntGrid();
+updateVarsCount();
 
 // Auto-fill date
 document.getElementById('sb-date').value = new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
