@@ -35,6 +35,7 @@
     --panic:  #8a4a3a;
     --phobia: #4a5c8a;
     --sad:    #5a6b8a;
+    --iad:    #4a7a6b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -194,6 +195,7 @@
   .nav-item.active[data-dx="panic"]  { border-left-color: var(--panic); }
   .nav-item.active[data-dx="phobia"] { border-left-color: var(--phobia); }
   .nav-item.active[data-dx="sad"]    { border-left-color: var(--sad); }
+  .nav-item.active[data-dx="iad"]    { border-left-color: var(--iad); }
 
   /* ── Main panel ── */
   .main { flex: 1; overflow-y: auto; background: var(--warm-white); min-height: 0; }
@@ -1144,6 +1146,14 @@
         <span class="nav-code">F45.1</span>
       </div>
     </div>
+    <div class="nav-item" data-dx="iad" onclick="showDx('iad', this)">
+      <div class="nav-dot" style="background:var(--iad)"></div>
+      <span class="nav-name">Illness Anxiety Disorder</span>
+      <div class="nav-right">
+        <span class="nav-sig" id="nsig-iad" style="background:var(--iad)"></span>
+        <span class="nav-code">F41.8</span>
+      </div>
+    </div>
     <div class="nav-item" data-dx="dpd" onclick="showDx('dpd', this)">
       <div class="nav-dot" style="background:var(--dpd)"></div>
       <span class="nav-name">Depersonalization/Derealization</span>
@@ -1370,6 +1380,10 @@
           <label class="symptom-row">
             <input type="checkbox" class="symp-cb" id="hs30" onchange="updateHomeSignals()">
             <span class="symp-text">Recurrent or persistent feelings of unreality — detachment from self (depersonalization) or surroundings (derealization)</span>
+          </label>
+          <label class="symptom-row">
+            <input type="checkbox" class="symp-cb" id="hs34" onchange="updateHomeSignals()">
+            <span class="symp-text">Preoccupation with having or developing a serious illness — with little to no somatic symptoms, and anxiety persisting despite medical reassurance</span>
           </label>
         </div>
 
@@ -4498,6 +4512,159 @@
       </div>
     </div>
 
+    <!-- ══════════════════════════════════════ ILLNESS ANXIETY ══════ -->
+    <div class="diagnosis-panel" id="panel-iad">
+      <div class="dx-header">
+        <div class="dx-header-top">
+          <div class="dx-color-bar" style="background:var(--iad)"></div>
+          <div class="dx-title-wrap">
+            <div class="dx-name">Illness Anxiety Disorder</div>
+            <div class="dx-subtitle">Somatic Symptom and Related Disorders · DSM-5-TR 300.7</div>
+          </div>
+        </div>
+        <div class="dx-codes">
+          <span class="code-chip dsm">DSM-5-TR 300.7</span>
+          <span class="code-chip icd">F41.8</span>
+        </div>
+      </div>
+      <div class="dx-body">
+        <div class="dx-section">
+          <div class="dx-section-title">Diagnostic Criteria</div>
+          <div class="criteria-group">
+            <div class="criteria-group-label">Criterion A</div>
+            <ul class="criteria-list">
+              <li><label class="criteria-row"><input type="checkbox" class="criteria-cb" id="iad-a" onchange="updateNarrative('iad')"><span class="cb-text"><strong>A:</strong> Preoccupation with having or acquiring a serious illness</span></label></li>
+            </ul>
+          </div>
+          <div class="criteria-group">
+            <div class="criteria-group-label">Criterion B</div>
+            <ul class="criteria-list">
+              <li><label class="criteria-row"><input type="checkbox" class="criteria-cb" id="iad-b" onchange="updateNarrative('iad')"><span class="cb-text"><strong>B:</strong> Somatic symptoms are not present or, if present, are only mild in intensity. If another medical condition is present or there is a high risk for one, the preoccupation is clearly excessive or disproportionate.</span></label></li>
+            </ul>
+          </div>
+          <div class="criteria-group">
+            <div class="criteria-group-label">Criterion C</div>
+            <ul class="criteria-list">
+              <li><label class="criteria-row"><input type="checkbox" class="criteria-cb" id="iad-c" onchange="updateNarrative('iad')"><span class="cb-text"><strong>C:</strong> High level of anxiety about health; the individual is easily alarmed about personal health status</span></label></li>
+            </ul>
+          </div>
+          <div class="criteria-group">
+            <div class="criteria-group-label">Criterion D</div>
+            <ul class="criteria-list">
+              <li><label class="criteria-row"><input type="checkbox" class="criteria-cb" id="iad-d" onchange="updateNarrative('iad')"><span class="cb-text"><strong>D:</strong> Excessive health-related behaviors (e.g., repeated body checking, frequent medical appointments, researching symptoms) OR maladaptive avoidance (e.g., avoiding doctor visits, medical procedures, or reminders of illness)</span></label></li>
+            </ul>
+          </div>
+          <div class="criteria-group">
+            <div class="criteria-group-label">Criterion E</div>
+            <ul class="criteria-list">
+              <li><label class="criteria-row"><input type="checkbox" class="criteria-cb" id="iad-e" onchange="updateNarrative('iad')"><span class="cb-text"><strong>E:</strong> Illness preoccupation has been present for at least 6 months, though the specific illness feared may change over that period</span></label></li>
+            </ul>
+          </div>
+          <div class="criteria-group">
+            <div class="criteria-group-label">Criterion F</div>
+            <ul class="criteria-list">
+              <li><label class="criteria-row"><input type="checkbox" class="criteria-cb" id="iad-f" onchange="updateNarrative('iad')"><span class="cb-text"><strong>F:</strong> Not better explained by another mental disorder — such as Somatic Symptom Disorder, Panic Disorder, GAD, Body Dysmorphic Disorder, OCD, or Delusional Disorder (somatic type)</span></label></li>
+            </ul>
+          </div>
+          <div class="criteria-note">Critical distinction from SSD: IAD involves preoccupation with <em>having or acquiring</em> an illness, with minimal or no somatic symptoms. SSD centers on actual somatic symptoms that are distressing, with excessive cognitive and behavioral responses to those symptoms. When prominent somatic symptoms are present, SSD takes precedence. Reassurance from medical providers typically provides only brief, if any, relief in IAD.</div>
+        </div>
+        <div class="dx-section">
+          <div class="dx-section-title">Specifiers</div>
+          <div class="specifier-grid">
+            <div class="specifier-card"><div class="specifier-name">Care-Seeking Type</div><div class="specifier-desc">Medical care — including physician visits, medical tests, and specialist referrals — is used excessively. Reassurance is sought repeatedly but provides only brief relief.</div></div>
+            <div class="specifier-card"><div class="specifier-name">Care-Avoidant Type</div><div class="specifier-desc">Medical care is maladaptively avoided. The individual does not seek evaluation despite significant illness preoccupation — often due to fear of what a diagnosis might confirm.</div></div>
+          </div>
+        </div>
+        <div class="dx-section">
+          <div class="dx-section-title">Formulation Builder</div>
+          <div class="fb-wrap">
+            <div class="fb-hint">Select the applicable specifier — the diagnosis string below updates automatically.</div>
+            <div class="fb-row">
+              <span class="fb-label">Type</span>
+              <div class="fb-options">
+                <label class="fb-radio"><input type="radio" name="iad-type" value="Care-Seeking Type" onchange="updateIAD()"> Care-Seeking Type</label>
+                <label class="fb-radio"><input type="radio" name="iad-type" value="Care-Avoidant Type" onchange="updateIAD()"> Care-Avoidant Type</label>
+              </div>
+            </div>
+            <hr class="fb-divider">
+            <div class="fb-row">
+              <span class="fb-label">Output</span>
+              <div style="flex:1"><input class="fb-out" id="fb-iad-out" type="text" readonly></div>
+              <button class="fb-copy-btn" onclick="copyFb('fb-iad-out', this)">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="dx-section mn-section">
+          <div class="dx-section-title">Medical Necessity</div>
+          <div class="mn-wrap">
+            <div class="mn-rationale">Client meets DSM-5-TR criteria for Illness Anxiety Disorder. Persistent preoccupation with having or acquiring a serious illness — in the absence of prominent somatic symptoms — causes clinically significant anxiety and functional impairment. Health-related checking behaviors or avoidance of medical care perpetuate the anxiety cycle and restrict adaptive functioning. Treatment is medically necessary to reduce illness-focused preoccupation, interrupt reinforcing behavioral patterns, and develop a workable relationship with health uncertainty.</div>
+            <div>
+              <div class="mn-block-label">Functional Impairment <span style="font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted);">— check all that apply</span></div>
+              <div class="mn-check-grid">
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-work" onchange="updateMN('iad')">Occupational / work performance</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-sleep" onchange="updateMN('iad')">Sleep and rest</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-social" onchange="updateMN('iad')">Social functioning / relationships</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-family" onchange="updateMN('iad')">Parenting or family role</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-adl" onchange="updateMN('iad')">Self-care / daily activities</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-academic" onchange="updateMN('iad')">Academic functioning</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-financial" onchange="updateMN('iad')">Financial decision-making</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-health" onchange="updateMN('iad')">Physical health maintenance</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-imp-emotion" onchange="updateMN('iad')">Emotional regulation in daily life</label>
+              </div>
+            </div>
+            <div>
+              <div class="mn-block-label">CPT 90837 Justification <span style="font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted);">— select if applicable</span></div>
+              <div class="mn-check-grid">
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-severity" onchange="updateMN('iad')">Severity of symptoms requiring extended processing time</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-trauma" onchange="updateMN('iad')">Trauma processing requiring full protocol — cannot safely interrupt</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-crisis" onchange="updateMN('iad')">Crisis stabilization or active safety planning</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-comorbid" onchange="updateMN('iad')">Multiple comorbid conditions addressed within the same session</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-dysreg" onchange="updateMN('iad')">Client emotional dysregulation requiring sustained containment before session close</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-ifs" onchange="updateMN('iad')">Identity-level or parts work (ACT/IFS) requiring uninterrupted engagement</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-relapse" onchange="updateMN('iad')">Relapse prevention or high-risk symptom monitoring</label>
+                <label class="mn-check-row"><input type="checkbox" class="mn-cb" id="iad-90837-intensive" onchange="updateMN('iad')">Initial intensive phase of treatment</label>
+              </div>
+            </div>
+            <div class="mn-output-wrap">
+              <textarea class="mn-output" id="mn-output-iad" readonly></textarea>
+              <div class="mn-footer">
+                <span class="mn-note">Copy into session note — documents medical necessity and 90837 justification</span>
+                <button class="mn-copy-btn" onclick="copyMN('iad', this)">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dx-section">
+          <div class="dx-section-title">Differential Diagnoses</div>
+          <div class="differential-item" onclick="toggleDiff(this)">
+            <div class="differential-header"><span class="differential-name">Somatic Symptom Disorder</span><span class="differential-toggle">+</span></div>
+            <div class="differential-body"><div class="distinguisher"><strong>Key distinguisher:</strong> SSD requires one or more actual somatic symptoms that are distressing or disruptive, accompanied by excessive cognitive and behavioral responses to those symptoms. IAD is appropriate when somatic symptoms are absent or mild and the preoccupation is about having or developing illness rather than about the somatic experience itself. If prominent somatic symptoms are present, SSD takes precedence over IAD.</div></div>
+          </div>
+          <div class="differential-item" onclick="toggleDiff(this)">
+            <div class="differential-header"><span class="differential-name">GAD</span><span class="differential-toggle">+</span></div>
+            <div class="differential-body"><div class="distinguisher"><strong>Key distinguisher:</strong> GAD involves excessive worry spanning multiple life domains; health may be one of them. IAD is diagnosed when illness preoccupation is the predominant, persistent concern — not one worry among many. If the clinical picture is broader and health anxiety is one component of pervasive worry, GAD may be more accurate.</div></div>
+          </div>
+          <div class="differential-item" onclick="toggleDiff(this)">
+            <div class="differential-header"><span class="differential-name">OCD</span><span class="differential-toggle">+</span></div>
+            <div class="differential-body"><div class="distinguisher"><strong>Key distinguisher:</strong> In OCD, intrusive thoughts about illness are typically ego-dystonic — the individual recognizes them as excessive and distressing, and engages in compulsions to neutralize them. In IAD, the illness beliefs feel more plausible and are held with some conviction. Checking behaviors appear in both; assess for ego-dystonicity, the presence of other OCD themes, and whether the feared content is specifically illness versus contamination or harm.</div></div>
+          </div>
+          <div class="differential-item" onclick="toggleDiff(this)">
+            <div class="differential-header"><span class="differential-name">Panic Disorder</span><span class="differential-toggle">+</span></div>
+            <div class="differential-body"><div class="distinguisher"><strong>Key distinguisher:</strong> Panic attacks frequently involve acute fear of serious illness (heart attack, stroke). IAD involves a persistent, ongoing preoccupation rather than episodic fear peaks. If illness fear is primarily confined to panic attack episodes and resolves between them, Panic Disorder is more appropriate. Comorbidity is possible.</div></div>
+          </div>
+        </div>
+        <div class="dx-section">
+          <div class="dx-section-title">Prevalence, Course &amp; Clinical Notes</div>
+          <div class="course-grid">
+            <div class="course-card"><div class="course-card-label">Prevalence</div><div class="course-card-value">~1.3–10% in outpatient general medical settings; less well-characterized in mental health settings. Roughly equally distributed between men and women. Often first identified in primary care rather than mental health contexts.</div></div>
+            <div class="course-card"><div class="course-card-label">Course</div><div class="course-card-value">Typically chronic and waxing/waning without treatment, often triggered or worsened by stressors, family illness, or personal medical events. The specific illness feared frequently shifts over time. Prognosis is better with early treatment, lower health anxiety severity, and absence of comorbid personality pathology.</div></div>
+            <div class="course-card"><div class="course-card-label">Clinical Notes</div><div class="course-card-value">Reassurance is reinforcing — providing it perpetuates the anxiety cycle rather than resolving it. ACT (defusion from illness-related thoughts, acceptance of uncertainty) and CBT with exposure components are the primary evidence-based approaches. IFS may be useful for exploring the protective function of health vigilance. Psychoeducation about the role of attention and reassurance-seeking is often an early priority.</div></div>
+            <div class="course-card"><div class="course-card-label">Common Comorbidities</div><div class="course-card-value">Anxiety disorders (GAD, Panic Disorder, Specific Phobia), MDD, OCD spectrum. High rates of functional impairment and medical utilization. Often presents alongside actual medical conditions, where the preoccupation is disproportionate to the condition's severity or prognosis.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ══════════════════════════════════════ DEPERSONALIZATION ══════ -->
     <div class="diagnosis-panel" id="panel-dpd">
       <div class="dx-header">
@@ -5596,6 +5763,7 @@
     asd:    { label: 'Acute Stress Disorder · F43.0',            fn: narrativeASD },
     pgd:    { label: 'Prolonged Grief Disorder · F43.81',        fn: narrativePGD },
     ssd:    { label: 'Somatic Symptom Disorder · F45.1',         fn: narrativeSSD },
+    iad:    { label: 'Illness Anxiety Disorder · F41.8',         fn: narrativeIAD },
     dpd:    { label: 'Depersonalization/Derealization · F48.1',  fn: narrativeDPD },
     bdd:    { label: 'Body Dysmorphic Disorder · F45.22',        fn: narrativeBDD },
     anxu:   { label: 'Anxiety Disorder, Unspecified · F41.9',    fn: narrativeANXU },
@@ -5672,6 +5840,7 @@
     asd:    "Client meets DSM-5-TR criteria for Acute Stress Disorder following recent traumatic exposure. Acute stress symptoms including intrusion, avoidance, dissociation, and hyperarousal cause clinically significant distress and functional impairment. Treatment is medically necessary to provide acute stabilization, reduce symptom intensity, prevent chronification, and monitor for progression to PTSD.",
     pgd:    "Client meets DSM-5-TR criteria for Prolonged Grief Disorder. Persistent, impairing grief characterized by intense longing, identity disruption, and difficulty reintegrating causes clinically significant distress and functional impairment extending beyond expected bereavement. Treatment is medically necessary to process the loss, restore functioning, and address the identity and relational disruption caused by prolonged grief.",
     ssd:    "Client meets DSM-5-TR criteria for Somatic Symptom Disorder. Excessive cognitive and behavioral responses to somatic symptoms — including disproportionate health-related worry, persistent preoccupation, and significant functional disruption — cause clinically significant distress and impairment. Treatment is medically necessary to reduce health-related anxiety, develop a workable relationship with somatic experience, and restore adaptive functioning.",
+    iad:    "Client meets DSM-5-TR criteria for Illness Anxiety Disorder. Persistent preoccupation with having or acquiring a serious illness — in the absence of prominent somatic symptoms — causes clinically significant anxiety and functional impairment. Health-related checking behaviors or avoidance of medical care perpetuate the anxiety cycle and restrict adaptive functioning. Treatment is medically necessary to reduce illness-focused preoccupation, interrupt reinforcing behavioral patterns, and develop a workable relationship with health uncertainty.",
     dpd:    "Client meets DSM-5-TR criteria for Depersonalization/Derealization Disorder. Persistent or recurrent experiences of detachment from self or surroundings — with intact reality testing — cause clinically significant distress and functional impairment. Treatment is medically necessary to reduce the frequency and intensity of dissociative episodes, build grounding capacity, and address underlying contributors to dissociation.",
     bdd:    "Client meets DSM-5-TR criteria for Body Dysmorphic Disorder. Preoccupation with perceived physical flaws — accompanied by repetitive behaviors and/or mental acts — causes clinically significant distress and functional impairment. Treatment is medically necessary to reduce compulsive appearance-focused behaviors, develop a workable relationship with body image, and address underlying shame and identity-level disturbance.",
     anxu:   "Client presents with clinically significant anxiety symptoms causing marked distress and functional impairment. While the presentation does not yet meet full criteria for a specific anxiety disorder, symptoms are consistent with anxiety disorder pathology requiring clinical intervention. Treatment is medically necessary to address symptom burden, reduce functional impairment, and clarify the diagnostic picture as treatment progresses.",
@@ -5862,6 +6031,29 @@
     document.getElementById('fb-ssd-out').value = parts.join(', ');
   }
 
+  // ─── ILLNESS ANXIETY DISORDER ───────────────────────────
+  function narrativeIAD() {
+    if (!checked('iad-a')) return '';
+    const items = [];
+    if (checked('iad-b')) items.push('somatic symptoms are absent or mild; illness preoccupation is not accounted for by somatic experience');
+    if (checked('iad-c')) items.push('high level of health anxiety with low threshold for alarm about personal health status');
+    if (checked('iad-d')) items.push('excessive health-related checking behaviors or maladaptive avoidance of medical care');
+    if (!items.length) return '';
+    let narrative = 'The client presents with persistent preoccupation with having or acquiring a serious illness, consistent with Illness Anxiety Disorder (F41.8). ';
+    narrative += listify(items) + '. ';
+    if (checked('iad-e')) narrative += 'Illness preoccupation has been present for at least 6 months. ';
+    if (checked('iad-f')) narrative += 'Presentation is not better explained by another mental disorder. ';
+    return narrative.trim();
+  }
+  function updateIAD() {
+    const p = document.getElementById('panel-iad');
+    const type = getRadio(p, 'iad-type');
+    const parts = ['Illness Anxiety Disorder'];
+    if (type) parts.push(type);
+    parts.push('(F41.8)');
+    document.getElementById('fb-iad-out').value = parts.join(', ');
+  }
+
   // ─── DEPERSONALIZATION/DEREALIZATION ────────────────────
   function narrativeDPD() {
     const hasDep = checked('dpd-a1');
@@ -5952,11 +6144,12 @@
     { id: 'hs26', primary: ['cyc'],        consider: ['bpd', 'bpd2', 'adhd'] },
     { id: 'hs27', primary: ['asd'],        consider: ['adj'] },
     { id: 'hs28', primary: ['pgd'],        consider: ['mdd'] },
-    { id: 'hs29', primary: ['ssd'],        consider: ['gad', 'adj'] },
+    { id: 'hs29', primary: ['ssd'],        consider: ['gad', 'adj', 'iad'] },
     { id: 'hs30', primary: ['dpd'],        consider: ['ptsd', 'panic'] },
     { id: 'hs31', primary: ['bdd'],        consider: ['ocd', 'sad'] },
     { id: 'hs32', primary: ['anxu'],       consider: ['gad', 'sad', 'panic'] },
     { id: 'hs33', primary: ['stru'],       consider: ['adj', 'ptsd'] },
+    { id: 'hs34', primary: ['iad'],        consider: ['ssd', 'gad', 'ocd'] },
   ];
 
   const homeDxMeta = {
@@ -5977,6 +6170,7 @@
     asd:    { name: 'Acute Stress Disorder',           code: 'F43.0',  color: 'var(--asd)' },
     pgd:    { name: 'Prolonged Grief Disorder',        code: 'F43.81', color: 'var(--pgd)' },
     ssd:    { name: 'Somatic Symptom Disorder',        code: 'F45.1',  color: 'var(--ssd)' },
+    iad:    { name: 'Illness Anxiety Disorder',        code: 'F41.8',  color: 'var(--iad)' },
     dpd:    { name: 'Depersonalization/Derealization', code: 'F48.1',  color: 'var(--dpd)' },
     bdd:    { name: 'Body Dysmorphic Disorder',        code: 'F45.22', color: 'var(--bdd)' },
     anxu:   { name: 'Anxiety Disorder, Unspecified',   code: 'F41.9',  color: 'var(--anxu)' },
