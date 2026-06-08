@@ -1783,14 +1783,17 @@
         <div class="tp-section">
           <div class="tp-section-title" style="--dx-accent:var(--iad)">Plan Output</div>
           <div class="tp-hint">Updates as you select goals and objectives above. Copy into your treatment plan document.</div>
-          <div class="plan-output-wrap">
-            <div class="plan-output-actions">
-              <span class="plan-copied" id="iad-plan-copied">Copied</span>
-              <button class="plan-btn" onclick="clearSelections('iad')">Clear</button>
-              <button class="plan-btn primary" onclick="copyPlan('iad')">Copy</button>
+          <div class="plan-output-section">
+            <div class="plan-output-header">
+              <span class="plan-output-label">Generated Plan</span>
+              <div class="plan-output-actions">
+                <span class="plan-copied" id="iad-plan-copied">Copied</span>
+                <button class="plan-btn" onclick="clearSelections('iad')">Clear</button>
+                <button class="plan-btn primary" onclick="copyPlan('iad')">Copy</button>
+              </div>
             </div>
+            <div class="plan-output" id="iad-plan-output"><span class="plan-placeholder">Select goals and objectives above to generate the treatment plan.</span></div>
           </div>
-          <div class="plan-output" id="iad-plan-output"><span class="plan-placeholder">Select goals and objectives above to generate the treatment plan.</span></div>
         </div>
         <div class="tp-section">
           <div class="tp-section-title" style="--dx-accent:var(--iad)">Interventions</div>
