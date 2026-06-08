@@ -1151,7 +1151,7 @@
       <span class="nav-name">Illness Anxiety Disorder</span>
       <div class="nav-right">
         <span class="nav-sig" id="nsig-iad" style="background:var(--iad)"></span>
-        <span class="nav-code">F41.8</span>
+        <span class="nav-code">F45.21</span>
       </div>
     </div>
     <div class="nav-item" data-dx="dpd" onclick="showDx('dpd', this)">
@@ -4524,7 +4524,7 @@
         </div>
         <div class="dx-codes">
           <span class="code-chip dsm">DSM-5-TR 300.7</span>
-          <span class="code-chip icd">F41.8</span>
+          <span class="code-chip icd">F45.21</span>
         </div>
       </div>
       <div class="dx-body">
@@ -5763,7 +5763,7 @@
     asd:    { label: 'Acute Stress Disorder · F43.0',            fn: narrativeASD },
     pgd:    { label: 'Prolonged Grief Disorder · F43.81',        fn: narrativePGD },
     ssd:    { label: 'Somatic Symptom Disorder · F45.1',         fn: narrativeSSD },
-    iad:    { label: 'Illness Anxiety Disorder · F41.8',         fn: narrativeIAD },
+    iad:    { label: 'Illness Anxiety Disorder · F45.21',         fn: narrativeIAD },
     dpd:    { label: 'Depersonalization/Derealization · F48.1',  fn: narrativeDPD },
     bdd:    { label: 'Body Dysmorphic Disorder · F45.22',        fn: narrativeBDD },
     anxu:   { label: 'Anxiety Disorder, Unspecified · F41.9',    fn: narrativeANXU },
@@ -6039,7 +6039,7 @@
     if (checked('iad-c')) items.push('high level of health anxiety with low threshold for alarm about personal health status');
     if (checked('iad-d')) items.push('excessive health-related checking behaviors or maladaptive avoidance of medical care');
     if (!items.length) return '';
-    let narrative = 'The client presents with persistent preoccupation with having or acquiring a serious illness, consistent with Illness Anxiety Disorder (F41.8). ';
+    let narrative = 'The client presents with persistent preoccupation with having or acquiring a serious illness, consistent with Illness Anxiety Disorder (F45.21). ';
     narrative += listify(items) + '. ';
     if (checked('iad-e')) narrative += 'Illness preoccupation has been present for at least 6 months. ';
     if (checked('iad-f')) narrative += 'Presentation is not better explained by another mental disorder. ';
@@ -6050,7 +6050,7 @@
     const type = getRadio(p, 'iad-type');
     const parts = ['Illness Anxiety Disorder'];
     if (type) parts.push(type);
-    parts.push('(F41.8)');
+    parts.push('(F45.21)');
     document.getElementById('fb-iad-out').value = parts.join(', ');
   }
 
@@ -6170,7 +6170,7 @@
     asd:    { name: 'Acute Stress Disorder',           code: 'F43.0',  color: 'var(--asd)' },
     pgd:    { name: 'Prolonged Grief Disorder',        code: 'F43.81', color: 'var(--pgd)' },
     ssd:    { name: 'Somatic Symptom Disorder',        code: 'F45.1',  color: 'var(--ssd)' },
-    iad:    { name: 'Illness Anxiety Disorder',        code: 'F41.8',  color: 'var(--iad)' },
+    iad:    { name: 'Illness Anxiety Disorder',        code: 'F45.21',  color: 'var(--iad)' },
     dpd:    { name: 'Depersonalization/Derealization', code: 'F48.1',  color: 'var(--dpd)' },
     bdd:    { name: 'Body Dysmorphic Disorder',        code: 'F45.22', color: 'var(--bdd)' },
     anxu:   { name: 'Anxiety Disorder, Unspecified',   code: 'F41.9',  color: 'var(--anxu)' },
