@@ -23,6 +23,7 @@
   --c-values: #c08850;
   --c-action: #6aaa6a;
   --c-ifs: #a07898;
+  --c-assert: #c87840;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 
@@ -275,6 +276,19 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
 .copy-confirm{font-size:12px;color:#5c7a52;font-style:italic;opacity:0;transition:opacity .3s;}
 .copy-confirm.show{opacity:1;}
+
+/* ── MN SECTION ── */
+.mn-letter{font-size:15px;letter-spacing:.04em;font-family:'Jost',sans-serif;font-weight:500;}
+.mn-badge{
+  font-size:10px;font-weight:500;letter-spacing:.10em;text-transform:uppercase;
+  color:var(--gold);background:rgba(215,159,85,.12);border:1px solid rgba(215,159,85,.25);
+  padding:2px 8px;border-radius:10px;margin-left:auto;
+}
+.mn-disclaimer{
+  font-size:11px;color:var(--muted);font-style:italic;
+  padding:8px 16px 6px;border-bottom:1px solid var(--border);
+  background:#f7f4f0;
+}
 </style>
 </head>
 <body>
@@ -324,6 +338,29 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       <option value="Telehealth – Video, Non-Home (POS 02)">Telehealth – Video, Non-Home (POS 02)</option>
       <option value="Telehealth – Audio Only (POS 10)">Telehealth – Audio Only (POS 10)</option>
     </select>
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">Diagnosis</span>
+    <input class="sb-input" id="sb-dx" type="text" placeholder="e.g. F41.1 — GAD" style="width:240px" list="dx-datalist" oninput="build()">
+    <datalist id="dx-datalist">
+      <option value="F41.1 — Generalized Anxiety Disorder">
+      <option value="F33.0 — Major Depressive Disorder, Single Episode, Mild">
+      <option value="F33.1 — Major Depressive Disorder, Recurrent, Moderate">
+      <option value="F33.2 — Major Depressive Disorder, Recurrent, Severe">
+      <option value="F41.0 — Panic Disorder">
+      <option value="F43.10 — PTSD, Unspecified">
+      <option value="F43.12 — PTSD, Chronic">
+      <option value="F40.10 — Social Anxiety Disorder">
+      <option value="F43.21 — Adjustment Disorder w/ Depressed Mood">
+      <option value="F43.23 — Adjustment Disorder w/ Mixed Anxiety and Depressed Mood">
+      <option value="F34.1 — Persistent Depressive Disorder (Dysthymia)">
+      <option value="F60.3 — Borderline Personality Disorder">
+      <option value="F42.2 — OCD">
+      <option value="F40.00 — Agoraphobia, Unspecified">
+      <option value="F31.81 — Bipolar II Disorder">
+      <option value="F90.0 — ADHD, Predominantly Inattentive">
+      <option value="F90.2 — ADHD, Combined Presentation">
+    </datalist>
   </div>
 </div>
 
@@ -522,6 +559,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
           <button class="filt" data-filter="values" onclick="filterInts('values',this)" style="border-color:var(--c-values);">Values</button>
           <button class="filt" data-filter="action" onclick="filterInts('action',this)" style="border-color:var(--c-action);">Action</button>
           <button class="filt" data-filter="ifs" onclick="filterInts('ifs',this)" style="border-color:var(--c-ifs);">IFS</button>
+          <button class="filt" data-filter="assertiveness" onclick="filterInts('assertiveness',this)" style="border-color:var(--c-assert);">Assertiveness</button>
         </div>
 
         <div class="int-grid" id="int-grid"></div>
@@ -616,6 +654,61 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       </div>
     </div>
 
+    <!-- MN: MEDICAL NECESSITY -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-letter mn-letter">MN</span>
+        <span class="section-title">Medical Necessity</span>
+        <span class="mn-badge">Auto-generates from session data</span>
+      </div>
+      <div class="mn-disclaimer">
+        Template only — verify language against payer requirements before use. CPT medical necessity criteria require documented diagnosis, functional impairment, and clinical justification.
+      </div>
+      <div class="section-body">
+
+        <div class="mse-row">
+          <div class="fl">Functional Impairment Domains <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">select all that apply</span></div>
+          <div class="check-group" id="cg-impairment" onchange="build()">
+            <label><input type="checkbox" value="occupational / vocational functioning"> Occupational / vocational</label>
+            <label><input type="checkbox" value="relational / interpersonal functioning"> Relational / interpersonal</label>
+            <label><input type="checkbox" value="social functioning"> Social</label>
+            <label><input type="checkbox" value="self-care / ADLs"> Self-care / ADLs</label>
+            <label><input type="checkbox" value="academic functioning"> Academic</label>
+            <label><input type="checkbox" value="safety and risk management"> Safety / risk management</label>
+          </div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Clinical Acuity Indicators <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">select all that apply</span></div>
+          <div class="check-group" id="cg-acuity" onchange="build()">
+            <label><input type="checkbox" value="significant psychological distress"> Significant distress</label>
+            <label><input type="checkbox" value="functional deterioration from baseline"> Functional deterioration</label>
+            <label><input type="checkbox" value="complex diagnostic presentation / comorbidities"> Complex / comorbidities</label>
+            <label><input type="checkbox" value="active safety concerns requiring clinical monitoring"> Safety monitoring</label>
+            <label><input type="checkbox" value="inadequate response to lower level of care"> LOC escalation hx</label>
+            <label><input type="checkbox" value="trauma history complicating standard treatment trajectory"> Trauma complicating tx</label>
+            <label><input type="checkbox" value="decompensation risk without continued structured support"> Decompensation risk</label>
+          </div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Treatment Phase</div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="tx-stage" value="initial"> Initial / Assessment</label>
+            <label><input type="radio" name="tx-stage" value="active"> Active treatment</label>
+            <label><input type="radio" name="tx-stage" value="maintenance"> Maintenance</label>
+            <label><input type="radio" name="tx-stage" value="termination"> Termination planning</label>
+          </div>
+        </div>
+
+        <div class="sub-divider">Additional MN Context</div>
+        <div class="fb">
+          <textarea class="fi" id="mn-notes" rows="2" placeholder="Payer-specific language, prior authorization context, coordination of care rationale, or other MN documentation…" oninput="build()"></textarea>
+        </div>
+
+      </div>
+    </div>
+
   </div><!-- /left-panel -->
 
   <!-- RIGHT PANEL: PREVIEW -->
@@ -653,10 +746,18 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       <div class="preview-text" id="prev-plan"></div>
     </div>
 
+    <div class="preview-section">
+      <div class="preview-section-header">
+        <span class="ps-label">Medical Necessity</span>
+        <button class="ps-copy" onclick="copySection('prev-mn', this)">Copy</button>
+      </div>
+      <div class="preview-text" id="prev-mn"></div>
+    </div>
+
     <div class="copy-all-bar">
       <div class="copy-all-brand">Tended Path Counseling — Bethany Sherman, LMHC #LH70011579</div>
       <div class="copy-all-group">
-        <button class="btn-ca btn-gold" onclick="copyAll()">Copy Full Note</button>
+        <button class="btn-ca btn-gold" onclick="copyAll()">Copy Full Note + MN</button>
         <button class="btn-ca btn-outline" onclick="clearAll()">Clear</button>
         <span class="copy-confirm" id="copy-confirm">Copied ✓</span>
       </div>
@@ -876,6 +977,18 @@ const INTS = [
    d:'Using an IFS-informed approach, therapist explored inherited messages or legacy burdens contributing to client\'s [belief/rule/self-concept], tracing their origin to [family/cultural context]. Client identified the burden as external in origin rather than self-authored, supporting differentiation and movement toward chosen values.'},
   {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Parts Mapping',
    d:'Therapist and client identified and mapped [part(s)] active in relation to [concern/situation], exploring each part\'s protective role, feared outcome, and relationship to Self. Client demonstrated increased curiosity toward [part] and reduced blending, supporting conditions for deeper internal dialogue.'},
+  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'NVC — Observation, Feeling, Need, Request',
+   d:'Therapist introduced the Nonviolent Communication framework (Rosenberg), guiding client to distinguish observation from evaluation in the context of [topic]. Session focused on formulating a needs-based statement using the OFNR structure: observation of [behavior], expression of [emotion], identification of the underlying need ([value]), and a clear, doable request. Client practiced the OFNR sequence and demonstrated [capacity to separate observation from judgment / difficulty identifying the underlying need / readiness to make a direct request — specify].'},
+  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'DESC Script — Assertive Communication',
+   d:'Therapist introduced the DESC framework (Describe, Express, Specify, Consequences) to support assertive communication around [topic]. Client practiced structuring a response: Describe the situation ([behavior]), Express the impact ([emotion]), Specify a clear and concrete request, and identify natural Consequences of the change. Client demonstrated [ability to use the structure without blame / difficulty moving from complaint to direct request / increased confidence in assertive stance — specify].'},
+  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'DEAR MAN — Interpersonal Effectiveness',
+   d:'Therapist introduced the DEAR MAN skill (Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate) to support client in [goal: making a request / setting a limit / declining a request] in the context of [topic]. Session addressed applying the full sequence with attention to the Reinforce and Appear Confident steps. Client practiced structuring the interaction and demonstrated [understanding of the skill structure / readiness to apply in target situation / specific difficulty with a named step — specify].'},
+  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'"I" Statements & Direct Expression',
+   d:'Therapist introduced assertive communication using "I" statements, supporting client in shifting from [pattern] toward direct, needs-based expression in [topic]. Session focused on reformulating [pattern] using the structure: "I feel [emotion] when I observe [behavior] because I need [value]." Client practiced the structure and demonstrated [increased directness / difficulty maintaining a non-blaming stance / readiness to apply in target situation — specify].'},
+  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'Values-Based Boundary Setting',
+   d:'Therapist facilitated exploration of client\'s difficulty asserting limits in [domain], identifying [pattern] as the primary barrier to self-advocacy. Session connected limit-setting to the underlying value of [value] and supported client in identifying and articulating a clear, behaviorally specific limit. Client demonstrated [emerging capacity to assert without guilt / difficulty tolerating the anticipated reaction / reduced sense of responsibility for others\' responses — specify].'},
+  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'Communication Styles — Psychoeducation',
+   d:'Therapist provided psychoeducation on passive, aggressive, and assertive communication styles, connecting client\'s habitual pattern of [pattern] to its functional costs in [domain]. Session supported identification of assertive communication as a values-aligned alternative consistent with [value]. Client verbalized understanding of the passive/aggressive/assertive distinction and identified a target situation for applying assertive communication skills.'},
 ];
 
 // Track selected interventions
@@ -1026,6 +1139,131 @@ function build() {
   buildI();
   buildR();
   buildPlan();
+  buildMN();
+}
+
+// ── BUILD MEDICAL NECESSITY ──
+function buildMN() {
+  const cpt      = document.getElementById('sb-cpt')?.value || '90837';
+  const dx       = document.getElementById('sb-dx')?.value.trim() || '';
+  const date     = document.getElementById('sb-date')?.value || '';
+  const duration = document.getElementById('sb-duration')?.value.trim() || '';
+  const start    = document.getElementById('sb-start')?.value.trim() || '';
+  const end      = document.getElementById('sb-end')?.value.trim() || '';
+  const pos      = document.getElementById('sb-pos')?.value || '';
+
+  // MSE
+  const mood      = radio('mood');
+  const affects   = checks('cg-affect');
+  const insight   = radio('insight');
+  const safety    = radio('safety');
+  const cognition = radio('cognition');
+
+  // MN-specific inputs
+  const impairment = checks('cg-impairment');
+  const acuity     = checks('cg-acuity');
+  const stage      = radio('tx-stage');
+  const mnNotes    = ta('mn-notes');
+
+  // Session variables
+  const v = sessionVars;
+
+  // Deduplicated intervention modalities
+  const modalities = [...new Set(selectedInts.map(s => INTS[s.idx].l))];
+
+  // CPT time descriptor
+  const cptDesc = {
+    '90837': '53+ minute',
+    '90834': '38–52 minute',
+    '90832': '16–37 minute'
+  }[cpt] || '';
+
+  const parts = [];
+
+  // ── 1. Diagnosis + clinical presentation ──
+  const clinicalLines = [];
+  if (dx) clinicalLines.push(`Client carries a diagnosis of ${dx}.`);
+
+  const symptoms = [];
+  if (mood && !['good / positive', 'neutral / stable'].includes(mood)) symptoms.push(`${mood} mood`);
+  const abnormalAffects = affects.filter(a => a !== 'euthymic / full range');
+  if (abnormalAffects.length) symptoms.push(`${listify(abnormalAffects)} affect`);
+  if (v.symptom) symptoms.push(v.symptom);
+  if (v.emotion && !v.symptom) symptoms.push(v.emotion);
+  if (v.pattern) symptoms.push(v.pattern);
+  if (v.thought) symptoms.push(`cognitive content: ${v.thought}`);
+
+  if (symptoms.length) clinicalLines.push(`Presenting clinical indicators include ${symptoms.join(', ')}.`);
+  if (safety && safety !== 'No SI or HI reported') clinicalLines.push(`Safety / risk: ${safety}.`);
+  if (insight && ['limited', 'poor'].includes(insight)) clinicalLines.push(`Insight and judgment are ${insight}, indicating ongoing clinical need.`);
+  if (cognition && cognition !== 'Alert and oriented x4') clinicalLines.push(`${cognition}.`);
+
+  if (clinicalLines.length) parts.push(clinicalLines.join(' '));
+
+  // ── 2. Functional impairment ──
+  if (impairment.length) {
+    parts.push(
+      `Functional impairment is documented in the following domain(s): ${listify(impairment)}, ` +
+      `consistent with diagnostic criteria and individualized treatment plan objectives.`
+    );
+  }
+
+  // ── 3. Acuity indicators ──
+  if (acuity.length) {
+    parts.push(`Additional clinical indicators supporting medical necessity: ${acuity.join('; ')}.`);
+  }
+
+  // ── 4. Session / CPT description ──
+  let sessionLine = `${cpt}`;
+  if (cptDesc) sessionLine += ` (${cptDesc} individual psychotherapy)`;
+  sessionLine += ` was provided`;
+  if (date) sessionLine += ` on ${date}`;
+  const timeParts = [];
+  if (start && end) timeParts.push(`${start}–${end}`);
+  if (duration) timeParts.push(`${duration} min`);
+  if (timeParts.length) sessionLine += ` (${timeParts.join(', ')})`;
+  sessionLine += ` via ${pos}.`;
+
+  if (modalities.length) {
+    const topic = v.topic || v.symptom || '';
+    sessionLine += ` Session employed evidence-based interventions (${modalities.join(', ')})`;
+    if (topic) sessionLine += ` targeting ${topic}`;
+    sessionLine += `, consistent with the client's individualized treatment plan.`;
+  } else {
+    sessionLine += ` Session was consistent with the client's individualized treatment plan.`;
+  }
+  parts.push(sessionLine);
+
+  // ── 5. Treatment phase ──
+  const stageMap = {
+    'initial':     'Treatment is in the initial/engagement phase; session focus includes therapeutic alliance building, comprehensive assessment, and treatment planning.',
+    'active':      'Treatment is in the active phase, with ongoing work targeting core clinical concerns identified in the treatment plan.',
+    'maintenance': 'Treatment is in the maintenance/consolidation phase, focused on relapse prevention, generalizing gains, and sustaining functional improvement.',
+    'termination': 'Treatment is in the termination/transition phase; session addressed consolidation of progress, review of treatment goals, and discharge planning.'
+  };
+  if (stage && stageMap[stage]) parts.push(stageMap[stage]);
+
+  // ── 6. Conclusion ──
+  if (dx || symptoms.length || impairment.length) {
+    let conclusion = 'Continued individual psychotherapy at this level of care is medically necessary';
+    if (dx) conclusion += ` for the treatment of ${dx}`;
+    const goals = [];
+    if (impairment.length) goals.push(`restore and maintain functioning in ${listify(impairment)}`);
+    goals.push('reduce symptom severity and clinical distress');
+    goals.push('prevent deterioration or need for a higher level of care');
+    conclusion += ` to ${goals.join(', ')}.`;
+    parts.push(conclusion);
+  }
+
+  // ── 7. Additional MN notes ──
+  if (mnNotes) parts.push(mnNotes);
+
+  const hasContent = dx || symptoms.length || impairment.length || acuity.length || stage;
+  setPreview(
+    'prev-mn',
+    hasContent && parts.length ? parts.join('\n\n') : '',
+    '[Enter diagnosis and select clinical indicators above to generate]'
+  );
 }
 
 function buildP() {
@@ -1158,10 +1396,15 @@ function copySection(id, btn) {
 }
 
 function copyAll() {
-  const sections = ['prev-p','prev-i','prev-r','prev-plan'];
-  const labels   = ['P:', 'I:', 'R:', 'P:'];
-  const text = sections.map((id, i) => `${labels[i]}\n${document.getElementById(id).innerText}`).join('\n\n');
-  navigator.clipboard.writeText(text).then(() => {
+  const sections = ['prev-p','prev-i','prev-r','prev-plan','prev-mn'];
+  const labels   = ['P:', 'I:', 'R:', 'P:', 'Medical Necessity:'];
+  const parts = sections
+    .map((id, i) => {
+      const text = document.getElementById(id)?.innerText?.trim();
+      return text ? `${labels[i]}\n${text}` : null;
+    })
+    .filter(Boolean);
+  navigator.clipboard.writeText(parts.join('\n\n')).then(() => {
     const el = document.getElementById('copy-confirm');
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2000);
@@ -1181,8 +1424,12 @@ function clearAll() {
   document.querySelectorAll('.notes-row input').forEach(i => i.value = '');
 
   // Reset textareas
-  ['presenting-content','int-extra','response-narrative','plan-homework','plan-focus','plan-coordination']
+  ['presenting-content','int-extra','response-narrative','plan-homework','plan-focus','plan-coordination','mn-notes']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+
+  // Reset diagnosis field
+  const dxEl = document.getElementById('sb-dx');
+  if (dxEl) dxEl.value = '';
 
   // Reset interventions
   selectedInts = [];
