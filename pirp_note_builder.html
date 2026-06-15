@@ -32,9 +32,10 @@ body {
   background:var(--cream);
   color:var(--ink);
   font-size:16px;
-  min-height:100vh;
+  height:100vh;
   display:flex;
   flex-direction:column;
+  overflow:hidden;
 }
 
 /* ── HEADER ── */
@@ -79,9 +80,11 @@ body {
 
 /* ── LEFT PANEL ── */
 .left-panel{
-  overflow-y:auto;height:calc(100vh - 115px);
+  overflow-y:auto;
+  min-height:0;
   background:#f2ede6;
   border-right:1px solid var(--border);
+  position:relative;
 }
 
 .section-block{border-bottom:1px solid var(--border);}
@@ -226,7 +229,8 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
 /* ── RIGHT PANEL ── */
 .right-panel{
-  overflow-y:auto;height:calc(100vh - 115px);
+  overflow-y:auto;
+  min-height:0;
   background:var(--warm-white);
   padding:24px 28px;
   display:flex;flex-direction:column;gap:16px;
@@ -289,6 +293,54 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   padding:8px 16px 6px;border-bottom:1px solid var(--border);
   background:#f7f4f0;
 }
+
+/* ── EMOTION WHEEL ── */
+.emotion-wheel-wrap { width:100%; }
+.emotion-wheel-wrap svg { display:block; width:100%; max-height:560px; }
+
+/* ── PANEL DRAG RESIZER ── */
+.panel-resizer {
+  position:absolute; right:0; top:0; bottom:0; width:5px;
+  cursor:col-resize; z-index:50; background:transparent; transition:background .15s;
+}
+.panel-resizer:hover, .panel-resizer.active { background:rgba(215,159,85,.4); }
+.emotion-chips {
+  display:flex; flex-wrap:wrap; gap:4px;
+  margin-top:6px; min-height:20px; align-items:center;
+}
+.emotion-chip {
+  display:inline-flex; align-items:center; gap:4px;
+  background:var(--gold-light); color:var(--ink);
+  font-size:11px; font-weight:500; font-family:'Jost',sans-serif;
+  padding:2px 8px 2px 7px; border-radius:10px;
+  border:1px solid rgba(215,159,85,.6);
+}
+.chip-x { cursor:pointer; color:var(--muted); font-size:10px; line-height:1; }
+.chip-x:hover { color:#c07868; }
+
+/* ── WALK-AND-TALK BAR ── */
+.ww-bar {
+  background:#1a1e2e;
+  border-bottom:1px solid rgba(215,159,85,.25);
+  padding:8px 32px;
+  display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center;
+  flex-shrink:0;
+}
+.ww-bar-label {
+  font-size:10px; font-weight:500; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--gold); margin-right:4px;
+}
+.ww-select {
+  font-family:'Jost',sans-serif; font-size:13px; color:var(--warm-white);
+  background:transparent; border:none;
+  border-bottom:1px solid rgba(215,159,85,.3);
+  padding:2px 18px 2px 4px; outline:none; cursor:pointer;
+  -webkit-appearance:none; appearance:none; transition:border-color .15s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238a8490'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 2px center;
+}
+.ww-select:focus { border-bottom-color:var(--gold); }
+.ww-select option { background:#242733; color:#f7f4f0; }
 </style>
 </head>
 <body>
@@ -362,6 +414,47 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       <option value="F90.2 — ADHD, Combined Presentation">
     </datalist>
   </div>
+  <div class="sb-field" style="margin-left:auto;padding-left:18px;border-left:1px solid rgba(215,159,85,.18);">
+    <label style="display:flex;align-items:center;gap:7px;cursor:pointer;">
+      <input type="checkbox" id="ww-enabled" onchange="toggleWalkAndTalk()"
+        style="accent-color:var(--gold);cursor:pointer;width:14px;height:14px;">
+      <span class="sb-label" style="color:var(--gold-light);font-size:11px;">Walk-and-Talk</span>
+    </label>
+  </div>
+</div>
+
+<!-- WALK-AND-TALK BAR -->
+<div class="ww-bar" id="ww-bar" style="display:none;">
+  <span class="ww-bar-label">Walk-and-Talk</span>
+  <div class="sb-field">
+    <span class="sb-label">WW Start</span>
+    <input class="sb-input" id="ww-start" type="text" placeholder="e.g. 2:15 PM" style="width:90px" oninput="build()">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">WW End</span>
+    <input class="sb-input" id="ww-end" type="text" placeholder="e.g. 2:45 PM" style="width:90px" oninput="build()">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">Trail / Location</span>
+    <input class="sb-input" id="ww-location" type="text" style="width:260px" oninput="build()"
+      value="a trail near office (along NE 145th St in Woodinville, WA)">
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">Started From</span>
+    <select class="ww-select" id="ww-start-loc" onchange="build()">
+      <option value="in office">In office</option>
+      <option value="in the parking lot">Parking lot</option>
+      <option value="at the trailhead">Trailhead</option>
+    </select>
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">Completed At</span>
+    <select class="ww-select" id="ww-end-loc" onchange="build()">
+      <option value="in office">In office</option>
+      <option value="in the parking lot">Parking lot</option>
+      <option value="at the trailhead">Trailhead</option>
+    </select>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -369,6 +462,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
   <!-- LEFT PANEL -->
   <div class="left-panel">
+    <div class="panel-resizer" id="panel-resizer" title="Drag to resize panel"></div>
 
     <!-- SESSION VARIABLES -->
     <div class="vars-panel">
@@ -379,10 +473,14 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
         <span class="vars-toggle-arrow open" id="vars-arrow">▾</span>
       </div>
       <div class="vars-body" id="vars-body">
-        <div class="var-field">
-          <label class="var-label" for="var-emotion">Emotion / Feeling</label>
-          <input class="var-input" id="var-emotion" type="text" placeholder="e.g. guilt"
-            oninput="onVarChange('emotion',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        <div class="var-field full-width">
+          <label class="var-label">Emotion / Feeling <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">click segments to select multiple</span></label>
+          <div class="emotion-wheel-wrap">
+            <svg id="emotion-wheel-svg" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="emotion-chips" id="emotion-chips">
+              <span style="font-size:11px;color:#bbb5b0;font-style:italic;">Click wheel to select</span>
+            </div>
+          </div>
         </div>
         <div class="var-field">
           <label class="var-label" for="var-sensation">Sensation</label>
@@ -773,6 +871,192 @@ const sessionVars = {
   emotion:'', sensation:'', value:'', behavior:'', pattern:'',
   thought:'', topic:'', symptom:'', domain:'', barrier:'', part:'', story:''
 };
+
+// ── EMOTION WHEEL ──
+const EMOTION_WHEEL_DATA = [
+  { name:'joy',          color:'#c9952a', light:'#e8cc72', subs:['content','happy','elated'] },
+  { name:'trust',        color:'#5a9a28', light:'#90c858', subs:['secure','trusting','admiring'] },
+  { name:'fear',         color:'#1e9870', light:'#52c8a0', subs:['uneasy','anxious','terrified'] },
+  { name:'surprise',     color:'#1880b8', light:'#58b0d8', subs:['uncertain','startled','amazed'] },
+  { name:'sadness',      color:'#2858a8', light:'#6090d0', subs:['lonely','sad','grief'] },
+  { name:'disgust',      color:'#6040a0', light:'#9878c8', subs:['displeased','disgusted','loathing'] },
+  { name:'anger',        color:'#b03030', light:'#d87070', subs:['annoyed','frustrated','rage'] },
+  { name:'anticipation', color:'#b07020', light:'#d8a058', subs:['attentive','interested','eager'] },
+];
+
+const selectedEmotions = new Set();
+
+function arcPath(cx, cy, r1, r2, startAngle, endAngle) {
+  const gap = 0.018;
+  const sa = startAngle + gap, ea = endAngle - gap;
+  const c = Math.cos, s = Math.sin;
+  const large = (ea - sa > Math.PI) ? 1 : 0;
+  return [
+    `M ${cx+r2*c(sa)} ${cy+r2*s(sa)}`,
+    `A ${r2} ${r2} 0 ${large} 1 ${cx+r2*c(ea)} ${cy+r2*s(ea)}`,
+    `L ${cx+r1*c(ea)} ${cy+r1*s(ea)}`,
+    `A ${r1} ${r1} 0 ${large} 0 ${cx+r1*c(sa)} ${cy+r1*s(sa)}`, 'Z'
+  ].join(' ');
+}
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function buildEmotionWheel() {
+  const svg = document.getElementById('emotion-wheel-svg');
+  if (!svg) return;
+  svg.innerHTML = '';
+
+  const cx = 140, cy = 140;
+  const r0 = 33, r1 = 35, r2 = 80, r3 = 82, r4 = 126;
+  const n = EMOTION_WHEEL_DATA.length;
+  const step = (Math.PI * 2) / n;
+  const offset = -Math.PI / 2;
+  const shortDisplay = { 'anticipation': 'ANTICI.', 'surprise': 'SURPRS.' };
+
+  EMOTION_WHEEL_DATA.forEach((em, i) => {
+    const sa = offset + i * step;
+    const ea = sa + step;
+    const mid = (sa + ea) / 2;
+
+    // Inner ring — primary emotion
+    const inner = svgEl('path', {
+      d: arcPath(cx, cy, r1, r2, sa, ea),
+      fill: em.color, stroke: '#f2ede6', 'stroke-width': '1', cursor: 'pointer',
+      'data-emotion': em.name,
+    });
+    const t1 = svgEl('title', {}); t1.textContent = em.name;
+    inner.appendChild(t1);
+    inner.addEventListener('click', () => toggleWheelEmotion(em.name));
+    svg.appendChild(inner);
+
+    // Primary label (rotated radially, always readable)
+    const tr = (r1 + r2) / 2;
+    const tx = cx + tr * Math.cos(mid), ty = cy + tr * Math.sin(mid);
+    let rot = mid * 180 / Math.PI;
+    if (Math.cos(mid) < 0) rot += 180; // flip left-half so text reads inward
+    const label = svgEl('text', {
+      x: tx, y: ty, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      'font-size': '9', 'font-family': 'Jost, sans-serif',
+      fill: '#fff', 'font-weight': '500', 'letter-spacing': '0.05em',
+      transform: `rotate(${rot},${tx},${ty})`, 'pointer-events': 'none',
+    });
+    label.textContent = (shortDisplay[em.name] || em.name).toUpperCase();
+    svg.appendChild(label);
+
+    // Outer ring — secondary emotions
+    const subStep = step / em.subs.length;
+    em.subs.forEach((sub, j) => {
+      const ssa = sa + j * subStep, sea = ssa + subStep;
+      const smid = (ssa + sea) / 2;
+
+      const outer = svgEl('path', {
+        d: arcPath(cx, cy, r3, r4, ssa, sea),
+        fill: em.light, stroke: '#f2ede6', 'stroke-width': '1', cursor: 'pointer',
+        'data-emotion': sub,
+      });
+      const t2 = svgEl('title', {}); t2.textContent = sub + ' (' + em.name + ')';
+      outer.appendChild(t2);
+      outer.addEventListener('click', (e) => { e.stopPropagation(); toggleWheelEmotion(sub); });
+      svg.appendChild(outer);
+
+      // Secondary label
+      const sr = (r3 + r4) / 2;
+      const stx = cx + sr * Math.cos(smid), sty = cy + sr * Math.sin(smid);
+      let srot = smid * 180 / Math.PI;
+      if (Math.cos(smid) < 0) srot += 180;
+      const subLabel = svgEl('text', {
+        x: stx, y: sty, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+        'font-size': '7.5', 'font-family': 'Jost, sans-serif',
+        fill: '#242733', 'font-weight': '400',
+        transform: `rotate(${srot},${stx},${sty})`, 'pointer-events': 'none',
+      });
+      subLabel.textContent = sub;
+      svg.appendChild(subLabel);
+    });
+  });
+
+  // Center circle
+  svg.appendChild(svgEl('circle', { cx, cy, r: r0, fill: '#f2ede6', stroke: '#d6d0c8', 'stroke-width': '1' }));
+  const centerLabel = svgEl('text', {
+    x: cx, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+    'font-size': '7', 'font-family': 'Jost, sans-serif',
+    fill: '#8a8490', 'font-weight': '500', 'letter-spacing': '0.12em',
+  });
+  centerLabel.textContent = 'EMOTION';
+  svg.appendChild(centerLabel);
+
+  updateEmotionWheelDisplay();
+}
+
+function toggleWheelEmotion(emotion) {
+  if (selectedEmotions.has(emotion)) {
+    selectedEmotions.delete(emotion);
+  } else {
+    selectedEmotions.add(emotion);
+  }
+  sessionVars.emotion = Array.from(selectedEmotions).join(', ');
+  updateVarsCount();
+  // Re-substitute in any unedited intervention textareas
+  selectedInts.forEach(s => {
+    const taI = document.getElementById('int-ta-i-' + s.id);
+    const taR = document.getElementById('int-ta-r-' + s.id);
+    if (taI && taI.value === s.lastGenI) {
+      const newText = substituteVars(s.origI);
+      taI.value = newText; s.lastGenI = newText;
+    }
+    if (taR && taR.value === s.lastGenR) {
+      const newText = substituteVars(s.origR);
+      taR.value = newText; s.lastGenR = newText;
+    }
+  });
+  updateEmotionWheelDisplay();
+  build();
+}
+
+function updateEmotionWheelDisplay() {
+  // Visual state of segments
+  const svg = document.getElementById('emotion-wheel-svg');
+  if (svg) {
+    svg.querySelectorAll('[data-emotion]').forEach(el => {
+      const em = el.getAttribute('data-emotion');
+      if (selectedEmotions.has(em)) {
+        el.setAttribute('stroke', '#242733');
+        el.setAttribute('stroke-width', '2.5');
+        el.setAttribute('opacity', '1');
+      } else {
+        el.setAttribute('stroke', '#f2ede6');
+        el.setAttribute('stroke-width', '1');
+        el.setAttribute('opacity', '0.9');
+      }
+    });
+  }
+  // Chips
+  const chips = document.getElementById('emotion-chips');
+  if (!chips) return;
+  chips.innerHTML = '';
+  if (selectedEmotions.size === 0) {
+    chips.innerHTML = '<span style="font-size:11px;color:#bbb5b0;font-style:italic;">Click wheel to select</span>';
+    return;
+  }
+  selectedEmotions.forEach(em => {
+    const chip = document.createElement('span');
+    chip.className = 'emotion-chip';
+    chip.innerHTML = `${em} <span class="chip-x" onclick="toggleWheelEmotion('${em}')">&#x2715;</span>`;
+    chips.appendChild(chip);
+  });
+}
+
+// ── WALK-AND-TALK ──
+function toggleWalkAndTalk() {
+  const enabled = document.getElementById('ww-enabled')?.checked;
+  const bar = document.getElementById('ww-bar');
+  if (bar) bar.style.display = enabled ? 'flex' : 'none';
+  build();
+}
 
 let varsPanelOpen = true;
 
@@ -1330,9 +1614,26 @@ function buildP() {
 
 function buildI() {
   const parts = [];
+
+  // Walk-and-talk sentence — prepended when checkbox is active
+  if (document.getElementById('ww-enabled')?.checked) {
+    const wwStart = document.getElementById('ww-start')?.value.trim() || '[start time]';
+    const wwEnd   = document.getElementById('ww-end')?.value.trim()   || '[end time]';
+    const wwLoc   = document.getElementById('ww-location')?.value.trim()
+                    || 'a trail near office (along NE 145th St in Woodinville, WA)';
+    const wwSLoc  = document.getElementById('ww-start-loc')?.value  || 'in office';
+    const wwELoc  = document.getElementById('ww-end-loc')?.value    || 'in office';
+    const wwSentence =
+      `Walk-and-talk intervention utilized in this session to promote grounding and facilitate emotional processing. ` +
+      `The location was ${wwLoc} after initial check-in ${wwSLoc}. ` +
+      `Outdoor session began at ${wwStart} and concluded at ${wwEnd}. ` +
+      `No confidentiality breaches occurred. Session was completed ${wwELoc}.`;
+    parts.push(wwSentence);
+  }
+
   selectedInts.forEach(s => {
-    const ta = document.getElementById('int-ta-i-' + s.id);
-    if (ta && ta.value.trim()) parts.push(ta.value.trim());
+    const taEl = document.getElementById('int-ta-i-' + s.id);
+    if (taEl && taEl.value.trim()) parts.push(taEl.value.trim());
   });
   const extra = ta('int-extra');
   if (extra) parts.push(extra);
@@ -1360,8 +1661,8 @@ function buildR() {
 
   // Pull client response sentences from each intervention
   selectedInts.forEach(s => {
-    const ta = document.getElementById('int-ta-r-' + s.id);
-    if (ta && ta.value.trim()) parts.push(ta.value.trim());
+    const taEl = document.getElementById('int-ta-r-' + s.id);
+    if (taEl && taEl.value.trim()) parts.push(taEl.value.trim());
   });
 
   if (narrative) parts.push(narrative);
@@ -1420,7 +1721,6 @@ function clearAll() {
   document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
 
   // Reset text inputs
-  document.querySelectorAll('input[type="text"].notes-row input, .notes-row input').forEach(i => i.value = '');
   document.querySelectorAll('.notes-row input').forEach(i => i.value = '');
 
   // Reset textareas
@@ -1439,13 +1739,59 @@ function clearAll() {
   // Reset session variables
   Object.keys(sessionVars).forEach(k => sessionVars[k] = '');
   document.querySelectorAll('.var-input').forEach(i => { i.value = ''; i.classList.remove('has-value'); });
-  updateVarsCount();
 
+  // Reset emotion wheel
+  selectedEmotions.clear();
+  updateEmotionWheelDisplay();
+
+  // Reset walk-and-talk
+  const wwCb = document.getElementById('ww-enabled');
+  if (wwCb) { wwCb.checked = false; toggleWalkAndTalk(); }
+  ['ww-start','ww-end'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const wwLoc = document.getElementById('ww-location');
+  if (wwLoc) wwLoc.value = 'a trail near office (along NE 145th St in Woodinville, WA)';
+  const wwSL = document.getElementById('ww-start-loc'); if (wwSL) wwSL.selectedIndex = 0;
+  const wwEL = document.getElementById('ww-end-loc');   if (wwEL) wwEL.selectedIndex = 0;
+
+  updateVarsCount();
   build();
 }
 
+// ── PANEL DRAG-TO-RESIZE ──
+(function () {
+  let active = false, startX = 0, startW = 0;
+  const mainEl = document.querySelector('.main');
+
+  document.getElementById('panel-resizer').addEventListener('mousedown', e => {
+    active = true;
+    startX = e.clientX;
+    startW = document.querySelector('.left-panel').offsetWidth;
+    document.getElementById('panel-resizer').classList.add('active');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!active) return;
+    const w = Math.max(280, Math.min(720, startW + e.clientX - startX));
+    mainEl.style.gridTemplateColumns = w + 'px 1fr';
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!active) return;
+    active = false;
+    document.getElementById('panel-resizer').classList.remove('active');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    document.body.style.webkitUserSelect = '';
+  });
+})();
+
 // ── INIT ──
 buildIntGrid();
+buildEmotionWheel();
 updateVarsCount();
 
 // Auto-fill date
