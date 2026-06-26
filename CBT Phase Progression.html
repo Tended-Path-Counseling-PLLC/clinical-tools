@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT Therapy Arc — Tended Path Counseling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1b1d27;
+    --ink-mid:   #242733;
+    --ink-light: #2e3147;
+    --ink-card:  #252838;
+    --gold:      #d79f55;
+    --gold-dim:  #a87a3a;
+    --gold-glow: rgba(215,159,85,0.12);
+    --gold-tint: rgba(215,159,85,0.07);
+    --cream:     #ede8e1;
+    --warm:      #f7f4f0;
+    --text:      #c8c5bf;
+    --text-dim:  #888580;
+    --text-bright: #e8e4dd;
+    --border:    rgba(255,255,255,0.07);
+    --border-gold: rgba(215,159,85,0.3);
+
+    /* Clark & Wells accent — steel blue */
+    --cw:        #7ab3c8;
+    --cw-dim:    #4a8299;
+    --cw-glow:   rgba(122,179,200,0.10);
+    --cw-tint:   rgba(122,179,200,0.06);
+    --cw-border: rgba(122,179,200,0.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 18px; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 268px;
+    min-height: 100vh;
+    background: var(--ink-mid);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-brand .practice {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-brand .doc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+
+  .sidebar-nav { padding: 20px 0; flex: 1; }
+
+  .nav-section {
+    padding: 6px 24px 2px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1.3;
+  }
+
+  .nav-link:hover { color: var(--text-bright); background: var(--gold-tint); }
+  .nav-link.active { color: var(--gold); background: var(--gold-tint); }
+
+  .nav-link.cw-link:hover { color: var(--cw); background: var(--cw-tint); }
+  .nav-link.cw-link.active { color: var(--cw); background: var(--cw-tint); }
+
+  .nav-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold-dim);
+    min-width: 18px;
+  }
+
+  .nav-num.cw { color: var(--cw-dim); }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: 268px;
+    flex: 1;
+    max-width: 900px;
+    padding: 72px 64px 120px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    margin-bottom: 80px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-label::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 48px;
+    background: var(--gold-dim);
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  .hero-meta {
+    font-size: 16px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    background: var(--gold-tint);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .callout-label {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .callout p {
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* ─── SECTION HEADINGS ─── */
+  .section-block { margin-bottom: 80px; }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text-bright);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  /* ─── PHASE HEADERS ─── */
+  .phase-header {
+    display: flex;
+    align-items: stretch;
+    background: var(--ink-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 36px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .phase-num {
+    background: linear-gradient(160deg, #2a2d3e, var(--ink-mid));
+    border-right: 1px solid var(--border-gold);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+  }
+
+  .phase-num .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 46px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .phase-num .phase-word {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .phase-info {
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .phase-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .phase-sessions {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .phase-sub {
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text-dim);
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* ─── SUBSECTION LABELS ─── */
+  .sub-label {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin: 28px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sub-label.cw {
+    color: var(--cw-dim);
+    border-bottom-color: var(--cw-border);
+  }
+
+  /* ─── BODY TEXT ─── */
+  p {
+    font-size: 18px;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  p strong { color: var(--text-bright); font-weight: 500; }
+  p em { color: var(--text); }
+
+  /* ─── BULLETS ─── */
+  ul {
+    list-style: none;
+    margin-bottom: 14px;
+  }
+
+  ul li {
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--text);
+    padding: 5px 0 5px 22px;
+    position: relative;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+  }
+
+  ul li strong { color: var(--text-bright); font-weight: 500; }
+
+  ul.quotes li::before {
+    content: '"';
+    background: none;
+    color: var(--gold-dim);
+    font-size: 22px;
+    top: 4px;
+    left: 0;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  ul.quotes li { padding-left: 28px; font-style: italic; color: var(--text-dim); }
+
+  ul.cw-list li::before { background: var(--cw-dim); }
+
+  /* ─── HEX TAGS ─── */
+  .hex-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-glow);
+    border: 1px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 6px 14px;
+    margin: 4px 6px 4px 0;
+    font-size: 16px;
+    color: var(--gold);
+  }
+
+  .hex-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+  .hex-tags { margin: 10px 0 20px; }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 20px 0 28px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+
+  thead tr { background: var(--ink-card); }
+
+  thead th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--border-gold);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:hover { background: var(--gold-tint); }
+
+  tbody td {
+    padding: 14px 16px;
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tbody td:first-child { color: var(--text-bright); font-weight: 500; }
+
+  table.cw-table thead th { color: var(--cw); border-bottom-color: var(--cw-border); }
+  table.cw-table tbody tr:hover { background: var(--cw-tint); }
+  table.cw-table tbody td:first-child { color: var(--cw); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 60px 0;
+  }
+
+  .divider.cw-divider {
+    border-top-color: var(--cw-border);
+  }
+
+  /* ─── SOURCES ─── */
+  .sources {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-style: italic;
+    margin-top: 60px;
+  }
+
+  /* ─── DRIFT NOTE ─── */
+  .drift-note {
+    background: rgba(180, 100, 80, 0.08);
+    border-left: 3px solid rgba(180, 100, 80, 0.5);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 16px;
+    color: #c8a090;
+  }
+
+  .drift-note strong { color: #d4a898; }
+
+  /* ─── CLARK & WELLS NOTE (per-phase callouts) ─── */
+  .cw-note {
+    background: var(--cw-tint);
+    border-left: 3px solid var(--cw-border);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+
+  .cw-note .cw-label {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cw-dim);
+    margin-bottom: 6px;
+  }
+
+  .cw-note p { color: #9abfcf; font-style: italic; margin: 0; font-size: 16px; line-height: 1.7; }
+
+  /* ─── CLARK & WELLS SECTION CONTAINER ─── */
+  .cw-section {
+    border: 1px solid rgba(122,179,200,0.15);
+    border-radius: 10px;
+    padding: 44px 48px;
+    margin-top: 8px;
+    background: rgba(122,179,200,0.025);
+  }
+
+  .cw-section h2 {
+    color: var(--cw);
+  }
+
+  .cw-section-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--cw-border);
+    line-height: 1.6;
+  }
+
+  /* ─── MODEL FLOW (Clark & Wells mechanism) ─── */
+  .model-flow {
+    margin: 28px 0;
+  }
+
+  .flow-node {
+    background: var(--ink-card);
+    border: 1px solid var(--cw-border);
+    border-radius: 6px;
+    padding: 16px 22px;
+    margin-bottom: 0;
+  }
+
+  .flow-node .fn-label {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cw-dim);
+    margin-bottom: 4px;
+  }
+
+  .flow-node .fn-text {
+    font-size: 18px;
+    color: var(--text-bright);
+    line-height: 1.5;
+  }
+
+  .flow-node .fn-sub {
+    font-size: 16px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 5px;
+    line-height: 1.55;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    color: var(--cw-dim);
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }
+
+  .flow-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+
+  .flow-row .flow-node {
+    border-color: rgba(122,179,200,0.18);
+  }
+
+  /* ─── SESSION COUNT ─── */
+  .session-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .session-cell {
+    background: var(--ink-card);
+    padding: 20px 22px;
+  }
+
+  .session-cell .sc-label {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  .session-cell .sc-range {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+
+  .session-cell .sc-desc {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 40px; }
+    body { display: block; background: white; color: #222; }
+  }
+
+  /* ─── SCROLL SPY ─── */
+  .phase-anchor { display: block; position: relative; top: -80px; visibility: hidden; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="practice">Tended Path Counseling</div>
+    <div class="doc-title">CBT Therapy Arc</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section">Overview</div>
+    <a class="nav-link" href="#overview"><span class="nav-num">—</span> The Shape of CBT</a>
+    <a class="nav-link" href="#model"><span class="nav-num">—</span> Cognitive Model</a>
+    <a class="nav-link" href="#techniques"><span class="nav-num">—</span> Core Techniques</a>
+
+    <div class="nav-section">Phases</div>
+    <a class="nav-link" href="#phase1"><span class="nav-num">1</span> Assessment &amp; Conceptualization</a>
+    <a class="nav-link" href="#phase2"><span class="nav-num">2</span> Socialization to the Model</a>
+    <a class="nav-link" href="#phase3"><span class="nav-num">3</span> Cognitive Restructuring</a>
+    <a class="nav-link" href="#phase4"><span class="nav-num">4</span> Behavioral Interventions</a>
+    <a class="nav-link" href="#phase5"><span class="nav-num">5</span> Consolidation</a>
+    <a class="nav-link" href="#termination"><span class="nav-num">T</span> Termination</a>
+
+    <div class="nav-section">Specialty Application</div>
+    <a class="nav-link cw-link" href="#cw"><span class="nav-num cw">⊕</span> Clark &amp; Wells (1995)</a>
+    <a class="nav-link cw-link" href="#cw-mechanism"><span class="nav-num cw">—</span> Model Mechanism</a>
+    <a class="nav-link cw-link" href="#cw-treatment"><span class="nav-num cw">—</span> Treatment Sequence</a>
+
+    <div class="nav-section">Reference</div>
+    <a class="nav-link" href="#duration"><span class="nav-num">—</span> Session Count</a>
+  </div>
+
+  <div class="sidebar-footer">
+    Bethany Sherman, LMHC<br>
+    Internal clinical reference<br>
+    May 2026
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">Clinical Reference</div>
+    <h1>CBT Therapy:<br><em>A Session-by-Session Arc</em></h1>
+    <div class="hero-sub">From Intake Through Termination — with Clark &amp; Wells Application</div>
+    <div class="hero-meta">Tended Path Counseling &nbsp;·&nbsp; Bethany Sherman, LMHC &nbsp;·&nbsp; May 2026</div>
+  </section>
+
+  <!-- PREFATORY NOTES -->
+  <div class="callout">
+    <div class="callout-label">A note on structure</div>
+    <p>CBT is more protocol-driven than ACT, but it is not a rigid script. The phases described here reflect the logic and typical sequencing of cognitive behavioral therapy as grounded in Beck's cognitive model (Beck, 1979; J. Beck, 2011). Session pacing, emphasis, and sequencing depend on client presentation, diagnostic picture, and response to treatment. Clinical judgment governs.</p>
+  </div>
+
+  <div class="callout" style="margin-top: 12px;">
+    <div class="callout-label">CBT vs. ACT — the core distinction</div>
+    <p>CBT targets the <em>content</em> of cognitions — the goal is to examine, test, and revise thoughts and beliefs so they are more accurate and functional. ACT targets the <em>relationship</em> to cognitions — the goal is defusion and acceptance, not content change. Both are evidence-based; they operate through different mechanisms. This distinction matters when choosing interventions and when documentation needs to reflect a coherent treatment rationale.</p>
+  </div>
+
+  <div class="callout" style="margin-top: 12px;">
+    <div class="callout-label">Epistemic transparency</div>
+    <p>Well-established CBT content is presented without qualification. Where framing reflects clinical synthesis, integration judgments, or application to specific presentations beyond the standard model, it is marked as such. Clark &amp; Wells content is drawn from the 1995 model and subsequent empirical literature and is presented as well-established. Anything requiring licensed clinical judgment or supervision is named explicitly.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- OVERVIEW -->
+  <section class="section-block" id="overview">
+    <span class="phase-anchor"></span>
+    <h2>The Shape of CBT Treatment</h2>
+    <p>CBT is a structured, time-limited, present-focused therapy built on the premise that cognition, emotion, and behavior are mutually influential. The primary mechanism of change is modifying the <strong>content and pattern of dysfunctional thinking</strong> — particularly automatic thoughts and the underlying beliefs that generate them — in order to shift emotional states and expand behavioral repertoire.</p>
+    <p>Treatment moves broadly from assessment and conceptualization (establishing what is happening and why, within the cognitive model) through active skill-building phases (cognitive restructuring and behavioral change) toward consolidation and skills transfer. The endpoint is a client who understands their own cognitive patterns and can apply CBT tools independently — the therapist's role is explicitly pedagogical from the outset.</p>
+    <p>CBT is among the most empirically supported psychotherapies across diagnostic categories — particularly for depression, generalized anxiety, panic disorder, social anxiety disorder, OCD, PTSD, and health anxiety. Effect sizes are strongest when the full model (cognitive plus behavioral) is applied, rather than either component in isolation.</p>
+  </section>
+
+  <!-- COGNITIVE MODEL -->
+  <section class="section-block" id="model">
+    <span class="phase-anchor"></span>
+    <h2>The Cognitive Model</h2>
+    <p>Beck's cognitive model (1979) proposes that psychological distress arises from the interaction of three levels of cognition, all of which are shaped by early experience and can be identified and modified in treatment.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Description</th>
+            <th>Examples</th>
+            <th>Accessibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Automatic Thoughts</td>
+            <td>Rapid, involuntary thoughts that arise in specific situations; often believable and difficult to notice without training</td>
+            <td>"I said something stupid." "They think I'm incompetent." "I can't handle this."</td>
+            <td>Surface level — most accessible; entry point for treatment</td>
+          </tr>
+          <tr>
+            <td>Intermediate Beliefs</td>
+            <td>Rules, attitudes, and conditional assumptions that link core beliefs to situation-specific reactions; often phrased as "if–then" or "should" statements</td>
+            <td>"If I make a mistake, people will reject me." "I must be in control at all times." "Showing weakness is unacceptable."</td>
+            <td>Moderate depth — uncovered through Socratic questioning and the downward arrow; addressed in middle and later phases</td>
+          </tr>
+          <tr>
+            <td>Core Beliefs</td>
+            <td>Absolute, global beliefs about self, others, and the world; often dormant until activated by stress; three major clusters: helplessness, unlovability, worthlessness</td>
+            <td>"I am fundamentally defective." "I am helpless." "I am unlovable."</td>
+            <td>Deepest level — most resistant to change; requires sustained behavioral and cognitive work over time</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The <strong>cognitive triad</strong> (Beck, 1979) describes the specific pattern most common in depression: negative view of self, negative view of current experience, and negative view of the future. Variations on this triad characterize other presentations — in anxiety, for example, it manifests as overestimation of threat and underestimation of coping capacity.</p>
+
+    <div class="callout">
+      <div class="callout-label">Case conceptualization as a clinical instrument</div>
+      <p>The CBT case conceptualization is not an intake form — it is a working hypothesis that evolves across treatment. It maps the developmental origins of core beliefs, the compensatory strategies and intermediate beliefs that grew from them, and the cross-sectional cognitive-behavioral-emotional cycle operating in current situations. Sharing it collaboratively with the client (in a digestible way) is itself a therapeutic intervention: it externalizes the problem, reduces self-blame, and provides a coherent rationale for the work ahead.</p>
+    </div>
+  </section>
+
+  <!-- CORE TECHNIQUES -->
+  <section class="section-block" id="techniques">
+    <span class="phase-anchor"></span>
+    <h2>Core Techniques</h2>
+    <p style="margin-bottom: 20px;">The following techniques recur across phases. Their application varies with phase, presentation, and depth of the cognitive level being targeted.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Technique</th>
+            <th>Function</th>
+            <th>Primary phase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Thought Record</td><td>Identifies situation, automatic thought, emotion, evidence, and alternative perspective; builds cognitive flexibility</td><td>Phases 2–4</td></tr>
+          <tr><td>Socratic Questioning</td><td>Guided discovery — therapist questions lead the client to examine their own thinking rather than being persuaded by argument</td><td>All phases</td></tr>
+          <tr><td>Downward Arrow</td><td>Uncovers intermediate and core beliefs by following "and if that were true, what would that mean?" chains from automatic thoughts</td><td>Phases 3–5</td></tr>
+          <tr><td>Behavioral Experiment</td><td>Tests specific cognitive predictions in vivo; generates empirical evidence that verbal restructuring alone cannot provide</td><td>Phases 3–5</td></tr>
+          <tr><td>Activity Monitoring / Scheduling</td><td>Tracks mood-behavior connections; restores behavioral engagement and mastery in depressive presentations</td><td>Phase 4</td></tr>
+          <tr><td>Graded Task Assignment</td><td>Breaks avoided tasks into manageable steps; builds self-efficacy and counteracts avoidance</td><td>Phase 4</td></tr>
+          <tr><td>Agenda-Setting</td><td>Structures each session collaboratively; models active problem-solving and maintains treatment focus</td><td>All phases — every session</td></tr>
+          <tr><td>Homework</td><td>Between-session practice is a primary driver of CBT outcomes; without it, skill acquisition is significantly impaired</td><td>All phases — every session</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PHASE 1 -->
+  <section class="section-block" id="phase1">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">1</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Assessment and Case Conceptualization</div>
+        <div class="phase-sessions">Sessions 1–3</div>
+        <div class="phase-sub">Diagnosis, functional understanding, and the working hypothesis</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Establish safety, rapport, and the therapeutic frame</li>
+      <li>Complete diagnostic assessment (DSM-oriented, but functionally framed)</li>
+      <li>Develop an initial <strong>CBT case conceptualization</strong> — mapping automatic thoughts, intermediate beliefs, core beliefs, and compensatory strategies to the client's current presentation</li>
+      <li>Build a collaborative problem list and specific, measurable treatment goals</li>
+      <li>Orient the client to the cognitive model — early, in accessible terms</li>
+      <li>Identify working diagnosis; complete required clinical documentation (90791)</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>Assessment in CBT is both diagnostic and functional. Beyond DSM criteria, you are constructing a hypothesis about the cognitive-behavioral mechanisms sustaining the client's distress. This means asking: What does this person believe about themselves, others, and the world? What rules or assumptions organize their behavior? What situations reliably trigger distress, and what automatic thoughts accompany that distress?</p>
+    <p>The case conceptualization has two components. The <strong>longitudinal component</strong> traces how core beliefs developed — what early experiences (relational, developmental, traumatic) created the conditions for them. The <strong>cross-sectional component</strong> maps the current triggering situation → automatic thought → emotion/behavior/physical response cycle. Both are working hypotheses; both should be shared with the client in some form.</p>
+    <p>Sharing the conceptualization collaboratively is not optional. It is a clinical intervention: it reduces shame (the problem is a learned pattern, not a character flaw), creates a shared rationale for the work, and begins to establish the self-observational stance that CBT depends on.</p>
+
+    <div class="sub-label">Assessment Domains</div>
+    <ul>
+      <li>Presenting concerns, onset, and history — descriptive and functional</li>
+      <li><strong>Automatic thought content:</strong> what thoughts accompany distress, especially in specific situations</li>
+      <li><strong>Behavioral patterns:</strong> avoidance, withdrawal, safety behaviors, reassurance-seeking</li>
+      <li><strong>Emotional responses:</strong> primary and secondary emotions; how the client relates to their feelings</li>
+      <li>Early experience — relational patterns, critical messages, significant losses or events</li>
+      <li>Prior treatment history and the client's theory of change</li>
+      <li>Strengths, resources, and periods of better functioning</li>
+      <li>Safety — SI/SH screen, crisis history, current risk</li>
+    </ul>
+
+    <div class="sub-label">Documentation Note</div>
+    <p>Treatment goals documented at this phase should be specific and measurable, framed in behavioral or functional terms. "Reduce avoidance of social situations from daily to no more than once weekly" is auditable. "Improve anxiety" is not. Goals should connect to the conceptualization: what specific cognitive or behavioral targets will treatment address, and how will progress be measured?</p>
+
+    <div class="cw-note">
+      <div class="cw-label">Clark &amp; Wells Application</div>
+      <p>For clients presenting with social anxiety, standard assessment domains need to extend to capture Clark &amp; Wells-specific maintaining factors: What safety behaviors does the client use in feared situations? Do they engage in anticipatory rumination before social events? Do they conduct post-event reviews, and are those reviews consistently negative? Mapping these at intake shapes the entire treatment structure.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="section-block" id="phase2">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">2</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Socialization to the Model</div>
+        <div class="phase-sessions">Sessions 2–5</div>
+        <div class="phase-sub">Teaching the cognitive model; introducing thought monitoring</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Teach the cognitive model explicitly, using examples from the client's own experience</li>
+      <li>Establish the thought-emotion connection as a lived understanding, not an abstract concept</li>
+      <li>Introduce thought monitoring — the client begins to notice and record automatic thoughts between sessions</li>
+      <li>Establish the agenda-setting structure; introduce homework as a core component of treatment</li>
+      <li>Begin to cultivate the self-observational stance that all subsequent CBT work depends on</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>Socialization is foundational. Without it, cognitive restructuring in Phase 3 will feel arbitrary — the client won't understand why examining thoughts is relevant to how they feel. The goal is for the client to arrive at a genuine understanding that the same situation can produce different emotions depending on how it is interpreted, and that interpretations can be examined and revised.</p>
+    <p>Teach the model through the client's own examples, not generic scenarios. Walk through a recent distressing situation together: what was happening, what went through their mind, what did they feel, what did they do? This is the beginning of the thought record process in its simplest form. Most clients can identify the connection between thought and emotion within one or two examples.</p>
+
+    <div class="sub-label">Thought Monitoring</div>
+    <p>The first homework in CBT is typically a two- or three-column thought record: situation, automatic thought, emotion. The goal is not to change the thought — it is to notice it. Clients often find this surprisingly difficult at first. The automatic nature of these thoughts means they pass unexamined; naming them requires deliberate practice. Expect the first few records to require in-session scaffolding.</p>
+
+    <div class="sub-label">Agenda-Setting and the Session Structure</div>
+    <p>CBT sessions follow a consistent structure: mood check and brief update, agenda-setting, review of prior homework, session content, new homework, and summary with feedback. This is not merely organizational — it models problem-solving, establishes the client as an active participant, and reinforces between-session work as essential. Agenda-setting in particular should be genuinely collaborative: both therapist and client name priorities.</p>
+
+    <div class="sub-label">Introducing Homework</div>
+    <p>Homework failure is one of the most common reasons CBT stalls. Address it proactively. Effective homework assignments are: tied directly to session content, specific enough that the client knows exactly what to do, time-bounded, and accompanied by a brief anticipation of obstacles ("What might get in the way of doing this?"). The review of homework at the start of the next session signals that it matters — skipping the review signals that it doesn't.</p>
+
+    <div class="sub-label">Common Stalls at This Phase</div>
+    <ul>
+      <li>Client reports they "couldn't find" any thoughts — validate the difficulty, practice catching thoughts in-session using hypothetical or recalled situations</li>
+      <li>Client conflates thoughts with feelings ("I felt that I was a failure") — differentiate explicitly; feelings are single words, thoughts are sentences or propositions</li>
+      <li>Client intellectualizes the model without applying it personally — redirect to specific examples from their own experience</li>
+    </ul>
+
+    <div class="cw-note">
+      <div class="cw-label">Clark &amp; Wells Application</div>
+      <p>In the Clark &amp; Wells model, socialization includes building an individualized diagram of the model with the client — mapping their specific feared situation, the self-focused processing that follows, their safety behaviors, their anxiety symptoms, and the biased self-impression that results. This diagram, done collaboratively in session 2 or 3, becomes the treatment map. It also introduces the safety behavior concept directly, which prepares the client for the behavioral experiment work ahead.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="section-block" id="phase3">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">3</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Cognitive Restructuring</div>
+        <div class="phase-sessions">Sessions 4–12</div>
+        <div class="phase-sub">Examining thoughts, generating alternatives, reaching deeper beliefs</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Help the client examine automatic thoughts through evidence-gathering and perspective-taking</li>
+      <li>Generate more accurate, flexible, and functional alternative perspectives</li>
+      <li>Identify cognitive distortion patterns and use them as entry points for examination — not as endpoints</li>
+      <li>Use the downward arrow to access intermediate and core beliefs</li>
+      <li>Begin modifying intermediate beliefs; introduce core belief work as the treatment deepens</li>
+    </ul>
+
+    <div class="sub-label">Working with Automatic Thoughts</div>
+    <p>The full thought record (5–7 columns) extends the initial monitoring work: situation, automatic thought(s), emotion and intensity rating, evidence supporting the thought, evidence against the thought or alternative perspectives, and re-rated emotion. The critical clinical point is that the goal is <strong>not to convince the client the thought is wrong</strong> — it is to generate a more flexible, balanced perspective. "What is the most realistic way to look at this?" is more productive than "Is this thought accurate?" The former acknowledges that the thought may have some validity; the latter can feel invalidating.</p>
+    <p>Socratic questioning is the primary tool. Asking rather than telling allows the client to arrive at alternative perspectives through their own reasoning — this is more durable than therapist-generated conclusions. Useful questions: "What would you tell a friend who had this thought? What evidence do you have for the worst-case interpretation? Has anything happened that doesn't fit this view? What might a more balanced perspective look like?"</p>
+
+    <div class="sub-label">Cognitive Distortions</div>
+    <p>Cognitive distortions (all-or-nothing thinking, catastrophizing, mind-reading, emotional reasoning, personalization, and others) are useful as <strong>shorthand labels for identifiable patterns</strong>, not as clinical interventions in themselves. Labeling a thought as "catastrophizing" and stopping there does not change it. The label opens a door — the clinical work happens when the client examines the evidence, considers alternatives, and revises the perspective. Over-reliance on distortion labeling can become intellectualized and disconnected from the emotional change the model is designed to produce.</p>
+
+    <div class="sub-label">The Downward Arrow</div>
+    <p>The downward arrow moves from automatic thought to the belief structure underneath it. At each step: "And if that were true, what would that mean? What would that mean about you? Others? The world?" The chain continues until a global, absolute statement emerges — the core belief. This technique requires careful pacing; arriving at a core belief ("I am fundamentally unlovable") before the therapeutic relationship and the client's tolerance for distress are adequately developed can be destabilizing. Reserve deeper downward arrow work for Phase 4 and beyond, and always address what surfaces before ending the session.</p>
+
+    <div class="sub-label">Intermediate Belief Modification</div>
+    <p>Intermediate beliefs — the conditional rules and assumptions operating between core beliefs and automatic thoughts — are often more accessible and tractable than core beliefs, and modifying them produces meaningful change in automatic thought content. Techniques include: the advantages and disadvantages of holding a particular rule, developing more flexible alternative rules ("Rather than 'I must never show weakness,' what might a more workable rule look like?"), and behavioral experiments designed to test specific "if–then" predictions.</p>
+
+    <div class="sub-label">Core Belief Work</div>
+    <p>Core belief modification requires sustained effort across multiple sessions and multiple forms of evidence. Verbal restructuring alone is insufficient — core beliefs change when behavioral evidence accumulates against them. The core belief log (tracking evidence inconsistent with the belief over time) and the positive data log (recording experiences that contradict the belief) are primary tools. This work is appropriate in Phase 3 onward but reaches its fullest expression in Phase 5.</p>
+
+    <div class="sub-label">Common Stalls at This Phase</div>
+    <ul>
+      <li>Client generates alternative perspectives verbally but reports no emotional shift — this usually means the work is staying intellectual; increase behavioral experiment components</li>
+      <li>Client becomes the therapist's assistant in "debunking" thoughts but is not developing independent skill — ensure the client is generating challenges, not just agreeing with yours</li>
+      <li>Thought records feel mechanical or repetitive — vary the format; use in-session imaginal work or in-vivo examples rather than written records exclusively</li>
+    </ul>
+
+    <div class="drift-note">
+      <strong>Therapist drift to watch for:</strong> Slipping into debate or persuasion — arguing the client out of a belief rather than using guided discovery. If you find yourself explaining why the thought is wrong, you've left CBT and entered advocacy. The corrective is a question rather than a statement. Similarly, restructuring automatic thoughts while avoiding the intermediate and core beliefs that generate them produces surface-level change that does not hold under stress.
+    </div>
+
+    <div class="cw-note">
+      <div class="cw-label">Clark &amp; Wells Application</div>
+      <p>In social phobia, cognitive restructuring addresses two specific distortion patterns the Clark &amp; Wells model identifies as central: <strong>probability overestimation</strong> (overestimating how likely feared social outcomes are) and <strong>cost overestimation</strong> (overestimating how catastrophic it would be if the feared outcome occurred). A third target is the <strong>misuse of internal information</strong> — the client's use of how they feel internally as evidence for how they appear externally ("I feel anxious, so I must be visibly trembling"). Video feedback is the primary intervention for this last distortion and is addressed in the Clark &amp; Wells section.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="section-block" id="phase4">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">4</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Behavioral Interventions</div>
+        <div class="phase-sessions">Sessions 5–ongoing</div>
+        <div class="phase-sub">Behavioral activation, experiments, and exposure</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Interrupt behavioral patterns — avoidance, withdrawal, safety behaviors — that maintain cognitive distortions and emotional distress</li>
+      <li>Generate behavioral evidence that informs and deepens cognitive change</li>
+      <li>Restore functioning across relevant life domains through graded engagement</li>
+      <li>Use behavioral experiments to test specific cognitive predictions empirically</li>
+      <li>Apply exposure where indicated — graded, consistent, and framed as belief-testing</li>
+    </ul>
+
+    <div class="sub-label">Behavioral Activation (Depressive Presentations)</div>
+    <p>In depression, behavioral withdrawal reduces access to pleasure and mastery, which deepens low mood and hopelessness, which deepens withdrawal — a self-sustaining cycle. Behavioral activation interrupts this cycle before cognitive restructuring is fully effective. Beck's original model sequenced behavioral techniques first in depression precisely because the cognitive impairment of moderate-to-severe depression makes thought record work difficult until behavior has shifted.</p>
+    <p>Activity scheduling should include both <strong>pleasure activities</strong> (doing things that feel good, however muted that may be initially) and <strong>mastery activities</strong> (doing things that build a sense of competence or accomplishment). Monitoring mood in relation to activity — not just activity alone — builds the empirical connection between engagement and mood that the client needs to internalize.</p>
+
+    <div class="sub-label">Behavioral Experiments</div>
+    <p>Behavioral experiments are the most powerful intervention in the CBT toolkit because they generate evidence that verbal restructuring cannot. They are <strong>hypothesis tests</strong>, not exposure exercises. The structure is explicit: identify the specific belief being tested, generate a prediction (what the client expects to happen), design the experiment, conduct it, and review what happened relative to the prediction. The cognitive component is woven throughout — this is what distinguishes a behavioral experiment from simple exposure.</p>
+    <p>Examples: A client who believes "If I make a mistake at work, I will be fired immediately" tests this by intentionally leaving a minor error in an email and observing the response. A client who believes "People will notice I'm anxious and think less of me" attends a social event and afterward asks two trusted people what they observed. The experiment should be specific enough that the outcome genuinely tests the belief.</p>
+
+    <div class="sub-label">Exposure (Anxiety Presentations)</div>
+    <p>Graded exposure addresses the avoidance that maintains anxiety by preventing disconfirmation of feared outcomes. Construct a fear hierarchy collaboratively — situations or stimuli ordered from least to most distressing — and work up the hierarchy in a pace that allows engagement without overwhelming. Current inhibitory learning models (Craske et al., 2014) suggest that the mechanism is not habituation per se but the acquisition of new, non-threat associations that compete with the original fear response. Practically, this means: tolerate the anxiety to completion, maximize expectancy violation (the feared outcome does not occur), vary the exposure context, and reduce safety behaviors concurrently.</p>
+    <p><strong>Safety behaviors during exposure undermine its effectiveness</strong> — they prevent the full disconfirmation of feared outcomes. A client who holds a coffee cup with both hands to prevent visible trembling may complete an exposure successfully but attribute the absence of a negative outcome to the safety behavior rather than to the fact that the feared outcome was unlikely. Safety behaviors must be identified and reduced as part of the exposure protocol.</p>
+
+    <div class="sub-label">Common Stalls at This Phase</div>
+    <ul>
+      <li>Client avoids initiating behavioral experiments outside session — use in-session experiments first; build graduated confidence before expecting independent work</li>
+      <li>Exposure is conducted with safety behaviors intact — identify and address safety behaviors explicitly before progressing the hierarchy</li>
+      <li>Client endorses the alternative perspective intellectually but avoidance remains unchanged — this is the primary clinical indication for behavioral experiments; verbal persuasion without behavior change rarely holds</li>
+    </ul>
+
+    <div class="cw-note">
+      <div class="cw-label">Clark &amp; Wells Application</div>
+      <p>The Clark &amp; Wells model places behavioral experiments — not habituation-based exposure — at the center of treatment for social phobia. This is a meaningful distinction. Standard exposure focuses on anxiety reduction; Clark &amp; Wells experiments focus on belief disconfirmation, always with safety behaviors dropped and attentional focus shifted externally. Two interventions are especially distinctive here: <strong>video feedback</strong> (described in the Clark &amp; Wells section) and <strong>attentional training</strong> — structured practice shifting focus from internal monitoring to the external environment during feared situations.</p>
+    </div>
+  </section>
+
+  <!-- PHASE 5 -->
+  <section class="section-block" id="phase5">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num">5</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Consolidation and Relapse Prevention</div>
+        <div class="phase-sessions">Sessions 12–18+</div>
+        <div class="phase-sub">Skills transfer, core belief work, and the therapy blueprint</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Consolidate gains across cognitive and behavioral domains — move from therapist-assisted skill use to autonomous skill use</li>
+      <li>Address residual core beliefs through sustained behavioral and cognitive evidence-building</li>
+      <li>Develop the <strong>therapy blueprint</strong> — a client-authored summary of what they've learned and how to apply it</li>
+      <li>Identify early warning signs and build a specific relapse response plan</li>
+      <li>Prepare for termination — including the relational meaning of ending</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>By this phase, the client should be using thought records and behavioral experiments with increasing independence. Consolidation work checks and deepens that independence: What are the situations where skills use still breaks down? Are there residual core beliefs that need sustained attention? Are the gains stable across contexts, or do they apply only in low-stress conditions?</p>
+    <p>Core belief modification becomes the primary cognitive focus here, if it has not been adequately addressed. This requires accumulated behavioral evidence — not just verbal restructuring — and often takes longer than clients or therapists expect. The core belief log (tracking evidence against the belief over several weeks or months) and behavioral experiments designed specifically to test core belief predictions are the main vehicles.</p>
+
+    <div class="sub-label">The Therapy Blueprint</div>
+    <p>The therapy blueprint is the most important single product of CBT termination work. It is client-generated (with therapist scaffolding) and should include: what problems brought them to treatment; what they learned about the connection between thoughts, feelings, and behaviors; their most characteristic cognitive distortion patterns; which strategies were most useful and how to use them; early warning signs that difficulties are returning; and a specific plan for what to do if those signs appear. The blueprint is not a summary of treatment — it is a practical guide the client can return to independently.</p>
+
+    <div class="sub-label">Relapse Response Planning</div>
+    <ul>
+      <li>Normalize the likelihood of future distress — the goal is not to be permanently symptom-free, but to have the skills to manage effectively when difficulty returns</li>
+      <li>Identify the specific early warning signs unique to this client (cognitive, emotional, behavioral)</li>
+      <li>Specify what action to take at each warning sign level — what they'll do first, and when returning to treatment is appropriate</li>
+      <li>Establish explicit criteria for returning to treatment; frame return as appropriate use of a resource, not failure</li>
+    </ul>
+
+    <div class="cw-note">
+      <div class="cw-label">Clark &amp; Wells Application</div>
+      <p>Consolidation for social phobia (Clark &amp; Wells model) should specifically address any residual anticipatory processing and post-event processing patterns. These are often more persistent than the in-situation anxiety and can maintain the disorder independently. Clients should be able to identify when they are engaging in post-event review, understand its maintaining function, and apply the strategies developed in treatment — attention redirection, perspective-taking, brief self-compassion — when it occurs. The blueprint should include these explicitly.</p>
+    </div>
+  </section>
+
+  <!-- TERMINATION -->
+  <section class="section-block" id="termination">
+    <span class="phase-anchor"></span>
+    <div class="phase-header">
+      <div class="phase-num">
+        <span class="num" style="font-size:34px; letter-spacing:-1px;">T</span>
+        <span class="phase-word">Phase</span>
+      </div>
+      <div class="phase-info">
+        <div class="phase-title">Termination</div>
+        <div class="phase-sessions">Final 3–4 sessions</div>
+        <div class="phase-sub">Consolidation, skills transfer, and the relational ending</div>
+      </div>
+    </div>
+
+    <div class="sub-label">Primary Goals</div>
+    <ul>
+      <li>Finalize the therapy blueprint; ensure the client has a working, usable document — not just a conceptual understanding</li>
+      <li>Review the full arc of treatment: what has changed, what mechanisms produced that change, what they now know how to do</li>
+      <li>Conduct explicit relapse prevention planning with specific, behavioral language</li>
+      <li>Address the relational meaning of ending with the same directness as any other clinical content</li>
+    </ul>
+
+    <div class="sub-label">Clinical Focus</div>
+    <p>CBT termination is skills-forward: <strong>"Do you know how to apply these tools when things get hard again?"</strong> is the organizing question. A client who leaves treatment with some residual symptoms but solid cognitive and behavioral skills is well-prepared. A client who is symptom-free because the therapy context provided external regulation — but who does not have internalized skills — is not.</p>
+    <p>The final sessions should explicitly practice self-application of skills without therapist prompting. Walk through a hypothetical future scenario: if this type of situation occurred, what would you notice? What automatic thoughts would be likely? What would you do? The therapist's role shifts from facilitator to observer as the client demonstrates the skill independently.</p>
+
+    <div class="sub-label">Criteria for Readiness to Terminate</div>
+    <ul>
+      <li>Client uses thought records and cognitive restructuring skills independently, not only in session</li>
+      <li>Behavioral avoidance is substantially reduced across the problem hierarchy</li>
+      <li>The client can articulate their cognitive patterns — they know what their characteristic automatic thoughts and distortions are</li>
+      <li>A completed therapy blueprint exists and the client can explain it in their own words</li>
+      <li>A relapse response plan is specific, not vague ("I'll use thought records if I start withdrawing again" rather than "I'll try to think more positively")</li>
+      <li>Termination is collaborative and agreed upon, not unilateral</li>
+    </ul>
+
+    <div class="sub-label">The Termination Relationship</div>
+    <p>The therapeutic relationship carries meaning regardless of the modality. Clients may have grief, ambivalence, anxiety about managing without the structure of sessions, or relief. This should be named and explored directly. The ending is an opportunity to demonstrate the CBT process in miniature: notice the thoughts about ending, examine them, acknowledge the feelings, and make a choice about how to manage the transition that is consistent with the client's values and goals.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CLARK & WELLS SECTION                                       -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <section class="section-block" id="cw">
+    <span class="phase-anchor"></span>
+
+    <div class="cw-section">
+
+      <div class="hero-label" style="color: var(--cw); margin-bottom: 16px;">Specialty Application</div>
+      <h2>Cognitive Behavioral Model of Social Phobia</h2>
+      <p class="cw-section-intro">Clark &amp; Wells (1995) &nbsp;·&nbsp; Well-established model with RCT support &nbsp;·&nbsp; Integrated CBT application</p>
+
+      <p>Clark and Wells (1995) proposed a specific cognitive model of social phobia that diverges meaningfully from generic CBT anxiety models. Its core insight is that what maintains social phobia is not simply the avoidance of feared situations — it is a particular <strong>processing mode</strong> that activates when the person enters (or anticipates) a social situation, and which makes the feared outcome feel more certain and the self seem more inadequate regardless of what actually happens.</p>
+      <p>The model has strong empirical support. Clark et al. (2003, 2006) demonstrated that treatment based on this model outperformed both fluoxetine and exposure-only CBT in randomized controlled trials, with larger effect sizes and lower relapse rates. The distinctive active ingredients — video feedback, safety behavior elimination, and processing style modification — are what differentiate this protocol from standard exposure-based CBT.</p>
+
+      <hr class="divider cw-divider" style="margin: 32px 0;">
+
+      <span class="phase-anchor" id="cw-mechanism"></span>
+      <div class="sub-label cw">Model Mechanism</div>
+
+      <p>When a person with social phobia encounters or anticipates a social situation, the following sequence activates:</p>
+
+      <div class="model-flow">
+
+        <div class="flow-node">
+          <div class="fn-label">Trigger</div>
+          <div class="fn-text">Social situation or anticipation of one</div>
+          <div class="fn-sub">May begin days or hours before the actual event (anticipatory processing)</div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node">
+          <div class="fn-label">Schema Activation</div>
+          <div class="fn-text">Danger-linked social assumptions are triggered</div>
+          <div class="fn-sub">"I must perform well and be approved of." &nbsp;·&nbsp; "If I show anxiety, people will think I am incompetent." &nbsp;·&nbsp; "I am socially inadequate."</div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node">
+          <div class="fn-label">Perceived Social Danger</div>
+          <div class="fn-text">The situation is appraised as threatening</div>
+          <div class="fn-sub">Degree of perceived danger reflects the activated assumptions, not objective threat</div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node">
+          <div class="fn-label">Processing of Self as Social Object</div>
+          <div class="fn-text">Attention shifts inward; the person constructs an impression of themselves from an observer's perspective</div>
+          <div class="fn-sub">Crucially: this self-image is built primarily from <em>internal cues</em> — physical sensations, emotional state, intrusive thoughts — not from actual observable behavior. "I feel hot, therefore I must be visibly flushed." "My heart is racing, so others must notice."</div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="fn-label">Safety Behaviors</div>
+            <div class="fn-text">Actions taken to prevent feared catastrophe or manage anxiety</div>
+            <div class="fn-sub">Grip cup tightly to hide trembling &nbsp;·&nbsp; Avoid eye contact &nbsp;·&nbsp; Script conversation &nbsp;·&nbsp; Rehearse sentences before speaking &nbsp;·&nbsp; Wear concealing clothing &nbsp;·&nbsp; Deflect questions back to others</div>
+          </div>
+          <div class="flow-node">
+            <div class="fn-label">Anxiety Symptoms</div>
+            <div class="fn-text">Autonomic arousal and physical anxiety responses</div>
+            <div class="fn-sub">Visible or non-visible: blushing, trembling, sweating, voice quavering, cognitive interference, urge to escape &nbsp;·&nbsp; Interpreted as confirming the feared self-impression</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-node">
+          <div class="fn-label">Biased Post-Event Processing</div>
+          <div class="fn-text">After the situation ends, a review process runs — selective for evidence of failure and unfavorable social impression</div>
+          <div class="fn-sub">Sustains core beliefs across time &nbsp;·&nbsp; Maintains elevated baseline anxiety before the next social situation &nbsp;·&nbsp; Primes the anticipatory processing cycle for future events</div>
+        </div>
+
+      </div>
+
+      <div class="sub-label cw" style="margin-top: 36px;">Maintaining Factors</div>
+
+      <p>Four mechanisms keep the cycle running regardless of what actually happens in the social situation:</p>
+
+      <div class="table-wrap">
+        <table class="cw-table">
+          <thead>
+            <tr>
+              <th>Factor</th>
+              <th>How it maintains the disorder</th>
+              <th>Treatment target</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Safety behaviors</td>
+              <td>Prevent disconfirmation — if nothing bad happened, the client attributes success to the safety behavior rather than to the low probability of the feared outcome. Paradoxically, some safety behaviors (avoiding eye contact, speaking quietly) actually impair performance and may increase the probability of a negative response.</td>
+              <td>Systematic elimination before and during behavioral experiments</td>
+            </tr>
+            <tr>
+              <td>Self-focused attention</td>
+              <td>Reduces the ability to gather accurate information from the environment; increases awareness and perceived intensity of anxiety symptoms; generates a distorted self-impression; impairs actual conversational performance</td>
+              <td>Attentional training — shifting focus externally; behavioral experiments with attention manipulation</td>
+            </tr>
+            <tr>
+              <td>Misuse of internal information</td>
+              <td>The client uses felt sense as social evidence: "I feel anxious, therefore I must appear anxious." "I feel stupid, therefore I sound stupid." The internal experience is treated as a reliable indicator of how one appears to others — it is not.</td>
+              <td>Video feedback — most powerful single technique for addressing this specific distortion</td>
+            </tr>
+            <tr>
+              <td>Anticipatory and post-event processing</td>
+              <td>Pre-event: imagery of failure primes threat detection and increases physiological arousal before the situation begins. Post-event: selective review maintains negative self-evaluation and pessimistic predictions for future events.</td>
+              <td>Attention redirection, worry postponement, compassionate self-assessment, behavioral experiments targeting specific predictions</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="divider cw-divider" style="margin: 40px 0 32px;">
+
+      <span class="phase-anchor" id="cw-treatment"></span>
+      <div class="sub-label cw">Treatment Sequence</div>
+
+      <p>The Clark &amp; Wells treatment sequence is more prescribed than generic CBT — the ordering of components is clinically meaningful and should not be rearranged without reason.</p>
+
+      <div class="sub-label cw" style="margin-top: 28px;">Step 1 — Build the Individualized Model (Sessions 1–2)</div>
+      <p>Work collaboratively with the client to map <em>their specific</em> version of the Clark &amp; Wells model: their core feared social scenario, the self-focused processing that activates, their particular safety behaviors, the anxiety symptoms that arise, and how they interpret those symptoms. Draw this as a diagram in session — the visual representation is important. This serves as both a conceptualization tool and a shared treatment map that will be referenced throughout.</p>
+      <p>Most clients find this formulation genuinely explanatory and somewhat relieving — it provides a coherent account of why their anxiety has persisted despite trying to manage it, and it frames the problem as a learned pattern rather than a character deficit.</p>
+
+      <div class="sub-label cw">Step 2 — Video Feedback (Sessions 2–4, typically early)</div>
+      <p>Video feedback is the most technically distinctive element of the Clark &amp; Wells protocol and is introduced earlier than most CBT practitioners expect. The procedure: the client engages in a brief mock social interaction (or is recorded in a naturalistic situation), rates how they believe they appeared on dimensions relevant to their feared self-impression (flushing, shaking, appearing incompetent, etc.), and then watches the video. The discrepancy between their pre-viewing prediction and their actual appearance is the intervention.</p>
+      <p><strong>The clinical mechanism:</strong> self-focused attention generates a distorted self-image built from internal sensations, not observable behavior. The video provides direct evidence against the felt-sense-as-social-information assumption. Most clients are genuinely surprised — they appear considerably more composed and competent than they believed. This single technique can produce rapid belief change that weeks of verbal restructuring may not.</p>
+
+      <div class="callout" style="margin-top: 16px;">
+        <div class="callout-label">Video feedback — clinical preparation</div>
+        <p>Prepare the client thoroughly before using video feedback. Explain the rationale clearly: the goal is to compare the internal impression to objective evidence. Agree on specific dimensions to rate before watching. Debrief carefully afterward — the discrepancy can produce both relief and a brief period of disorientation as the client adjusts their self-model. Some clients with severe presentations will need additional sessions before they are ready for this step; do not rush it. This technique requires clinical judgment and is not a rote protocol step — supervisor consultation is appropriate if you are implementing it for the first time.</p>
+      </div>
+
+      <div class="sub-label cw" style="margin-top: 28px;">Step 3 — Safety Behavior Elimination</div>
+      <p>Identifying and eliminating safety behaviors is arguably the most critical technical step in this protocol. Without it, behavioral experiments will not disconfirm the client's core beliefs — the client will attribute successful outcomes to their protective maneuvers rather than to the low probability of the feared outcome.</p>
+      <p>Common safety behaviors in social anxiety: gripping objects tightly (to prevent visible trembling), avoiding eye contact, speaking quietly, preparing scripts, redirecting conversation away from self, wearing concealing clothing, using alcohol before social events, positioning oneself near exits, deflecting personal questions. Many clients have used their safety behaviors so automatically that they are not aware of them. A safety behavior interview at the start of treatment — asking specifically what the client does to manage anxiety in feared situations — is necessary for complete identification.</p>
+      <p>Safety behavior elimination does not need to be immediate or total to begin. Work with the client to drop one or two safety behaviors at a time, framed as part of a behavioral experiment. "What would happen if you didn't hold the cup with both hands? Let's find out."</p>
+
+      <div class="sub-label cw">Step 4 — Attentional Training</div>
+      <p>Self-focused attention maintains social phobia through multiple routes: it reduces access to accurate environmental information, increases perceived intensity of anxiety symptoms, and generates the distorted self-image described above. Attentional training shifts focus from the internal monitor to the external environment.</p>
+      <p>In-session practice: during a brief social interaction (with therapist or in a group format), ask the client to notice everything they can about the other person — their gestures, tone, appearance, what they seem to be feeling. This dual-task focus on the environment crowds out the self-monitoring that maintains the fear. The clinical goal is not distraction but genuine engagement with the social environment — which is also, practically, what makes conversations go well.</p>
+      <p>Attentional training is practiced in session and assigned as a behavioral experiment between sessions. The target is not eliminating all self-awareness but achieving flexible attentional control.</p>
+
+      <div class="sub-label cw">Step 5 — Behavioral Experiments (Without Safety Behaviors)</div>
+      <p>The behavioral experiments in this protocol are designed to test specific predictions generated by the client's feared self-impression. They are always conducted without safety behaviors and with attention directed externally. The cognitive element is explicit and structural: before the experiment, the client generates a specific prediction; afterward, the outcome is compared to the prediction and its implications for the belief are discussed.</p>
+      <ul class="cw-list">
+        <li><strong>Attentional manipulation experiments:</strong> Client engages in the same social situation twice — once with self-focused attention, once with externally focused attention — and compares their performance and anxiety levels. This directly demonstrates the role of attentional focus.</li>
+        <li><strong>Safety behavior comparison experiments:</strong> Client engages in a social situation with safety behaviors in the first half and without them in the second, comparing outcomes. Typically, dropping safety behaviors produces equal or better outcomes, and sometimes reduces anxiety — disconfirming the protective function the behaviors seemed to have.</li>
+        <li><strong>Behavioral surveys:</strong> Client gathers data from others (trusted people or in-vivo encounters) to test specific beliefs about how they appear. "I'm going to ask two people whether they noticed me looking anxious during that conversation."</li>
+      </ul>
+
+      <div class="sub-label cw">Step 6 — Address Anticipatory Processing</div>
+      <p>Anticipatory processing (pre-event rumination) is often an invisible maintaining factor — clients do not spontaneously report it unless asked. Screen for it directly: "Before you go into a social situation that worries you, what tends to go through your mind in the hours or days beforehand?" Imagery of failure, repeated rehearsal of feared scenarios, and dwelling on past perceived failures are the most common patterns.</p>
+      <p>Interventions: attention redirection (postpone the processing to a specific limited time if it is hard to stop), the "film director perspective" (observing the anticipated scenario from an outside vantage point rather than from within it), and brief behavioral experiments that compare the accuracy of anticipatory predictions to actual outcomes. Clients are often surprised to discover that their pre-event predictions significantly overstate the severity of what actually happens.</p>
+
+      <div class="sub-label cw">Step 7 — Address Post-Event Processing</div>
+      <p>Post-event processing (the mental review that runs after a social situation) sustains negative self-evaluation through selective focus on perceived failures and unfavorable impressions. Because this processing occurs privately and feels like "just thinking about what happened," many clients do not recognize it as a maintaining behavior — they believe they are doing something helpful (processing the event) when they are in fact reinforcing their feared self-impression.</p>
+      <p>Interventions: psychoeducation about the biased and selective nature of post-event reviews (supported by asking the client whether the review is balanced or predominantly negative), attention redirection at the point of review onset, and a structured alternative — brief, compassionate self-assessment that asks "What actually happened?" rather than "What did I do wrong?"</p>
+
+      <div class="sub-label cw">Step 8 — Cognitive Restructuring of Assumptions and Core Beliefs</div>
+      <p>Once the maintaining factors have been addressed through the steps above, cognitive work on the deeper assumptions ("If people see my anxiety, they will think I am weak and incompetent") and core beliefs ("I am socially inadequate") proceeds with the accumulating behavioral evidence from experiments as the primary material. Verbal restructuring in the absence of behavioral evidence is substantially less effective. By this step in the protocol, the client typically has sufficient evidence from experiments to examine and revise their social assumptions in a way that is grounded rather than merely aspirational.</p>
+
+      <div class="callout" style="margin-top: 24px; border-left-color: var(--cw); background: var(--cw-tint);">
+        <div class="callout-label" style="color: var(--cw);">Key distinction — Clark &amp; Wells vs. standard exposure CBT</div>
+        <p>Standard exposure-based CBT for social anxiety aims to reduce anxiety through habituation — repeated contact with the feared situation until the anxiety response decreases. The Clark &amp; Wells model treats this as insufficient: habituation without addressing safety behaviors, self-focused processing, and the distorted self-image will produce incomplete results. A client can complete a full exposure hierarchy and still maintain the core beliefs if those maintaining mechanisms are untouched. The protocol targets the maintaining factors directly and uses exposure as a belief-testing exercise, not primarily a habituation exercise.</p>
+      </div>
+
+      <div class="drift-note" style="margin-top: 20px;">
+        <strong>Clinical caution:</strong> A minority of clients with social phobia have genuine, identifiable social skill deficits — not just perceived ones. The Clark &amp; Wells model addresses the distorted self-impression component, but if a client truly has limited skills in a specific area (public speaking, assertiveness, dating), skills training may be warranted in addition to the standard protocol. Assess for this early. Proceeding with video feedback and belief-testing before ruling out genuine skill gaps can produce confusion if the video confirms that performance is in fact impaired.
+      </div>
+
+    </div><!-- end .cw-section -->
+  </section>
+
+  <hr class="divider">
+
+  <!-- SESSION COUNT -->
+  <section class="section-block" id="duration">
+    <span class="phase-anchor"></span>
+    <h2>Session Count and Duration</h2>
+    <p>CBT has been studied in formats ranging from 6 to 20+ sessions depending on presentation. In standard outpatient private practice:</p>
+
+    <div class="session-grid">
+      <div class="session-cell">
+        <div class="sc-label">Brief / Focused</div>
+        <div class="sc-range">8–14</div>
+        <div class="sc-desc">Specific phobia, single-domain anxiety, mild-to-moderate depression with good premorbid functioning</div>
+      </div>
+      <div class="session-cell">
+        <div class="sc-label">Moderate Complexity</div>
+        <div class="sc-range">14–24</div>
+        <div class="sc-desc">GAD, MDD, social anxiety disorder, panic disorder, health anxiety</div>
+      </div>
+      <div class="session-cell">
+        <div class="sc-label">Complex / Extended</div>
+        <div class="sc-range">24+</div>
+        <div class="sc-desc">Chronic depression, comorbid presentations, significant core belief work, trauma history, personality-level patterns</div>
+      </div>
+    </div>
+
+    <p>Clark &amp; Wells (1995) protocol for social phobia has been studied in formats of 14–16 individual sessions (Clark et al., 2003), though complex presentations require more. The protocol works well within standard outpatient frequency.</p>
+    <p>Billing code <strong>90837</strong> (53+ minutes) is appropriate for active CBT given the structured, skills-based nature of the work. Shorter sessions (90834 / 90832) may be appropriate toward the end of treatment when consolidation is the primary focus and the client is largely independent in skill use.</p>
+  </section>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <strong style="color: var(--text-dim); font-style: normal;">Primary sources:</strong>
+    Beck, A.T., Rush, A.J., Shaw, B.F., &amp; Emery, G. (1979). <em>Cognitive Therapy of Depression.</em> Guilford.
+    &nbsp;|&nbsp;
+    Beck, J.S. (2011). <em>Cognitive Behavior Therapy: Basics and Beyond</em> (2nd ed.). Guilford.
+    &nbsp;|&nbsp;
+    Clark, D.M., &amp; Wells, A. (1995). A cognitive model of social phobia. In R. Heimberg, M. Liebowitz, D. Hope, &amp; F. Schneier (Eds.), <em>Social Phobia: Diagnosis, Assessment and Treatment.</em> Guilford.
+    &nbsp;|&nbsp;
+    Clark, D.M., Ehlers, A., McManus, F., Hackmann, A., Fennell, M., Campbell, H., ... Louis, B. (2003). Cognitive therapy versus fluoxetine in generalized social phobia. <em>Journal of Consulting and Clinical Psychology, 71</em>(6), 1058–1067.
+    &nbsp;|&nbsp;
+    Craske, M.G., Treanor, M., Conway, C.C., Zbozinek, T., &amp; Vervliet, B. (2014). Maximizing exposure therapy: An inhibitory learning approach. <em>Behaviour Research and Therapy, 58,</em> 10–23.
+    &nbsp;|&nbsp;
+    Westbrook, D., Kennerley, H., &amp; Kirk, J. (2011). <em>An Introduction to Cognitive Behaviour Therapy</em> (2nd ed.). Sage.
+    <br><br>
+    Tended Path Counseling, PLLC &nbsp;·&nbsp; Internal clinical reference, not for distribution &nbsp;·&nbsp; May 2026
+  </div>
+
+</main>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,1168 @@
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── Wrapper ── */
+.tpc-as {
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.75;
+  color: #242733;
+  background: #f7f4f0;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 40px 40px 60px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.tpc-as *, .tpc-as *::before, .tpc-as *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@media (max-width: 600px) { .tpc-as { padding: 24px 20px 44px; } }
+
+/* ── Top bar ── */
+.tpc-as .as-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.tpc-as .as-back {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #8a8887;
+  text-decoration: none;
+  margin-right: auto;
+  transition: color 0.2s;
+}
+.tpc-as .as-back:hover { color: #d79f55; }
+.tpc-as .as-status {
+  font-size: 12px;
+  color: #8a8887;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.tpc-as .as-status.visible { opacity: 1; }
+.tpc-as .as-btn-ghost {
+  background: transparent;
+  color: #242733;
+  border: 1.5px solid #d5cfc7;
+  padding: 8px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.tpc-as .as-btn-ghost:hover { border-color: #d79f55; color: #a87230; background: #fdf8f0; }
+.tpc-as .as-btn-primary {
+  background: #242733;
+  color: #f7f4f0;
+  border: none;
+  padding: 9px 20px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.tpc-as .as-btn-primary:hover { background: #d79f55; }
+.tpc-as .as-file-input { display: none; }
+
+/* ── Title block ── */
+.tpc-as .as-title-block {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid #d79f55;
+}
+.tpc-as .as-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #d79f55;
+  margin-bottom: 8px;
+}
+.tpc-as .as-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 400;
+  color: #242733;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.tpc-as .as-title em { color: #d79f55; font-style: italic; }
+.tpc-as .as-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 300;
+  font-style: italic;
+  color: #8a8887;
+}
+
+/* ── Sections ── */
+.tpc-as .as-section { margin-bottom: 44px; }
+.tpc-as .as-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.tpc-as .as-section-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: #d79f55;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.tpc-as .as-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #242733;
+  line-height: 1.2;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #d5cfc7;
+  flex: 1;
+}
+.tpc-as .as-section-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: #3d4154;
+  line-height: 1.72;
+  margin: 10px 0 20px;
+  max-width: 640px;
+}
+
+/* ── Framing block ── */
+.tpc-as .as-frame {
+  background: #242733;
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 36px;
+}
+.tpc-as .as-frame-eyebrow {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #8fb5b0;
+  margin-bottom: 10px;
+}
+.tpc-as .as-frame-body {
+  font-size: 14px;
+  font-weight: 300;
+  color: #cfcecd;
+  line-height: 1.78;
+}
+.tpc-as .as-frame-body strong { color: #f7f4f0; font-weight: 400; }
+
+/* ── Three styles ── */
+.tpc-as .as-styles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 560px) { .tpc-as .as-styles-grid { grid-template-columns: 1fr; } }
+.tpc-as .as-style-card {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e7e6;
+}
+.tpc-as .as-style-head {
+  padding: 11px 14px 9px;
+}
+.tpc-as .as-style-head.passive  { background: #fdf8f0; border-bottom: 2px solid #e8c08a; }
+.tpc-as .as-style-head.assert   { background: #f2f5f0; border-bottom: 2px solid #7d9977; }
+.tpc-as .as-style-head.aggress  { background: #f7f0ef; border-bottom: 2px solid #c4877a; }
+.tpc-as .as-style-tag {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.tpc-as .as-style-card.passive  .as-style-tag  { color: #a87230; }
+.tpc-as .as-style-card.assert   .as-style-tag  { color: #4e6b49; }
+.tpc-as .as-style-card.aggress  .as-style-tag  { color: #8c4438; }
+.tpc-as .as-style-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #242733;
+}
+.tpc-as .as-style-body {
+  background: white;
+  padding: 12px 14px 14px;
+}
+.tpc-as .as-style-list {
+  list-style: none;
+}
+.tpc-as .as-style-list li {
+  font-size: 12px;
+  font-weight: 300;
+  color: #3d4154;
+  padding: 2px 0;
+  line-height: 1.45;
+  display: flex;
+  gap: 6px;
+}
+.tpc-as .as-style-list li::before { content: '—'; color: #cfcecd; flex-shrink: 0; }
+.tpc-as .as-style-example {
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: #8a8887;
+  line-height: 1.5;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f0efee;
+}
+.tpc-as .as-style-example span {
+  font-weight: 400;
+  color: #3d4154;
+  font-style: normal;
+}
+
+/* ── Textareas ── */
+.tpc-as .as-textarea {
+  width: 100%;
+  border: 1px solid #d5cfc7;
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #242733;
+  background: #f7f4f0;
+  resize: vertical;
+  min-height: 82px;
+  line-height: 1.6;
+  display: block;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.tpc-as .as-textarea:focus { border-color: #d79f55; background: white; }
+.tpc-as .as-textarea::placeholder { color: #b0aeac; font-style: italic; }
+.tpc-as .as-textarea.short { min-height: 62px; }
+.tpc-as .as-textarea.tall  { min-height: 110px; }
+
+/* ── Reflect cards ── */
+.tpc-as .as-reflect-card {
+  background: white;
+  border-radius: 8px;
+  padding: 18px 18px 16px;
+  border: 1px solid #e8e7e6;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.tpc-as .as-reflect-card:focus-within { border-color: #d79f55; }
+.tpc-as .as-reflect-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #242733;
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+.tpc-as .as-reflect-hint {
+  font-size: 12px;
+  font-weight: 300;
+  color: #8a8887;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* ── Two column ── */
+.tpc-as .as-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+@media (max-width: 560px) { .tpc-as .as-two-col { grid-template-columns: 1fr; } }
+
+/* ── NVC steps ── */
+.tpc-as .as-nvc-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e7e6;
+  margin-bottom: 20px;
+}
+.tpc-as .as-nvc-step {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid #e8e7e6;
+}
+.tpc-as .as-nvc-step:last-child { border-bottom: none; }
+@media (max-width: 560px) {
+  .tpc-as .as-nvc-step { grid-template-columns: 1fr; }
+}
+.tpc-as .as-nvc-label-col {
+  background: #242733;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.tpc-as .as-nvc-step-num {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8fb5b0;
+  margin-bottom: 3px;
+}
+.tpc-as .as-nvc-step-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 400;
+  color: #d79f55;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.tpc-as .as-nvc-step-def {
+  font-size: 11px;
+  font-weight: 300;
+  color: #8a8887;
+  line-height: 1.55;
+}
+.tpc-as .as-nvc-input-col {
+  background: white;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+.tpc-as .as-nvc-prompt {
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d4154;
+  font-style: italic;
+  line-height: 1.5;
+}
+.tpc-as .as-nvc-contrast {
+  font-size: 11px;
+  font-weight: 300;
+  color: #8a8887;
+  line-height: 1.45;
+  padding: 6px 10px;
+  background: #f7f4f0;
+  border-radius: 4px;
+  border-left: 2px solid #e8c08a;
+}
+.tpc-as .as-nvc-contrast strong { color: #3d4154; font-weight: 500; }
+
+/* ── DESC steps ── */
+.tpc-as .as-desc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+@media (max-width: 560px) { .tpc-as .as-desc-grid { grid-template-columns: 1fr; } }
+.tpc-as .as-desc-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e7e6;
+  transition: border-color 0.2s;
+}
+.tpc-as .as-desc-card:focus-within { border-color: #d79f55; }
+.tpc-as .as-desc-head {
+  background: #3d4154;
+  padding: 11px 16px 9px;
+}
+.tpc-as .as-desc-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: #d79f55;
+  line-height: 1;
+  margin-bottom: 1px;
+}
+.tpc-as .as-desc-word {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #cfcecd;
+}
+.tpc-as .as-desc-body {
+  padding: 14px 16px 16px;
+}
+.tpc-as .as-desc-guide {
+  font-size: 12px;
+  font-weight: 300;
+  color: #3d4154;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+.tpc-as .as-desc-note {
+  font-size: 11px;
+  font-weight: 300;
+  color: #8a8887;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  padding: 5px 8px;
+  background: #f7f4f0;
+  border-radius: 4px;
+}
+
+/* ── Domain cards ── */
+.tpc-as .as-domain-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+@media (max-width: 560px) { .tpc-as .as-domain-cols { grid-template-columns: 1fr; } }
+.tpc-as .as-domain-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e7e6;
+  transition: border-color 0.2s;
+}
+.tpc-as .as-domain-card:focus-within { border-color: #d79f55; }
+.tpc-as .as-domain-head {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid #f0efee;
+}
+.tpc-as .as-domain-head.partner { background: #fdf4ee; border-bottom-color: #e8c08a; }
+.tpc-as .as-domain-head.family  { background: #eef4ee; border-bottom-color: #b8c4b2; }
+.tpc-as .as-domain-head.work    { background: #eef3f5; border-bottom-color: #8fb5b0; }
+.tpc-as .as-domain-tag {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.tpc-as .as-domain-head.partner .as-domain-tag { color: #a87230; }
+.tpc-as .as-domain-head.family  .as-domain-tag { color: #4e6b49; }
+.tpc-as .as-domain-head.work    .as-domain-tag { color: #5a8f89; }
+.tpc-as .as-domain-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #242733;
+  line-height: 1.2;
+}
+.tpc-as .as-domain-context {
+  font-size: 12px;
+  font-weight: 300;
+  color: #8a8887;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+.tpc-as .as-domain-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tpc-as .as-domain-prompt {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8887;
+}
+
+/* ── When it gets hard ── */
+.tpc-as .as-hard-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e7e6;
+  margin-bottom: 20px;
+}
+.tpc-as .as-hard-item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border-bottom: 1px solid #e8e7e6;
+}
+.tpc-as .as-hard-item:last-child { border-bottom: none; }
+@media (max-width: 560px) { .tpc-as .as-hard-item { grid-template-columns: 1fr; } }
+.tpc-as .as-hard-label-col {
+  padding: 16px 18px;
+  background: #f7f4f0;
+  border-right: 1px solid #e8e7e6;
+}
+.tpc-as .as-hard-scenario {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: #242733;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.tpc-as .as-hard-tool {
+  font-size: 12px;
+  font-weight: 300;
+  color: #3d4154;
+  line-height: 1.6;
+  font-style: italic;
+}
+.tpc-as .as-hard-input-col {
+  background: white;
+  padding: 16px 18px;
+}
+.tpc-as .as-hard-prompt {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8887;
+  margin-bottom: 8px;
+}
+@media (max-width: 560px) {
+  .tpc-as .as-hard-label-col { border-right: none; border-bottom: 1px solid #e8e7e6; }
+}
+
+/* ── Callout boxes ── */
+.tpc-as .as-callout {
+  background: #ede8e1;
+  border-left: 3px solid #d79f55;
+  border-radius: 0 7px 7px 0;
+  padding: 15px 20px;
+  margin-bottom: 18px;
+}
+.tpc-as .as-callout p {
+  font-size: 13px;
+  font-weight: 300;
+  color: #3d4154;
+  line-height: 1.7;
+  margin: 0;
+}
+.tpc-as .as-callout p + p { margin-top: 6px; }
+.tpc-as .as-callout strong { color: #242733; font-weight: 500; }
+.tpc-as .as-callout a {
+  color: #a87230;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+.tpc-as .as-callout a:hover { color: #d79f55; }
+.tpc-as .as-callout.teal { background: #eef4f4; border-left-color: #5a8f89; }
+
+/* ── Integration (dark) ── */
+.tpc-as .as-dark-block {
+  background: #242733;
+  border-radius: 10px;
+  padding: 28px 30px;
+}
+.tpc-as .as-dark-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: #f7f4f0;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.tpc-as .as-dark-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: #cfcecd;
+  line-height: 1.75;
+  margin-bottom: 24px;
+  max-width: 560px;
+}
+.tpc-as .as-dark-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #d79f55;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.tpc-as .as-dark-textarea {
+  width: 100%;
+  border: 1px solid rgba(207,206,205,0.28);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #f7f4f0;
+  background: rgba(255,255,255,0.06);
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 20px;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.tpc-as .as-dark-textarea:focus { border-color: rgba(215,159,85,0.7); background: rgba(255,255,255,0.1); }
+.tpc-as .as-dark-textarea::placeholder { color: rgba(207,206,205,0.45); font-style: italic; }
+.tpc-as .as-dark-textarea:last-child { margin-bottom: 0; }
+
+/* ── Divider ── */
+.tpc-as .as-divider {
+  border: none;
+  border-top: 1px solid #e8e7e6;
+  margin: 40px 0;
+}
+
+/* ── Footer ── */
+.tpc-as .as-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 24px;
+  border-top: 1px solid #e8e7e6;
+  margin-top: 40px;
+}
+.tpc-as .as-footer span {
+  font-size: 12px;
+  font-weight: 300;
+  color: #8a8887;
+}
+
+/* ── Print ── */
+@media print {
+  .tpc-as .as-bar { display: none !important; }
+  .tpc-as { border-radius: 0; padding: 20px 28px 40px; max-width: 100%; }
+  .tpc-as .as-textarea, .tpc-as .as-dark-textarea { background: white !important; color: #242733 !important; border-color: #d5cfc7 !important; }
+  .tpc-as .as-nvc-label-col, .tpc-as .as-frame, .tpc-as .as-dark-block,
+  .tpc-as .as-desc-head, .tpc-as .as-hard-label-col { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tpc-as .as-nvc-step, .tpc-as .as-desc-card, .tpc-as .as-reflect-card { break-inside: avoid; }
+}
+</style>
+
+<div class="tpc-as">
+
+  <!-- ── TOP BAR ── -->
+  <div class="as-bar">
+    <a class="as-back" href="https://www.tendedpathcounseling.com/worksheets">← All worksheets</a>
+    <span class="as-status" id="as-status"></span>
+    <input type="file" id="as-file-input" class="as-file-input" accept=".json">
+    <button class="as-btn-ghost" id="as-load-btn">↑ Upload responses</button>
+    <button class="as-btn-ghost" id="as-save-btn">↓ Save responses</button>
+    <button class="as-btn-primary" id="as-print-btn">↓ Print / Save as PDF</button>
+  </div>
+
+  <!-- ── TITLE ── -->
+  <div class="as-title-block">
+    <div class="as-eyebrow">Communication Skills</div>
+    <div class="as-title">Speaking Up <em>Without Shutting Down</em></div>
+    <div class="as-subtitle">An introduction to assertiveness in close relationships</div>
+  </div>
+
+  <!-- ── FRAMING ── -->
+  <div class="as-frame">
+    <div class="as-frame-eyebrow">Before you begin</div>
+    <div class="as-frame-body">
+      Assertiveness is not the same as being demanding, blunt, or difficult. It's the practice of <strong>expressing your needs, limits, and perspectives honestly</strong> while staying in relationship with the other person. It sits between two patterns that most of us know well: going quiet to keep the peace, or pushing hard enough that the conversation stops being a conversation.<br><br>
+      The frameworks in this worksheet, Nonviolent Communication and DESC, aren't scripts. They're structures to help you find your own words. The goal isn't to "win" a conversation. It's to be known, and to make a genuine request of someone who matters to you.
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: THREE STYLES ── -->
+  <div class="as-section">
+    <div class="as-section-header">
+      <span class="as-section-num">Part 1</span>
+      <h2 class="as-section-title">Three Communication Styles</h2>
+    </div>
+    <div class="as-section-desc">Most of us shift between these styles depending on the relationship, the stakes, and how safe we feel. Notice which pattern is most familiar to you, and in which contexts it tends to show up.</div>
+
+    <div class="as-styles-grid">
+
+      <div class="as-style-card passive">
+        <div class="as-style-head passive">
+          <div class="as-style-tag">Passive</div>
+          <div class="as-style-name">Going Quiet</div>
+        </div>
+        <div class="as-style-body">
+          <ul class="as-style-list">
+            <li>Saying yes when you mean no</li>
+            <li>Swallowing feelings to avoid conflict</li>
+            <li>Hoping others notice without asking</li>
+            <li>Resentment builds beneath the surface</li>
+            <li>Your needs get treated as optional</li>
+          </ul>
+          <div class="as-style-example">When a partner asks if you're okay and you say <span>"I'm fine"</span> when you aren't.</div>
+        </div>
+      </div>
+
+      <div class="as-style-card assert">
+        <div class="as-style-head assert">
+          <div class="as-style-tag">Assertive</div>
+          <div class="as-style-name">Speaking Up</div>
+        </div>
+        <div class="as-style-body">
+          <ul class="as-style-list">
+            <li>Names needs clearly and specifically</li>
+            <li>Stays in the conversation when it's hard</li>
+            <li>Respects others without erasing yourself</li>
+            <li>Can hear no without collapsing or escalating</li>
+            <li>Holds limits without punishment</li>
+          </ul>
+          <div class="as-style-example"><span>"When you make plans without checking, I feel left out. I need us to talk before committing."</span></div>
+        </div>
+      </div>
+
+      <div class="as-style-card aggress">
+        <div class="as-style-head aggress">
+          <div class="as-style-tag">Aggressive</div>
+          <div class="as-style-name">Pushing Hard</div>
+        </div>
+        <div class="as-style-body">
+          <ul class="as-style-list">
+            <li>Getting needs met at others' expense</li>
+            <li>Blaming, criticizing, or threatening</li>
+            <li>Winning the argument, losing the connection</li>
+            <li>Often rooted in unmet need or old pain</li>
+            <li>Others comply, but pull away</li>
+          </ul>
+          <div class="as-style-example">When someone disagrees and you respond by attacking their character rather than the issue.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="as-reflect-card">
+      <div class="as-reflect-label">Which style feels most familiar to you, and where?</div>
+      <div class="as-reflect-hint">Consider how this might shift depending on the relationship. You may be assertive at work but passive with a parent, or passive with a partner but aggressive with a sibling.</div>
+      <textarea class="as-textarea" id="as-style-reflect" placeholder="I tend toward _____ when … It's different in _____ relationships because …"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: WHAT GETS IN THE WAY ── -->
+  <div class="as-section">
+    <div class="as-section-header">
+      <span class="as-section-num">Part 2</span>
+      <h2 class="as-section-title">What Gets in the Way</h2>
+    </div>
+    <div class="as-section-desc">Assertiveness struggles rarely come from not knowing what to say. They usually come from something older — a learned belief that speaking up isn't safe, or that your needs are too much, or that conflict means loss. Do any of these feel familiar?</div>
+
+    <div class="as-two-col">
+      <div class="as-reflect-card">
+        <div class="as-reflect-label">Fear of the other person's reaction</div>
+        <div class="as-reflect-hint">Anger, withdrawal, disappointment, or rejection</div>
+        <textarea class="as-textarea short" id="as-barrier-fear" placeholder="What do you imagine will happen if you speak up?"></textarea>
+      </div>
+      <div class="as-reflect-card">
+        <div class="as-reflect-label">Guilt about having needs at all</div>
+        <div class="as-reflect-hint">The belief that wanting something is selfish or unfair</div>
+        <textarea class="as-textarea short" id="as-barrier-guilt" placeholder="What does the guilty voice say when you think about asking for something?"></textarea>
+      </div>
+      <div class="as-reflect-card">
+        <div class="as-reflect-label">Past experiences where speaking up backfired</div>
+        <div class="as-reflect-hint">Times when expressing a need led to conflict, dismissal, or punishment</div>
+        <textarea class="as-textarea short" id="as-barrier-past" placeholder="What happened before that makes this feel risky now?"></textarea>
+      </div>
+      <div class="as-reflect-card">
+        <div class="as-reflect-label">Not trusting your own read on the situation</div>
+        <div class="as-reflect-hint">Second-guessing whether your feelings are valid enough to name</div>
+        <textarea class="as-textarea short" id="as-barrier-trust" placeholder="Do you find yourself minimizing what you feel before you've even said it aloud?"></textarea>
+      </div>
+    </div>
+
+    <div class="as-callout">
+      <p>These barriers often connect to patterns explored in the <a href="https://www.tendedpathcounseling.com/boundaries" target="_blank">Boundaries worksheet</a>, particularly the People-Pleaser, Guilt Carrier, and Wall-Builder sections. If those feel relevant, they're worth revisiting alongside this work.</p>
+    </div>
+  </div>
+
+  <hr class="as-divider">
+
+  <!-- ── SECTION 3: NVC ── -->
+  <div class="as-section">
+    <div class="as-section-header">
+      <span class="as-section-num">Part 3</span>
+      <h2 class="as-section-title">Preparation: Nonviolent Communication</h2>
+    </div>
+    <div class="as-section-desc">Before you can say something clearly, you have to know what's actually true for you. NVC, developed by Marshall Rosenberg, slows that down. It slows down the gap between what happened and what you concluded about it — helping you locate the feeling underneath, identify the need driving that feeling, and shape a request from that honest place. Think of this as the inner work before the conversation.</div>
+
+    <div class="as-callout">
+      <p><strong>Choose a real situation to work with.</strong> Pick something current, in a relationship where assertiveness feels hard. You'll use this same situation for the DESC section that follows.</p>
+    </div>
+
+    <div class="as-reflect-card" style="margin-bottom: 20px;">
+      <div class="as-reflect-label">The situation I'm working with</div>
+      <div class="as-reflect-hint">Describe it briefly — who, what, and why it's been hard to address</div>
+      <textarea class="as-textarea short" id="as-sit-describe" placeholder="The person, the pattern or event, and what makes it difficult to speak up about…"></textarea>
+    </div>
+
+    <div class="as-nvc-steps">
+
+      <div class="as-nvc-step">
+        <div class="as-nvc-label-col">
+          <div class="as-nvc-step-num">Step 01</div>
+          <div class="as-nvc-step-name">Observation</div>
+          <div class="as-nvc-step-def">What actually happened, stated as a fact. No interpretation, no blame, no story — just what you would see on a recording.</div>
+        </div>
+        <div class="as-nvc-input-col">
+          <div class="as-nvc-prompt">When I observe / notice / hear…</div>
+          <div class="as-nvc-contrast"><strong>Evaluation:</strong> "You never listen to me." &nbsp; <strong>Observation:</strong> "When I'm speaking and you look at your phone…"</div>
+          <textarea class="as-textarea short" id="as-nvc-observation" placeholder="The specific, observable behavior or event — no adjectives, no 'always' or 'never'…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-nvc-step">
+        <div class="as-nvc-label-col">
+          <div class="as-nvc-step-num">Step 02</div>
+          <div class="as-nvc-step-name">Feeling</div>
+          <div class="as-nvc-step-def">Your genuine emotional response — not a thought disguised as a feeling. "I feel like you don't care" is a thought. "I feel hurt" is a feeling.</div>
+        </div>
+        <div class="as-nvc-input-col">
+          <div class="as-nvc-prompt">I feel…</div>
+          <div class="as-nvc-contrast"><strong>Thought:</strong> "I feel like you're not trying." &nbsp; <strong>Feeling:</strong> "I feel lonely and discouraged."</div>
+          <textarea class="as-textarea short" id="as-nvc-feeling" placeholder="The actual emotion — hurt, scared, frustrated, lonely, relieved, resentful, sad…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-nvc-step">
+        <div class="as-nvc-label-col">
+          <div class="as-nvc-step-num">Step 03</div>
+          <div class="as-nvc-step-name">Need</div>
+          <div class="as-nvc-step-def">The underlying need your feeling is pointing to. Needs are universal — connection, respect, predictability, rest, autonomy, safety. They belong to you, not to what someone else did or didn't do.</div>
+        </div>
+        <div class="as-nvc-input-col">
+          <div class="as-nvc-prompt">Because I need / value…</div>
+          <div class="as-nvc-contrast"><strong>Strategy:</strong> "I need you to put your phone away." &nbsp; <strong>Need:</strong> "I need to feel like I have your attention."</div>
+          <textarea class="as-textarea short" id="as-nvc-need" placeholder="The core need: to feel heard, to have predictability, to feel valued, to have rest, to feel safe…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-nvc-step">
+        <div class="as-nvc-label-col">
+          <div class="as-nvc-step-num">Step 04</div>
+          <div class="as-nvc-step-name">Request</div>
+          <div class="as-nvc-step-def">A clear, specific, doable ask — not a demand. A request can be declined. A demand punishes refusal. The distinction matters for both of you.</div>
+        </div>
+        <div class="as-nvc-input-col">
+          <div class="as-nvc-prompt">Would you be willing to…</div>
+          <div class="as-nvc-contrast"><strong>Vague:</strong> "I just need you to be more present." &nbsp; <strong>Specific:</strong> "Would you be willing to put your phone in the other room when we eat together?"</div>
+          <textarea class="as-textarea short" id="as-nvc-request" placeholder="One specific, observable action — something they could actually say yes or no to…"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: DESC ── -->
+  <div class="as-section">
+    <div class="as-section-header">
+      <span class="as-section-num">Part 4</span>
+      <h2 class="as-section-title">The Conversation: DESC</h2>
+    </div>
+    <div class="as-section-desc">DESC, developed by Sharon and Gordon Bower, gives your NVC preparation a structure for the actual conversation. Use your work from the previous section to fill this in. Each step builds on the one before it — Describe what happened, Express how it affected you, Specify what you need, and name the Consequence of change.</div>
+
+    <div class="as-desc-grid">
+
+      <div class="as-desc-card">
+        <div class="as-desc-head">
+          <div class="as-desc-letter">D</div>
+          <div class="as-desc-word">Describe</div>
+        </div>
+        <div class="as-desc-body">
+          <div class="as-desc-guide">State the specific, observable situation. No interpretation or blame — just what happened.</div>
+          <div class="as-desc-note">Draw directly from your NVC Observation. Keep it brief and factual.</div>
+          <textarea class="as-textarea short" id="as-desc-describe" placeholder="When [specific behavior or situation]…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-desc-card">
+        <div class="as-desc-head">
+          <div class="as-desc-letter">E</div>
+          <div class="as-desc-word">Express</div>
+        </div>
+        <div class="as-desc-body">
+          <div class="as-desc-guide">Share how it affects you, using "I" language. Your feelings and the need underneath them.</div>
+          <div class="as-desc-note">Draw from your NVC Feeling and Need. Own it fully — this is your experience, not their verdict.</div>
+          <textarea class="as-textarea short" id="as-desc-express" placeholder="I feel [emotion] because I need [need]…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-desc-card">
+        <div class="as-desc-head">
+          <div class="as-desc-letter">S</div>
+          <div class="as-desc-word">Specify</div>
+        </div>
+        <div class="as-desc-body">
+          <div class="as-desc-guide">Ask for one specific, realistic change. Concrete enough that you'd both know if it happened.</div>
+          <div class="as-desc-note">Draw from your NVC Request. Avoid asking for attitude changes — ask for actions.</div>
+          <textarea class="as-textarea short" id="as-desc-specify" placeholder="What I'm asking for is [specific, observable action]…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-desc-card">
+        <div class="as-desc-head">
+          <div class="as-desc-letter">C</div>
+          <div class="as-desc-word">Consequence</div>
+        </div>
+        <div class="as-desc-body">
+          <div class="as-desc-guide">Name what changes if your request is met — lead with the positive outcome for both of you. A consequence is not a threat.</div>
+          <div class="as-desc-note">Focus on what becomes possible. "If we can do this, I think I'll feel closer to you" lands differently than an ultimatum.</div>
+          <textarea class="as-textarea short" id="as-desc-consequence" placeholder="If this changes, I think we'd both… / What I imagine becoming possible is…"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="as-reflect-card">
+      <div class="as-reflect-label">Put it together — in your own words</div>
+      <div class="as-reflect-hint">Write out what you'd actually say, as naturally as you'd say it. This is not a script to memorize; it's a draft to get the shape of the conversation in your body before you have it.</div>
+      <textarea class="as-textarea tall" id="as-desc-together" placeholder="Write it out as you'd say it, in your own voice. It doesn't have to be perfect — it just has to sound like you."></textarea>
+    </div>
+  </div>
+
+  <hr class="as-divider">
+
+  <!-- ── SECTION 5: DOMAINS ── -->
+  <div class="as-section">
+    <div class="as-section-header">
+      <span class="as-section-num">Part 5</span>
+      <h2 class="as-section-title">Where Does This Show Up for You?</h2>
+    </div>
+    <div class="as-section-desc">Assertiveness looks different depending on who you're with. The same skill lands differently in a long-term partnership than it does in a family where roles have been fixed for decades. Take a moment to think about each domain that feels relevant to you.</div>
+
+    <div class="as-domain-cols">
+
+      <div class="as-domain-card">
+        <div class="as-domain-head partner">
+          <div class="as-domain-tag">Partner / Significant Other</div>
+          <div class="as-domain-name">Intimate Relationships</div>
+          <div class="as-domain-context">Shared life, shared history, the most at stake</div>
+        </div>
+        <div class="as-domain-body">
+          <div class="as-domain-prompt">What's hard to say here?</div>
+          <textarea class="as-textarea short" id="as-domain-partner-hard" placeholder="What do you hold back with a partner? What feels too risky or too much?"></textarea>
+          <div class="as-domain-prompt">What gets in the way?</div>
+          <textarea class="as-textarea short" id="as-domain-partner-barrier" placeholder="Fear, past patterns, roles you've settled into, what you've learned happens when you ask…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-domain-card">
+        <div class="as-domain-head family">
+          <div class="as-domain-tag">Family of Origin</div>
+          <div class="as-domain-name">Parents, Siblings, Extended Family</div>
+          <div class="as-domain-context">Old roles, old dynamics, the longest history</div>
+        </div>
+        <div class="as-domain-body">
+          <div class="as-domain-prompt">What's hard to say here?</div>
+          <textarea class="as-textarea short" id="as-domain-family-hard" placeholder="What role do you play in your family system? What happens when you try to step outside it?"></textarea>
+          <div class="as-domain-prompt">What gets in the way?</div>
+          <textarea class="as-textarea short" id="as-domain-family-barrier" placeholder="Loyalty, guilt, old patterns, fear of disrupting the peace, not wanting to be the difficult one…"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="as-domain-card" style="margin-bottom: 12px;">
+      <div class="as-domain-head work">
+        <div class="as-domain-tag">Work &amp; Professional Relationships</div>
+        <div class="as-domain-name">Colleagues, Managers, Workplace Dynamics</div>
+        <div class="as-domain-context">Power differentials, performance stakes, less room to be fully yourself</div>
+      </div>
+      <div class="as-domain-body">
+        <div class="as-domain-prompt">What's hard to say here, and to whom?</div>
+        <textarea class="as-textarea short" id="as-domain-work-hard" placeholder="What do you swallow at work? Where does the power dynamic make speaking up feel unsafe or pointless?"></textarea>
+      </div>
+    </div>
+
+    <div class="as-callout teal">
+      <p>If workplace stress is a primary concern, the <a href="https://www.tendedpathcounseling.com/burnout" target="_blank">Burnout &amp; Boundary Mapping worksheet</a> offers a space to explore what's contributing to burnout, identify potential options and solutions, and reflect on how your boundaries at work may be playing a role.</p>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: WHEN IT GETS HARD ── -->
+  <div class="as-section">
+    <div class="as-section-header">
+      <span class="as-section-num">Part 6</span>
+      <h2 class="as-section-title">When It Gets Hard</h2>
+    </div>
+    <div class="as-section-desc">Most worksheets teach you what to say. This section is about what happens after you say it — the moments where the framework falls away and something older takes over.</div>
+
+    <div class="as-hard-cards">
+
+      <div class="as-hard-item">
+        <div class="as-hard-label-col">
+          <div class="as-hard-scenario">You freeze mid-conversation</div>
+          <div class="as-hard-tool">Buying time is not failure. "I need a moment" or "let me think about how to say this" keeps you in the conversation without saying something you don't mean.</div>
+        </div>
+        <div class="as-hard-input-col">
+          <div class="as-hard-prompt">What helps you get back to yourself when you go blank?</div>
+          <textarea class="as-textarea short" id="as-hard-freeze" placeholder="A breath, a phrase you can use, a signal to yourself that you're okay and can keep going…"></textarea>
+        </div>
+      </div>
+
+      <div class="as-hard-item">
+        <div class="as-hard-label-col">
+          <div class="as-hard-scenario">They get defensive or upset</div>
+          <div class="as-hard-tool">Defensiveness usually means someone feels threatened, not that your request was wrong. You can acknowledge their reaction without taking your request back. "I hear that this landed hard. I still need to talk about this."</div>
+        </div>
+        <div class="as-hard-input-col">
+          <div class="as-hard-prompt">What tends to happen in you when someone reacts badly to what you've said?</div>
+          <textarea class="as-textarea short" id="as-hard-pushback" placeholder="Do you collapse, escalate, over-explain, apologize immediately? What's the pull?"></textarea>
+        </div>
+      </div>
+
+      <div class="as-hard-item">
+        <div class="as-hard-label-col">
+          <div class="as-hard-scenario">You give in and feel terrible afterward</div>
+          <div class="as-hard-tool">This is information, not failure. Noticing the moment you backed down — and what it cost you — is the beginning of doing it differently next time. Self-criticism won't help. Curiosity will.</div>
+        </div>
+        <div class="as-hard-input-col">
+          <div class="as-hard-prompt">When you've given in, what happened right before? What was the tipping point?</div>
+          <textarea class="as-textarea short" id="as-hard-givein" placeholder="What did they say or do — or what did you feel — right before you let it go?"></textarea>
+        </div>
+      </div>
+
+      <div class="as-hard-item">
+        <div class="as-hard-label-col">
+          <div class="as-hard-scenario">They say no — or nothing changes</div>
+          <div class="as-hard-tool">Assertiveness is about expressing a need and making a request. It is not about controlling the outcome. Their response is their choice. What you do with that information is yours.</div>
+        </div>
+        <div class="as-hard-input-col">
+          <div class="as-hard-prompt">If they say no or nothing changes, what does that tell you? What becomes your decision?</div>
+          <textarea class="as-textarea short" id="as-hard-noanswer" placeholder="What are you willing to accept? What becomes a limit? What does it mean for the relationship?"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="as-divider">
+
+  <!-- ── SECTION 7: INTEGRATION ── -->
+  <div class="as-section">
+    <div class="as-dark-block">
+      <div class="as-dark-title">Before the conversation</div>
+      <div class="as-dark-desc">Use this space to prepare for the specific conversation you've been working toward. Not to rehearse a script — to settle into what's true for you and what you're actually asking for.</div>
+
+      <div class="as-dark-label">Who do I need to have this conversation with, and what's the situation?</div>
+      <textarea class="as-dark-textarea" id="as-integ-who" placeholder="Name the relationship and the specific thing you need to address…"></textarea>
+
+      <div class="as-dark-label">What do I most want them to understand?</div>
+      <textarea class="as-dark-textarea" id="as-integ-understand" placeholder="Not what you want them to do — what do you want them to actually know about your experience?"></textarea>
+
+      <div class="as-dark-label">What am I afraid will happen, and how will I take care of myself if it does?</div>
+      <textarea class="as-dark-textarea" id="as-integ-afraid" placeholder="Name the fear, then name one way you'll care for yourself regardless of how it goes…"></textarea>
+
+      <div class="as-dark-label">One thing I want to remember going in</div>
+      <textarea class="as-dark-textarea" id="as-integ-remember" placeholder="Not a rule. Something true about you, and what you deserve."></textarea>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="as-footer">
+    <span>Tended Path Counseling, PLLC &nbsp;·&nbsp; Bethany Sherman, LMHC &nbsp;·&nbsp; Woodinville, WA</span>
+    <span>tendedpathcounseling.com</span>
+  </div>
+
+</div><!-- /tpc-as -->
+
+<script>
+(function () {
+
+const TEXT_IDS = [
+  'as-style-reflect',
+  'as-barrier-fear', 'as-barrier-guilt', 'as-barrier-past', 'as-barrier-trust',
+  'as-sit-describe',
+  'as-nvc-observation', 'as-nvc-feeling', 'as-nvc-need', 'as-nvc-request',
+  'as-desc-describe', 'as-desc-express', 'as-desc-specify', 'as-desc-consequence', 'as-desc-together',
+  'as-domain-partner-hard', 'as-domain-partner-barrier',
+  'as-domain-family-hard', 'as-domain-family-barrier',
+  'as-domain-work-hard',
+  'as-hard-freeze', 'as-hard-pushback', 'as-hard-givein', 'as-hard-noanswer',
+  'as-integ-who', 'as-integ-understand', 'as-integ-afraid', 'as-integ-remember'
+];
+
+// ── Save ─────────────────────────────────────────────────────
+function saveData() {
+  const payload = {
+    version: 1,
+    worksheet: 'assertiveness-skills',
+    savedAt: new Date().toISOString(),
+    fields: {}
+  };
+  TEXT_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) payload.fields[id] = el.value;
+  });
+
+  const dateSlug = new Date().toISOString().slice(0, 10);
+  const filename = `tended-path-assertiveness-${dateSlug}.json`;
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  showStatus('Responses saved ✓');
+}
+
+// ── Load ─────────────────────────────────────────────────────
+function loadData(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.fields) {
+        TEXT_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && data.fields[id] !== undefined) el.value = data.fields[id];
+        });
+      }
+      showStatus('Responses restored ✓');
+    } catch (_) {
+      showStatus('Could not read file — please upload a saved .json file');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ── Status flash ─────────────────────────────────────────────
+let statusTimer;
+function showStatus(msg) {
+  const el = document.getElementById('as-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('visible');
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => el.classList.remove('visible'), 3200);
+}
+
+// ── Wire buttons ─────────────────────────────────────────────
+const saveBtn   = document.getElementById('as-save-btn');
+const loadBtn   = document.getElementById('as-load-btn');
+const fileInput = document.getElementById('as-file-input');
+const printBtn  = document.getElementById('as-print-btn');
+
+if (saveBtn)   saveBtn.addEventListener('click', saveData);
+if (loadBtn)   loadBtn.addEventListener('click', () => fileInput?.click());
+if (printBtn)  printBtn.addEventListener('click', () => window.print());
+if (fileInput) fileInput.addEventListener('change', e => {
+  loadData(e.target.files[0]);
+  fileInput.value = '';
+});
+
+})();
+</script>

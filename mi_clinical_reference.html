@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MI Clinical Reference — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #242733;
+    --gold: #d79f55;
+    --gold-light: #e8bb7e;
+    --cream: #ede8e1;
+    --warm-white: #f7f4f0;
+    --muted: #6b6d78;
+    --border: #d5cfc7;
+    --process-1: #5b7fa6;
+    --process-2: #7a9e7e;
+    --process-3: #c4845a;
+    --process-4: #8a70a8;
+    --process-5: #d79f55;
+    --process-6: #6b9ea8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--warm-white);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--ink);
+    padding: 28px 48px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--warm-white);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* MODEL STRIP */
+  .model-strip {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 48px;
+  }
+  .model-strip-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .model-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .model-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .model-pill {
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .model-pill:hover { opacity: 0.85; }
+  .model-pill.p1 { background: var(--process-1); }
+  .model-pill.p2 { background: var(--process-2); }
+  .model-pill.p3 { background: var(--process-3); }
+  .model-pill.p4 { background: var(--process-4); }
+  .model-pill.p5 { background: var(--process-5); }
+  .model-pill.p6 { background: var(--process-6); }
+
+  /* LAYOUT */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--ink);
+    padding: 32px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 24px 8px;
+    margin-top: 20px;
+  }
+  .sidebar-section-label:first-child { margin-top: 0; }
+  .nav-item {
+    display: block;
+    padding: 9px 24px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #a0a3ae;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+  .nav-item:hover {
+    color: var(--warm-white);
+    background: rgba(255,255,255,0.05);
+  }
+  .nav-item.active {
+    color: var(--warm-white);
+    border-left-color: var(--gold);
+    background: rgba(215,159,85,0.1);
+  }
+  .nav-item .nav-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    margin-top: -2px;
+  }
+
+  /* CONTENT */
+  .content {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 860px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .section-subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-weight: 300;
+    font-style: italic;
+  }
+  .process-accent {
+    display: inline-block;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    margin-top: 14px;
+  }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #3a3d4a;
+    margin-bottom: 10px;
+  }
+  .card p:last-child { margin-bottom: 0; }
+  .card.accent {
+    border-left: 4px solid var(--gold);
+    background: #fdf9f4;
+  }
+  .card.process-card-1 { border-left: 4px solid var(--process-1); }
+  .card.process-card-2 { border-left: 4px solid var(--process-2); }
+  .card.process-card-3 { border-left: 4px solid var(--process-3); }
+  .card.process-card-4 { border-left: 4px solid var(--process-4); }
+  .card.process-card-5 { border-left: 4px solid var(--process-5); }
+  .card.process-card-6 { border-left: 4px solid var(--process-6); }
+
+  /* TWO-COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  /* LISTS */
+  ul.clinical-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+  }
+  ul.clinical-list li {
+    font-size: 15px;
+    line-height: 1.65;
+    padding: 6px 0 6px 20px;
+    position: relative;
+    border-bottom: 1px solid var(--cream);
+    color: #3a3d4a;
+  }
+  ul.clinical-list li:last-child { border-bottom: none; }
+  ul.clinical-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* QUESTION BLOCKS */
+  .q-block {
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+  }
+  .q-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  /* EXAMPLE BLOCKS (speech / technique examples) */
+  .example-block {
+    background: var(--ink);
+    color: var(--warm-white);
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+  }
+  .example-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .example-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #c8cad4;
+  }
+  .example-note {
+    font-size: 13px;
+    margin-top: 10px;
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  /* DARN-CAT GRID */
+  .darn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .darn-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .darn-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .darn-word {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .darn-def {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #3a3d4a;
+  }
+  .darn-example {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--cream);
+  }
+
+  /* PACE GRID */
+  .pace-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .pace-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .pace-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .pace-word {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .pace-def {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #3a3d4a;
+  }
+
+  /* TAGS */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 0;
+  }
+  .tag {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 12px;
+    border-radius: 12px;
+    background: var(--cream);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .tag.evidence { background: #ebf3f0; color: #3a7a5a; border-color: #aed1c3; }
+  .tag.caution  { background: #fdf3e7; color: #8a5a1a; border-color: #e8c48a; }
+  .tag.clinical { background: #fdf3e7; color: #8a5a1a; border-color: #e8c48a; }
+  .tag.synthesis { background: #f0ebf7; color: #7a4fa8; border-color: #c9b5e0; }
+
+  /* TABLE */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .ref-table th {
+    background: var(--ink);
+    color: var(--gold);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ref-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+    color: #3a3d4a;
+  }
+  .ref-table tr:nth-child(even) td { background: var(--cream); }
+
+  /* REFERENCES SECTION */
+  .ref-entry {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #3a3d4a;
+  }
+  .ref-entry .ref-type {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .ref-entry .ref-note {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--cream);
+  }
+
+  /* WARNING BANNER */
+  .synthesis-banner {
+    background: #f0ebf7;
+    border: 1px solid #c9b5e0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #5a3a7a;
+    margin-bottom: 20px;
+    line-height: 1.55;
+  }
+  .synthesis-banner strong { color: #4a2a6a; }
+
+  /* PRINT */
+  @media print {
+    .sidebar { display: none; }
+    .content { padding: 20px; max-width: 100%; }
+    .section { display: block !important; }
+    .site-header { padding: 16px 24px; }
+    .model-strip { padding: 12px 24px; }
+    .section-header { page-break-after: avoid; }
+    .card { page-break-inside: avoid; }
+  }
+
+  /* SCROLLBAR */
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div>
+    <div class="header-title">MI Clinical Reference</div>
+    <div class="header-sub">Tended Path Counseling, PLLC &nbsp;·&nbsp; Bethany Sherman, LMHC</div>
+  </div>
+  <div class="header-meta">
+    Motivational Interviewing<br>
+    Miller &amp; Rollnick · 3rd Edition Framework<br>
+    For clinical reference only
+  </div>
+</header>
+
+<!-- MODEL STRIP -->
+<div class="model-strip">
+  <div class="model-strip-inner">
+    <span class="model-label">Jump to process:</span>
+    <div class="model-pills">
+      <span class="model-pill p1" onclick="showSection('engaging')">Engaging</span>
+      <span class="model-pill p2" onclick="showSection('focusing')">Focusing</span>
+      <span class="model-pill p3" onclick="showSection('evoking')">Evoking</span>
+      <span class="model-pill p4" onclick="showSection('planning')">Planning</span>
+      <span class="model-pill p5" onclick="showSection('oars')">OARS</span>
+      <span class="model-pill p6" onclick="showSection('changetalk')">Change Talk</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section-label">Overview</div>
+    <a class="nav-item active" onclick="showSection('overview')">Model Overview</a>
+    <a class="nav-item" onclick="showSection('spirit')">The Spirit of MI</a>
+    <a class="nav-item" onclick="showSection('language')">MI Language Guide</a>
+
+    <div class="sidebar-section-label">Four Processes</div>
+    <a class="nav-item" onclick="showSection('engaging')"><span class="nav-dot" style="background:var(--process-1)"></span>Engaging</a>
+    <a class="nav-item" onclick="showSection('focusing')"><span class="nav-dot" style="background:var(--process-2)"></span>Focusing</a>
+    <a class="nav-item" onclick="showSection('evoking')"><span class="nav-dot" style="background:var(--process-3)"></span>Evoking</a>
+    <a class="nav-item" onclick="showSection('planning')"><span class="nav-dot" style="background:var(--process-4)"></span>Planning</a>
+
+    <div class="sidebar-section-label">Core Skills</div>
+    <a class="nav-item" onclick="showSection('oars')"><span class="nav-dot" style="background:var(--process-5)"></span>OARS</a>
+    <a class="nav-item" onclick="showSection('changetalk')"><span class="nav-dot" style="background:var(--process-6)"></span>Change Talk &amp; DARN-CAT</a>
+
+    <div class="sidebar-section-label">Clinical Tools</div>
+    <a class="nav-item" onclick="showSection('questions')">Clinical Questions</a>
+    <a class="nav-item" onclick="showSection('documentation')">Documentation Notes</a>
+    <a class="nav-item" onclick="showSection('references')">References</a>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ═══════════════════════════════ OVERVIEW ═══════════════════════════════ -->
+    <section class="section active" id="s-overview">
+      <div class="section-header">
+        <div class="section-tag">Foundation</div>
+        <div class="section-title">Model Overview</div>
+        <div class="section-subtitle">What MI is, what it aims for, and how it differs from other approaches</div>
+        <div class="process-accent" style="background:var(--gold)"></div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">Core Aim</div>
+        <p>Motivational Interviewing is a collaborative, goal-oriented style of communication designed to strengthen a person's own motivation and commitment to change. It is not a set of techniques applied to a passive client — it is a particular way of <em>being with</em> someone in the service of their own stated values and goals.</p>
+        <p>The central question MI asks is: <em>What is this person already moving toward, and how can I help them hear themselves more clearly?</em></p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Historical Context</div>
+        <p>MI was developed by William R. Miller in the early 1980s, originally in response to confrontational approaches then dominant in substance use treatment. The first formal description appeared in 1983 (Miller, Behavioural Psychotherapy). Miller and Stephen Rollnick refined and systematized the approach across three editions, with the third (2013) introducing the four-process framework that replaced the earlier phases model.</p>
+        <p>MI is now one of the most researched psychotherapy approaches in the world. Lundahl et al. (2010) synthesized 119 clinical trials and found MI consistently outperforms no treatment across substance use, health behavior, and engagement outcomes — and performs comparably to other active treatments in most contexts.</p>
+        <div class="tag-row">
+          <span class="tag evidence">Empirically supported</span>
+          <span class="tag evidence">119 RCTs — Lundahl et al., 2010</span>
+          <span class="tag clinical">Transdiagnostic / transtheoretical</span>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">What MI Is</div>
+          <ul class="clinical-list">
+            <li>A collaborative conversation <em>for</em> change</li>
+            <li>Evocative — draws out the client's own reasons</li>
+            <li>Honors autonomy — the client decides</li>
+            <li>Interested in ambivalence, not against it</li>
+            <li>Fundamentally person-centered in spirit</li>
+            <li>Evidence-based for behavior change across settings</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">What MI Is Not</div>
+          <ul class="clinical-list">
+            <li>A set of scripts or techniques to deploy</li>
+            <li>Confronting, persuading, or advising</li>
+            <li>Arguing the client into change</li>
+            <li>Motivating from the outside in</li>
+            <li>Ignoring client ambivalence or sustain talk</li>
+            <li>A magic bullet for pre-contemplative clients</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">The Righting Reflex</div>
+        <p>The single most important concept for MI practitioners to understand is the <strong>righting reflex</strong> — the instinct to correct, advise, fix, or persuade when someone is struggling. It comes from a caring impulse, but in MI it is the primary obstacle to change.</p>
+        <p>When a clinician argues for change, the client tends to argue against it. When the clinician expresses concern, the client minimizes. The more a clinician pushes, the more the client defends the status quo. Suppressing the righting reflex and redirecting that energy into genuine curiosity is the foundational discipline of MI practice.</p>
+        <div class="tag-row">
+          <span class="tag caution">Clinical discipline: notice the urge to fix — then don't</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">MI and Other Modalities</div>
+        <p>MI is not a standalone treatment in most clinical contexts — it functions as a relational stance and a preparation for change that enhances other interventions. Research supports MI as a prelude to CBT, behavioral activation, trauma processing, and other structured treatments. In an integrative practice, MI is most useful as the governing spirit of how you engage, and as a specific process during any moment of ambivalence — regardless of the primary modality.</p>
+        <div class="tag-row">
+          <span class="tag synthesis">Clinical synthesis — not a formal integration model</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ SPIRIT ═══════════════════════════════ -->
+    <section class="section" id="s-spirit">
+      <div class="section-header">
+        <div class="section-tag">Foundation</div>
+        <div class="section-title">The Spirit of MI</div>
+        <div class="section-subtitle">PACE — Partnership, Acceptance, Compassion, Evocation</div>
+        <div class="process-accent" style="background:var(--gold)"></div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">Why Spirit Comes First</div>
+        <p>Miller and Rollnick are explicit: MI is not primarily a set of techniques. The techniques without the spirit produce a manipulative, pseudo-empathic imitation of MI. The spirit — what you are fundamentally doing and why — is what makes OARS and change talk elicitation genuine rather than strategic.</p>
+        <p>The spirit is described through four overlapping orientations, remembered as PACE.</p>
+      </div>
+
+      <div class="pace-grid">
+        <div class="pace-item">
+          <div class="pace-letter">P</div>
+          <div class="pace-word">Partnership</div>
+          <div class="pace-def">MI is a collaborative process between two experts — the clinician as expert in change facilitation, the client as expert on their own life. It is not done <em>to</em> or <em>for</em> the client but <em>with</em> them. The clinician does not occupy a hierarchical expert role; the relationship is explicitly egalitarian in its orientation.</div>
+        </div>
+        <div class="pace-item">
+          <div class="pace-letter">A</div>
+          <div class="pace-word">Acceptance</div>
+          <div class="pace-def">MI acceptance has four components: <strong>Absolute Worth</strong> (unconditional positive regard — the client's inherent worth is not contingent on change); <strong>Accurate Empathy</strong> (seeking to understand the client's inner world on their own terms); <strong>Autonomy Support</strong> (the client has the right and capacity to choose their own path); <strong>Affirmation</strong> (genuine recognition of the client's strengths, not hollow praise).</div>
+        </div>
+        <div class="pace-item">
+          <div class="pace-letter">C</div>
+          <div class="pace-word">Compassion</div>
+          <div class="pace-def">The clinician actively promotes the client's welfare and prioritizes their needs. This is what distinguishes MI from manipulation — the purpose of eliciting change talk is not the clinician's agenda but the client's wellbeing. Compassion also keeps the clinician honest about whose interests are being served in any given moment.</div>
+        </div>
+        <div class="pace-item">
+          <div class="pace-letter">E</div>
+          <div class="pace-word">Evocation</div>
+          <div class="pace-def">The resources and motivation for change already exist within the client. The clinician's job is to draw them out — not install them. This is the most counterintuitive element of MI for clinicians trained in psychoeducation or skill-building approaches: the clinician is not the source of insight or motivation. The client is.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Acceptance in MI vs. ACT</div>
+        <p>The term "acceptance" carries different meanings in ACT and MI. In ACT, acceptance refers to the client's willingness to experience difficult inner states without avoidance. In MI, acceptance is a clinician orientation — the therapist's unconditional positive regard and affirmation of the client's inherent worth and autonomy. Both are important; neither substitutes for the other.</p>
+        <div class="tag-row">
+          <span class="tag synthesis">Clinical note: worth naming explicitly when working across modalities</span>
+        </div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Spirit Self-Check — During Session</div>
+        <div class="q-text">"Am I working for this person's agenda, or mine? Am I curious, or am I steering?"</div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Spirit Self-Check — On the Righting Reflex</div>
+        <div class="q-text">"I can see why I want to say that. But if I say it, whose side am I arguing from?"</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ LANGUAGE ═══════════════════════════════ -->
+    <section class="section" id="s-language">
+      <div class="section-header">
+        <div class="section-tag">Clinical Reference</div>
+        <div class="section-title">MI Language Guide</div>
+        <div class="section-subtitle">Terminology that belongs in MI documentation — and common pitfalls to avoid</div>
+        <div class="process-accent" style="background:var(--gold)"></div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">Why Documentation Language Matters</div>
+        <p>MI has a distinct clinical vocabulary that should appear in session notes when MI is the operative approach. Using generic or CBT-flavored language when you are doing MI creates a documentation mismatch — and obscures the actual mechanism of action in treatment. Auditors and supervisors should be able to identify the model from the note language.</p>
+      </div>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Avoid (generic / contradictory)</th>
+            <th>Use (MI-aligned)</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Challenged client's resistance</td>
+            <td>Explored sustain talk; rolled with discord</td>
+            <td>MI does not confront — it explores ambivalence</td>
+          </tr>
+          <tr>
+            <td>Encouraged client to change behavior</td>
+            <td>Elicited client's own reasons and desires for change</td>
+            <td>Motivation must come from within, not be installed by clinician</td>
+          </tr>
+          <tr>
+            <td>Confronted denial</td>
+            <td>Reflected ambivalence; amplified change talk</td>
+            <td>"Denial" is not an MI concept; sustain talk is normal and expected</td>
+          </tr>
+          <tr>
+            <td>Educated client about risks of [behavior]</td>
+            <td>Provided information with permission; explored client's awareness of impact</td>
+            <td>MI uses Ask-Tell-Ask, not unsolicited psychoeducation</td>
+          </tr>
+          <tr>
+            <td>Client not ready to change</td>
+            <td>Client expressed ambivalence; engaged in exploration of pros/cons</td>
+            <td>Readiness is not binary; ambivalence is the target, not an obstacle</td>
+          </tr>
+          <tr>
+            <td>Set goals with client</td>
+            <td>Collaboratively focused on target behavior; elicited commitment language</td>
+            <td>Distinguishes MI focusing/planning from generic goal-setting</td>
+          </tr>
+          <tr>
+            <td>Advised client to seek support</td>
+            <td>Explored client's existing support and what support they might want</td>
+            <td>MI evokes rather than advises — or advises with explicit permission</td>
+          </tr>
+          <tr>
+            <td>Explored feelings</td>
+            <td>Reflected emotional content; deepened exploration of values and ambivalence</td>
+            <td>More specific to the MI process at work</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card">
+        <div class="card-title">Key MI-Specific Terms for Notes</div>
+        <ul class="clinical-list">
+          <li><strong>Change talk</strong> — client statements favoring change (DARN-CAT)</li>
+          <li><strong>Sustain talk</strong> — client statements favoring the status quo; explored, not argued against</li>
+          <li><strong>Discord</strong> — interpersonal friction in the therapeutic relationship; managed with MI-consistent responses</li>
+          <li><strong>Ambivalence</strong> — normal coexistence of motivation to change and motivation to stay the same; the central clinical territory of MI</li>
+          <li><strong>Commitment language</strong> — mobilizing change talk indicating readiness to act (CAT)</li>
+          <li><strong>Decisional balance</strong> — structured exploration of pros and cons of change and status quo</li>
+          <li><strong>Importance/confidence ruler</strong> — brief scaling technique to elicit and elaborate on change motivation</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ ENGAGING ═══════════════════════════════ -->
+    <section class="section" id="s-engaging">
+      <div class="section-header">
+        <div class="section-tag">Process 1 of 4</div>
+        <div class="section-title">Engaging</div>
+        <div class="section-subtitle">Establishing a working alliance and creating the conditions for honest conversation</div>
+        <div class="process-accent" style="background:var(--process-1)"></div>
+      </div>
+
+      <div class="card process-card-1">
+        <div class="card-title">What It Is</div>
+        <p>Engaging is the relational foundation of MI — the process of building a trusting, collaborative working relationship in which the client feels genuinely heard and not judged. Without successful engaging, the other three processes have no platform. A client who does not feel safe or respected will not share ambivalence, explore values, or commit to change.</p>
+        <p>Engaging is not a one-time stage completed in session one. It is ongoing and can be threatened at any point — particularly when the clinician's righting reflex surfaces, when the topic becomes high-stakes, or when the therapeutic relationship experiences discord.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Clinician Tasks in Engaging</div>
+        <ul class="clinical-list">
+          <li>Convey genuine interest in the person, not just the presenting problem or target behavior</li>
+          <li>Use reflective listening to demonstrate accurate understanding — especially early</li>
+          <li>Avoid premature problem-solving, advice-giving, or agenda-setting</li>
+          <li>Notice and repair ruptures in the alliance — discord is information, not failure</li>
+          <li>Match pace and tone to the client — engaging in MI means following as much as leading</li>
+          <li>Ask for the client's perspective before offering your own</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Signs Engaging Is Working</div>
+        <ul class="clinical-list">
+          <li>Client speaks openly and elaborates without prompting</li>
+          <li>Client brings up concerns they haven't mentioned elsewhere</li>
+          <li>Client feels comfortable expressing ambivalence or doubt</li>
+          <li>Client disagrees with you and the conversation continues productively</li>
+          <li>Alliance ruptures are repaired without the client shutting down</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Signs Engaging Has Broken Down</div>
+        <ul class="clinical-list">
+          <li>Client gives short, flat answers without elaboration</li>
+          <li>Client seems to be telling you what you want to hear</li>
+          <li>Increasing discord — defensiveness, counter-arguing, disengagement</li>
+          <li>Client misses sessions or arrives late repeatedly</li>
+          <li>You realize you've been doing most of the talking</li>
+        </ul>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Opening</div>
+        <div class="q-text">"What brings you here today — and what's most important for me to understand about your situation?"</div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — After Discord</div>
+        <div class="q-text">"I think I may have gotten ahead of you just now. Can you help me understand where you're actually at with this?"</div>
+      </div>
+
+      <div class="tag-row">
+        <span class="tag evidence">Alliance quality predicts outcome across all therapies</span>
+        <span class="tag clinical">Primary skill: reflective listening</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ FOCUSING ═══════════════════════════════ -->
+    <section class="section" id="s-focusing">
+      <div class="section-header">
+        <div class="section-tag">Process 2 of 4</div>
+        <div class="section-title">Focusing</div>
+        <div class="section-subtitle">Developing a shared sense of direction — what this conversation is about</div>
+        <div class="process-accent" style="background:var(--process-2)"></div>
+      </div>
+
+      <div class="card process-card-2">
+        <div class="card-title">What It Is</div>
+        <p>Focusing is the process of developing and maintaining a clear sense of direction — a shared agenda between clinician and client about what this conversation is actually for. It is not agenda-setting in the CBT sense of a structured list. It is a collaborative exploration of what matters most to the client and what might be worth working on together.</p>
+        <p>Focusing matters because MI can drift into pleasant, supportive conversation without any traction toward change. A diffuse agenda protects the client from the discomfort of real exploration. Focusing brings gentle direction without coercion.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Three Agenda-Setting Scenarios</div>
+        <ul class="clinical-list">
+          <li><strong>Clear target, client-driven:</strong> Client arrives with a specific concern; focusing involves clarifying and deepening — what aspect matters most right now?</li>
+          <li><strong>Multiple concerns:</strong> Client presents with several issues; focusing involves exploring which feels most important or most changeable, then working there</li>
+          <li><strong>Clinician-initiated topic:</strong> A clinical concern (substance use, medication adherence, safety) is not on the client's agenda; focusing involves raising it with permission rather than imposing it</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ask-Tell-Ask</div>
+        <p>When the clinician needs to introduce information or a topic not raised by the client, MI prescribes the Ask-Tell-Ask (ATA) structure rather than unsolicited advice:</p>
+        <ul class="clinical-list">
+          <li><strong>Ask</strong> — "What do you already know about [topic]?" or "Would it be okay if I shared something about that?"</li>
+          <li><strong>Tell</strong> — offer information clearly and briefly, without elaboration or persuasion</li>
+          <li><strong>Ask</strong> — "What do you make of that? What's your reaction?"</li>
+        </ul>
+        <p style="margin-top:12px;">ATA respects autonomy, avoids the righting reflex, and positions the clinician as a resource rather than an authority.</p>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Opening Focus</div>
+        <div class="q-text">"There's a lot we could talk about. What feels most important for us to focus on today?"</div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Raising a Clinician Concern</div>
+        <div class="q-text">"There's something I've been curious about that I haven't asked directly. Would it be alright if I brought it up?"</div>
+      </div>
+
+      <div class="tag-row">
+        <span class="tag clinical">Key skill: agenda mapping</span>
+        <span class="tag clinical">Key technique: Ask-Tell-Ask</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ EVOKING ═══════════════════════════════ -->
+    <section class="section" id="s-evoking">
+      <div class="section-header">
+        <div class="section-tag">Process 3 of 4</div>
+        <div class="section-title">Evoking</div>
+        <div class="section-subtitle">Drawing out the client's own motivations, values, and reasons for change</div>
+        <div class="process-accent" style="background:var(--process-3)"></div>
+      </div>
+
+      <div class="card process-card-3">
+        <div class="card-title">What It Is</div>
+        <p>Evoking is the heart of MI and the process most distinctive to the model. It involves deliberately eliciting and strengthening the client's own change talk — their desires, abilities, reasons, and needs for change — while navigating sustain talk and ambivalence with curiosity rather than counter-argument.</p>
+        <p>The foundational premise of evoking is that the clinician's job is not to provide motivation but to summon what is already there. Clients already have reasons to change. Evoking is the disciplined practice of helping them hear themselves say those reasons out loud.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Working with Ambivalence</div>
+        <p>Ambivalence — the simultaneous experience of motivation to change and motivation to stay the same — is the normal state of most clients considering change. It is not a symptom, a character flaw, or a treatment obstacle. It is the clinical material.</p>
+        <ul class="clinical-list">
+          <li>Reflect both sides without resolving them prematurely: "Part of you is exhausted by how things are, and part of you worries about what change might cost."</li>
+          <li>Avoid arguing for the change side — the client will take the other side if you do</li>
+          <li>Explore what the sustain talk protects: function, familiarity, identity, relationships</li>
+          <li>Lean toward change talk with longer, more complex reflections; reflect sustain talk briefly and neutrally</li>
+          <li>Use decisional balance sparingly — it can reinforce sustain talk if done poorly</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Eliciting Change Talk — Key Strategies</div>
+        <ul class="clinical-list">
+          <li><strong>Open questions targeting DARN:</strong> "What would be different if you made this change?" "What do you think you could do if you decided to?"</li>
+          <li><strong>Importance and confidence rulers:</strong> "On a scale of 0–10, how important is this to you? What makes it a [X] and not a 1?" The follow-up question is where change talk lives.</li>
+          <li><strong>Looking forward / back:</strong> "If you keep going the way things are, where do you imagine you'll be in five years?" "Think back to when things were better — what was different?"</li>
+          <li><strong>Values exploration:</strong> "What matters most to you in your life? How does [target behavior] fit with that?"</li>
+          <li><strong>Reflecting change talk with extra weight:</strong> Reflect change talk back slightly amplified, elaborated, or in different words — this invites the client to hear it more fully</li>
+        </ul>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Ruler Follow-Up</div>
+        <div class="q-text">"You said it's about a 6. What makes it a 6 and not a 2?"</div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Values Link</div>
+        <div class="q-text">"You've mentioned how much your family means to you. How does that connect to what you're thinking about changing?"</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Discord: Not Resistance</div>
+        <p>Miller and Rollnick replaced "resistance" with "discord" in MI3 — a deliberate choice. "Resistance" implies a client defect; "discord" names an interpersonal phenomenon that the clinician has co-created. When discord appears, the clinician's first question should be: <em>What did I just do that amplified this?</em></p>
+        <p>Responses to discord in MI: reflect without amplifying, side with the client's autonomy ("You're the one who will decide this"), shift focus, reframe, or simply apologize for getting ahead.</p>
+        <div class="tag-row">
+          <span class="tag caution">Key distinction: discord is a relationship signal, not a client trait</span>
+        </div>
+      </div>
+
+      <div class="tag-row">
+        <span class="tag evidence">Change talk predicts behavior change outcomes — Magill et al., 2018</span>
+        <span class="tag clinical">Primary skill: selective reflection of change talk</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ PLANNING ═══════════════════════════════ -->
+    <section class="section" id="s-planning">
+      <div class="section-header">
+        <div class="section-tag">Process 4 of 4</div>
+        <div class="section-title">Planning</div>
+        <div class="section-subtitle">Translating commitment into a concrete, client-owned change plan</div>
+        <div class="process-accent" style="background:var(--process-4)"></div>
+      </div>
+
+      <div class="card process-card-4">
+        <div class="card-title">What It Is</div>
+        <p>Planning is the bridge between motivation and action. Once the client has expressed sufficient commitment language — once their own change talk has become strong and specific — the work turns toward developing a plan for how change might actually happen. Planning in MI is collaborative and client-led; it is not the clinician prescribing a course of action.</p>
+        <p>Critically: planning should not be rushed. Moving to planning before the client has genuine commitment typically produces a plan the client doesn't follow through on — and then the clinician, not the ambivalence, gets blamed for the failure.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recognizing Readiness for Planning</div>
+        <p>Signs the client is ready to shift from evoking to planning:</p>
+        <ul class="clinical-list">
+          <li>Increase in commitment language (CAT): "I'm going to," "I've decided," "I will"</li>
+          <li>Client asks practical questions: "How would I even start?" "What do other people do?"</li>
+          <li>Change talk becomes more specific and concrete</li>
+          <li>Sustain talk and ambivalence diminish noticeably</li>
+          <li>Client brings up next steps on their own</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">MI-Consistent Planning</div>
+        <ul class="clinical-list">
+          <li><strong>Evoke before prescribe:</strong> "What ideas do you have about how you'd do this?" before offering any suggestions</li>
+          <li><strong>Offer a menu, not a mandate:</strong> If you do suggest options, offer several and let the client choose</li>
+          <li><strong>Build on strengths:</strong> "What's worked for you when you've made changes before?"</li>
+          <li><strong>Anticipate obstacles:</strong> "What might get in the way? How will you handle that?" — MI-consistent problem-solving</li>
+          <li><strong>Elicit commitment explicitly:</strong> Summarize the plan, then ask "How does this sound? What are you willing to commit to?"</li>
+          <li><strong>Keep the door open:</strong> Ambivalence can return; planning is not a sealed deal</li>
+        </ul>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Transitioning to Planning</div>
+        <div class="q-text">"It sounds like you've been thinking more seriously about this. What do you think your next step might be?"</div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-label">Clinical Prompt — Strengthening Commitment</div>
+        <div class="q-text">"So if I'm hearing you right, you're saying you want to [change] and you're thinking about [specific step]. Is that something you're actually going to do?"</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">When Planning Stalls</div>
+        <p>If the client agrees to a plan but doesn't follow through, the most common MI explanation is that planning moved too fast — the ambivalence was not fully worked through. Return to evoking. Revisit what still feels uncertain. Avoid problem-solving the behavior and instead revisit the motivation.</p>
+        <div class="tag-row">
+          <span class="tag caution">Non-follow-through = signal to return to evoking, not to advise harder</span>
+        </div>
+      </div>
+
+      <div class="tag-row">
+        <span class="tag clinical">Primary skill: summarizing + eliciting commitment</span>
+        <span class="tag synthesis">The four processes are fluid — cycling is normal and expected</span>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ OARS ═══════════════════════════════ -->
+    <section class="section" id="s-oars">
+      <div class="section-header">
+        <div class="section-tag">Core Skills</div>
+        <div class="section-title">OARS</div>
+        <div class="section-subtitle">Open Questions · Affirmations · Reflections · Summaries</div>
+        <div class="process-accent" style="background:var(--process-5)"></div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">OARS as Foundation, Not Formula</div>
+        <p>OARS are the basic interaction skills that operationalize the MI spirit. They are not a sequence or a checklist — they are the moment-to-moment tools available in any MI conversation. Reflective listening is the most important and most underutilized of the four. Practitioners typically over-rely on open questions and underuse reflections.</p>
+      </div>
+
+      <div class="card process-card-5">
+        <div class="card-title">Open Questions</div>
+        <p>Open questions invite elaboration and give the client room to take the conversation where it needs to go. Closed questions (yes/no answers) are not prohibited in MI, but should be the minority of questions asked.</p>
+        <ul class="clinical-list">
+          <li><strong>Invite story:</strong> "Tell me what's been going on." "What brings you here today?"</li>
+          <li><strong>Explore ambivalence:</strong> "What are the good things about [behavior]? And the not-so-good things?"</li>
+          <li><strong>Elicit change talk:</strong> "What might your life look like if this were different?"</li>
+          <li><strong>Explore values:</strong> "What matters most to you right now?"</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag clinical">Target ratio: 2–3 reflections for every question asked</span>
+        </div>
+      </div>
+
+      <div class="card process-card-5">
+        <div class="card-title">Affirmations</div>
+        <p>Affirmations are genuine statements of appreciation for the client's strengths, efforts, and character — not hollow praise. They are different from compliments ("Good job") and from encouragement ("You can do it"). True affirmations notice something real about the person.</p>
+        <div class="example-block">
+          <div class="example-name">Examples — Genuine Affirmations</div>
+          <div class="example-text">"What you just described took a lot of courage to sit with."<br><br>
+          "You've made it through some really hard things. That persistence is part of who you are."<br><br>
+          "I notice that even in a moment like this, you're still thinking about what you want for your kids."</div>
+          <div class="example-note">Avoid: "That's great!" or "You're doing so well!" — these are clinician-centered, not person-centered</div>
+        </div>
+      </div>
+
+      <div class="card process-card-5">
+        <div class="card-title">Reflections — The Core Skill</div>
+        <p>Reflective listening is the most powerful and most underused MI skill. A reflection is a statement — not a question — that attempts to capture what the client just said, felt, or meant, and offers it back. It communicates understanding and invites further exploration. The four main types:</p>
+        <ul class="clinical-list">
+          <li><strong>Simple reflection:</strong> Mirrors content back at roughly the same level of depth. "You're frustrated with how long this has been going on."</li>
+          <li><strong>Amplified reflection:</strong> Reflects the content slightly louder than the client stated it — often prompts the client to soften or nuance. "So it sounds like you're completely certain this will never change." (Used carefully; not for distress)</li>
+          <li><strong>Double-sided reflection:</strong> Holds both sides of ambivalence in one statement. "On one hand you want things to be different, and on the other, this has been working for you in some ways."</li>
+          <li><strong>Feeling reflection:</strong> Names the underlying emotion, often deepening the exploration. "Underneath the anger, it sounds like there's a lot of grief there."</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag clinical">End reflections with a downward tone — upward = question, downward = statement</span>
+        </div>
+      </div>
+
+      <div class="card process-card-5">
+        <div class="card-title">Summaries</div>
+        <p>Summaries are extended reflections that gather and link what has been said. They communicate that you've been listening carefully, provide an opportunity to correct misunderstandings, and can be used strategically to move the conversation forward. Three types:</p>
+        <ul class="clinical-list">
+          <li><strong>Collecting summary:</strong> Gathers several things just said. "Let me see if I'm following — you've mentioned X, Y, and Z."</li>
+          <li><strong>Linking summary:</strong> Connects the current conversation to something said earlier. "This reminds me of what you said earlier about…"</li>
+          <li><strong>Transitional summary:</strong> Wraps up a topic or the session; often precedes a transition to planning. "So before we move on, let me try to capture what you've been saying…"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ CHANGE TALK ═══════════════════════════════ -->
+    <section class="section" id="s-changetalk">
+      <div class="section-header">
+        <div class="section-tag">Core Skills</div>
+        <div class="section-title">Change Talk &amp; DARN-CAT</div>
+        <div class="section-subtitle">Recognizing, eliciting, and responding to motivational language</div>
+        <div class="process-accent" style="background:var(--process-6)"></div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">Why Change Talk Matters</div>
+        <p>Change talk — client statements favoring change — is the primary linguistic signal of motivation in MI. Research consistently links the ratio of change talk to sustain talk with actual behavior change outcomes (Magill et al., 2018; Apodaca & Longabaugh, 2009). The clinician's job is to notice change talk, respond to it in ways that draw more out, and avoid inadvertently reinforcing sustain talk.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">DARN — Preparatory Change Talk</div>
+        <p>Preparatory change talk indicates movement toward change but not yet commitment. It is the material you work with during evoking.</p>
+      </div>
+
+      <div class="darn-grid">
+        <div class="darn-item">
+          <div class="darn-letter" style="color:var(--process-1)">D</div>
+          <div class="darn-word">Desire</div>
+          <div class="darn-def">Wanting, wishing, or hoping for change. Expresses the affective draw toward change.</div>
+          <div class="darn-example">"I really want to stop feeling this way." / "I wish things could be different."</div>
+        </div>
+        <div class="darn-item">
+          <div class="darn-letter" style="color:var(--process-2)">A</div>
+          <div class="darn-word">Ability</div>
+          <div class="darn-def">Perceived capacity or confidence to change. Self-efficacy language — "I could," "I can," "I might be able to."</div>
+          <div class="darn-example">"I think I could probably do it if I really tried." / "I've done hard things before."</div>
+        </div>
+        <div class="darn-item">
+          <div class="darn-letter" style="color:var(--process-3)">R</div>
+          <div class="darn-word">Reasons</div>
+          <div class="darn-def">Specific arguments or rationale for change. The "why" of motivation.</div>
+          <div class="darn-example">"My kids are watching everything I do." / "I'm tired of feeling ashamed."</div>
+        </div>
+        <div class="darn-item">
+          <div class="darn-letter" style="color:var(--process-4)">N</div>
+          <div class="darn-word">Need</div>
+          <div class="darn-def">Urgency or necessity language. Often signals real distress and pressure to change.</div>
+          <div class="darn-example">"I have to do something." / "I can't keep going like this." / "Something needs to change."</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">CAT — Mobilizing Change Talk</div>
+        <p>Mobilizing change talk indicates the client is moving toward commitment. It is more predictive of actual behavior change than preparatory change talk and signals readiness to shift toward planning.</p>
+      </div>
+
+      <div class="darn-grid">
+        <div class="darn-item">
+          <div class="darn-letter" style="color:var(--process-5)">C</div>
+          <div class="darn-word">Commitment</div>
+          <div class="darn-def">Language of intention and decision. The strongest predictor of behavior change.</div>
+          <div class="darn-example">"I'm going to do this." / "I've decided." / "I will."</div>
+        </div>
+        <div class="darn-item">
+          <div class="darn-letter" style="color:var(--process-6)">A</div>
+          <div class="darn-word">Activation</div>
+          <div class="darn-def">Preparatory language — not quite commitment, but approaching it. "I'm ready," "I'm willing," "I'm prepared to."</div>
+          <div class="darn-example">"I'm willing to try." / "I'm ready to start thinking about this seriously."</div>
+        </div>
+        <div class="darn-item" style="grid-column: 1 / -1;">
+          <div class="darn-letter" style="color:var(--gold)">T</div>
+          <div class="darn-word">Taking Steps</div>
+          <div class="darn-def">Client reports having already taken action — even small steps. Strong indicator of real motivation.</div>
+          <div class="darn-example">"I actually looked up some information about it this week." / "I talked to my doctor about it already."</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Sustain Talk</div>
+        <p>Sustain talk is the counterpart to change talk — statements that favor the status quo, express doubt about change, or articulate reasons to stay the same. It is entirely normal, expected, and not a sign of a difficult client.</p>
+        <ul class="clinical-list">
+          <li>Do not argue against sustain talk — it strengthens the client's defenses</li>
+          <li>Reflect sustain talk briefly and neutrally, then invite the other side: "And at the same time…"</li>
+          <li>Explore what the sustain talk is protecting — function, safety, identity, relationships</li>
+          <li>A high ratio of sustain talk to change talk predicts poor outcomes; low ratio predicts better outcomes</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag evidence">Sustain talk / change talk ratio predicts outcomes — Magill et al., 2018</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Responding to Change Talk</div>
+        <ul class="clinical-list">
+          <li><strong>Reflect it</strong> — with slightly more depth or weight than the client gave it</li>
+          <li><strong>Elaborate:</strong> "Tell me more about that." "What else?"</li>
+          <li><strong>Affirm it:</strong> If genuine, acknowledge the strength or courage it reflects</li>
+          <li><strong>Ask for examples:</strong> "When has that been true for you?"</li>
+          <li><strong>Connect to values:</strong> "How does that connect to what you said matters to you?"</li>
+          <li><strong>Look forward:</strong> "If you acted on that, what do you imagine might be different?"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ CLINICAL QUESTIONS ═══════════════════════════════ -->
+    <section class="section" id="s-questions">
+      <div class="section-header">
+        <div class="section-tag">Clinical Tools</div>
+        <div class="section-title">Clinical Questions</div>
+        <div class="section-subtitle">Organized by process and purpose — ready to reach for in session</div>
+        <div class="process-accent" style="background:var(--gold)"></div>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--process-1)">
+        <div class="card-title" style="color:var(--process-1)">Engaging</div>
+        <ul class="clinical-list">
+          <li>"What's most important for me to understand about what you're going through?"</li>
+          <li>"What's it been like, living with this for so long?"</li>
+          <li>"Before we dive in — is there anything you're hoping I won't ask?"</li>
+          <li>"How are things with you, outside of all of this?"</li>
+          <li>"What would make this [session / relationship / conversation] actually useful for you?"</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--process-2)">
+        <div class="card-title" style="color:var(--process-2)">Focusing</div>
+        <ul class="clinical-list">
+          <li>"There's a lot going on. What feels most pressing right now?"</li>
+          <li>"Of everything we could talk about today, what would mean the most to you to get into?"</li>
+          <li>"Would it be alright if I mentioned something I've been wondering about?"</li>
+          <li>"What are you hoping might be different after today?"</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--process-3)">
+        <div class="card-title" style="color:var(--process-3)">Evoking</div>
+        <ul class="clinical-list">
+          <li>"On a scale of 0–10, how important is this to you right now? What makes it a [X] and not a 1?"</li>
+          <li>"What are the good things about [behavior]? And the less good things?"</li>
+          <li>"What would your life look like in five years if nothing changes?"</li>
+          <li>"What would be different if you made this change — for you, for the people around you?"</li>
+          <li>"What's gotten in the way before, when you've thought about changing?"</li>
+          <li>"It sounds like part of you wants this, and part of you isn't sure. What does each part say?"</li>
+          <li>"What matters most to you, at the deepest level? How does this fit with that?"</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--process-4)">
+        <div class="card-title" style="color:var(--process-4)">Planning</div>
+        <ul class="clinical-list">
+          <li>"It sounds like you're ready to think about next steps. What ideas do you have?"</li>
+          <li>"What do you think would actually work for you — given what you know about yourself?"</li>
+          <li>"What might get in the way of this? How would you handle that?"</li>
+          <li>"What's one thing you could do in the next week, even a small thing, that would be a step in that direction?"</li>
+          <li>"What would help you stay on track when it gets hard?"</li>
+          <li>"So — is this actually something you're going to do?"</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--process-5)">
+        <div class="card-title" style="color:var(--process-5)">Change Talk / Ambivalence</div>
+        <ul class="clinical-list">
+          <li>"What makes you think you might be able to do this?"</li>
+          <li>"What would need to be different for you to feel ready?"</li>
+          <li>"What do you think you'd lose if you made this change? What do you think you'd gain?"</li>
+          <li>"You said [change talk statement]. Can you tell me more about that?"</li>
+          <li>"What does the part of you that wants this change know that the rest of you sometimes forgets?"</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--process-6)">
+        <div class="card-title" style="color:var(--process-6)">Discord / Sustain Talk</div>
+        <ul class="clinical-list">
+          <li>"I think I got ahead of you just now. What's actually true for you?"</li>
+          <li>"You don't have to convince me that this is complicated — I believe you."</li>
+          <li>"You're the expert on your own life. I'm not here to tell you what to do."</li>
+          <li>"It sounds like you've had plenty of people telling you what you should do. That's not what I want to add."</li>
+          <li>"What would feel most helpful from me right now?"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ DOCUMENTATION ═══════════════════════════════ -->
+    <section class="section" id="s-documentation">
+      <div class="section-header">
+        <div class="section-tag">Clinical Tools</div>
+        <div class="section-title">Documentation Notes</div>
+        <div class="section-subtitle">MI-aligned language for session notes and treatment planning</div>
+        <div class="process-accent" style="background:var(--gold)"></div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">Intervention Language Bank</div>
+        <p>Use these phrases in intervention narratives to accurately reflect MI work. Each maps to a specific process or skill.</p>
+      </div>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Process / Skill</th>
+            <th>Intervention Language for Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Engaging</td>
+            <td>Established / reinforced therapeutic alliance using reflective listening; explored client's experience and perspective; repaired therapeutic discord using MI-consistent responses</td>
+          </tr>
+          <tr>
+            <td>Focusing</td>
+            <td>Collaboratively identified focus area of [behavior/concern]; used agenda mapping to prioritize client's primary concern; introduced [topic] with client permission using Ask-Tell-Ask</td>
+          </tr>
+          <tr>
+            <td>Evoking</td>
+            <td>Elicited change talk using open questions and reflective listening; explored ambivalence regarding [behavior]; reflected and elaborated client's stated reasons, desires, and abilities for change; used importance/confidence ruler to identify and amplify change motivation</td>
+          </tr>
+          <tr>
+            <td>Planning</td>
+            <td>Transitioned to planning following emergence of commitment language; collaboratively developed change plan; anticipated barriers and elicited client's own coping strategies; strengthened commitment via summary and explicit commitment elicitation</td>
+          </tr>
+          <tr>
+            <td>OARS</td>
+            <td>Applied open questions, affirmations, reflective listening, and summaries throughout; used double-sided reflection to hold client's ambivalence; summarized session content transitionally to reinforce change talk</td>
+          </tr>
+          <tr>
+            <td>Change Talk</td>
+            <td>Identified and reflected preparatory change talk (DARN); noted emergence of commitment language (CAT); selectively reinforced change talk while reflecting sustain talk neutrally</td>
+          </tr>
+          <tr>
+            <td>Discord</td>
+            <td>Noticed and addressed therapeutic discord using MI-consistent responses; rolled with client's sustain talk; redirected without confrontation; affirmed client autonomy</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card">
+        <div class="card-title">Medical Necessity Anchors for MI</div>
+        <ul class="clinical-list">
+          <li>Ambivalence regarding [behavior] as a primary maintaining factor for presenting concern</li>
+          <li>Low intrinsic motivation for change contributing to [functional impairment / symptom persistence]</li>
+          <li>Therapeutic discord and alliance ruptures impeding treatment engagement</li>
+          <li>Pre-contemplative or contemplative stage of change requiring motivation-focused intervention prior to skill-building</li>
+          <li>Client self-efficacy deficits interfering with initiation of behavior change</li>
+          <li>Identified discrepancy between stated values and current behavior as clinical focus</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Outcome Measures — MI-Relevant</div>
+        <ul class="clinical-list">
+          <li><strong>URICA</strong> (University of Rhode Island Change Assessment) — stages of change; readiness to change across four domains</li>
+          <li><strong>SOCRATES</strong> (Stages of Change Readiness and Treatment Eagerness Scale) — widely used in substance use contexts</li>
+          <li><strong>Readiness Ruler</strong> — brief 0–10 importance and confidence scaling; not validated as a standalone measure but clinically useful</li>
+          <li><strong>PHQ-9 / GAD-7</strong> — standard symptom measures; track functional status alongside motivation measures</li>
+          <li><strong>AUDIT / DAST-10</strong> — substance use screeners; appropriate when MI is applied to SUD or risky use</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag synthesis">Note: no single validated MI-specific outcome instrument; this is a clinical synthesis of commonly used measures</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ REFERENCES ═══════════════════════════════ -->
+    <section class="section" id="s-references">
+      <div class="section-header">
+        <div class="section-tag">Clinical Tools</div>
+        <div class="section-title">References</div>
+        <div class="section-subtitle">Foundational texts and key empirical sources</div>
+        <div class="process-accent" style="background:var(--gold)"></div>
+      </div>
+
+      <div class="synthesis-banner">
+        <strong>Evidence transparency note:</strong> Content in this reference marked with the <em>synthesis</em> tag represents clinical inference or extrapolation from MI principles, not direct findings from the sources below. Content marked <em>empirically supported</em> is grounded in the cited literature. All clinical application requires licensed professional judgment.
+      </div>
+
+      <div class="card accent">
+        <div class="card-title">Primary Sources</div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-type">Foundational Text</div>
+        <strong>Miller, W. R., &amp; Rollnick, S. (2013).</strong> <em>Motivational Interviewing: Helping People Change</em> (3rd ed.). Guilford Press.
+        <div class="ref-note">The defining text of contemporary MI. Introduced the four-process framework (Engaging, Focusing, Evoking, Planning) and the PACE spirit. Replaced the earlier "phases" model and the concept of "resistance" with "discord." All OARS, DARN-CAT, and spirit content in this reference draws from this edition.</div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-type">Foundational Text — Briefer Applications</div>
+        <strong>Rollnick, S., Miller, W. R., &amp; Butler, C. C. (2008).</strong> <em>Motivational Interviewing in Health Care: Helping Patients Change Behavior.</em> Guilford Press.
+        <div class="ref-note">Compact application of MI principles to medical and healthcare settings. Focus on Ask-Tell-Ask, agenda mapping, and brief MI encounters. Useful for integrated care and consultation contexts.</div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-type">Meta-Analysis — Evidence Base</div>
+        <strong>Lundahl, B. W., Kunz, C., Brownell, C., Tollefson, D., &amp; Burke, B. L. (2010).</strong> A meta-analysis of motivational interviewing: Twenty-five years of empirical studies. <em>Research on Social Work Practice, 20</em>(2), 137–160.
+        <div class="ref-note">119 RCTs; 10–20% more effective than no treatment across substance use, health behavior, and engagement. Comparable to other active treatments. Robust across ethnicity, delivery format, and problem type. The primary evidence base citation for MI efficacy.</div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-type">Meta-Analysis — Process Research</div>
+        <strong>Magill, M., Apodaca, T. R., Borsari, B., Gaume, J., Hoadley, A., Gordon, R. E. F., Tonigan, J. S., &amp; Moyers, T. (2018).</strong> A meta-analysis of motivational interviewing process: Technical, relational, and conditional process models of change. <em>Journal of Consulting and Clinical Psychology, 86</em>(2), 140–157.
+        <div class="ref-note">Established that change talk (especially commitment language) predicts behavior change outcomes. Sustain talk-to-change talk ratio is clinically meaningful. Supports the clinical attention to language types in evoking.</div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-type">Meta-Analysis — Effectiveness Review</div>
+        <strong>Hettema, J., Steele, J., &amp; Miller, W. R. (2005).</strong> Motivational interviewing. <em>Annual Review of Clinical Psychology, 1</em>, 91–111.
+        <div class="ref-note">Practice-friendly review of MI effectiveness across problem areas. Found consistent effects particularly for substance use and health behavior change. Frequently cited alongside Lundahl et al. for summarizing the evidence base.</div>
+      </div>
+
+      <div class="ref-entry">
+        <div class="ref-type">Process Research</div>
+        <strong>Apodaca, T. R., &amp; Longabaugh, R. (2009).</strong> Mechanisms of change in motivational interviewing: A review and preliminary evaluation of the evidence. <em>Addiction, 104</em>(5), 705–715.
+        <div class="ref-note">Examined how MI works — identifying change talk elicitation and therapist MI-consistent behavior as likely mechanisms. Supports the theoretical model underlying the evoking process.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Training &amp; Continuing Education</div>
+        <ul class="clinical-list">
+          <li><strong>MINT</strong> (Motivational Interviewing Network of Trainers) — mint.org — international trainer network; training standards and events</li>
+          <li><strong>MINT-recommended fidelity measure:</strong> MITI 4.2 (Motivational Interviewing Treatment Integrity) — for supervision and self-assessment</li>
+          <li><strong>Miller &amp; Rollnick's website:</strong> motivationalinterviewing.org — resources, research reviews, and trainer finder</li>
+          <li><strong>Fidelity note:</strong> MI competence requires direct feedback on recorded sessions. Reading and training alone are insufficient; the MITI coding system is the standard for skill assessment in supervision contexts.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag caution">MI fidelity requires observation + feedback — not self-report</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const target = document.getElementById('s-' + id);
+    if (target) target.classList.add('active');
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
+        n.classList.add('active');
+      }
+    });
+    document.querySelector('.content').scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
