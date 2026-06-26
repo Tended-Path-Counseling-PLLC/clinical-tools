@@ -7,13 +7,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #242733;
-    --gold: #d79f55;
-    --gold-light: #e8bb7e;
-    --cream: #ede8e1;
-    --warm-white: #f7f4f0;
-    --muted: #6b6d78;
-    --border: #d5cfc7;
+    --ink:       #1b1d27;
+    --ink-mid:   #242733;
+    --ink-card:  #252838;
+    --ink-raised:#2a2d3f;
+    --gold:      #d79f55;
+    --gold-light:#e8bb7e;
+    --gold-dim:  #a87a3a;
+    --gold-glow: rgba(215,159,85,0.10);
+    --gold-border:rgba(215,159,85,0.25);
+    --warm-white:#e6e2da;
+    --muted:     #8a8d9a;
+    --border:    rgba(255,255,255,0.09);
+    --text:      #b8bac8;
     --process-1: #5b7fa6;
     --process-2: #7a9e7e;
     --process-3: #c4845a;
@@ -27,15 +33,15 @@
 
   body {
     font-family: 'Jost', sans-serif;
-    background: var(--warm-white);
-    color: var(--ink);
+    background: var(--ink);
+    color: var(--text);
     font-size: 16px;
     line-height: 1.7;
   }
 
   /* HEADER */
   .site-header {
-    background: var(--ink);
+    background: var(--ink-mid);
     padding: 28px 48px 24px;
     display: flex;
     align-items: flex-end;
@@ -69,7 +75,7 @@
 
   /* MODEL STRIP */
   .model-strip {
-    background: var(--cream);
+    background: var(--ink-mid);
     border-bottom: 1px solid var(--border);
     padding: 20px 48px;
   }
@@ -119,12 +125,13 @@
   .sidebar {
     width: 220px;
     min-width: 220px;
-    background: var(--ink);
+    background: var(--ink-mid);
     padding: 32px 0;
     position: sticky;
     top: 0;
     height: 100vh;
     overflow-y: auto;
+    border-right: 1px solid var(--border);
   }
   .sidebar-section-label {
     font-size: 11px;
@@ -179,7 +186,7 @@
   .section-header {
     margin-bottom: 32px;
     padding-bottom: 20px;
-    border-bottom: 2px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
   .section-tag {
     font-size: 11px;
@@ -193,7 +200,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 36px;
     font-weight: 500;
-    color: var(--ink);
+    color: var(--warm-white);
     line-height: 1.15;
   }
   .section-subtitle {
@@ -213,7 +220,7 @@
 
   /* CARDS */
   .card {
-    background: white;
+    background: var(--ink-card);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 24px 28px;
@@ -223,19 +230,19 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
     font-weight: 600;
-    color: var(--ink);
+    color: var(--warm-white);
     margin-bottom: 10px;
   }
   .card p {
     font-size: 15px;
     line-height: 1.75;
-    color: #3a3d4a;
+    color: var(--text);
     margin-bottom: 10px;
   }
   .card p:last-child { margin-bottom: 0; }
   .card.accent {
     border-left: 4px solid var(--gold);
-    background: #fdf9f4;
+    background: var(--gold-glow);
   }
   .card.process-card-1 { border-left: 4px solid var(--process-1); }
   .card.process-card-2 { border-left: 4px solid var(--process-2); }
@@ -263,8 +270,8 @@
     line-height: 1.65;
     padding: 6px 0 6px 20px;
     position: relative;
-    border-bottom: 1px solid var(--cream);
-    color: #3a3d4a;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
   }
   ul.clinical-list li:last-child { border-bottom: none; }
   ul.clinical-list li::before {
@@ -277,7 +284,8 @@
 
   /* QUESTION BLOCKS */
   .q-block {
-    background: var(--cream);
+    background: var(--ink-mid);
+    border: 1px solid var(--border);
     border-radius: 6px;
     padding: 18px 22px;
     margin-bottom: 12px;
@@ -294,14 +302,14 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 19px;
     font-style: italic;
-    color: var(--ink);
+    color: var(--warm-white);
     line-height: 1.4;
   }
 
-  /* EXAMPLE BLOCKS (speech / technique examples) */
+  /* EXAMPLE BLOCKS */
   .example-block {
-    background: var(--ink);
-    color: var(--warm-white);
+    background: var(--ink-raised);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 22px 26px;
     margin-bottom: 16px;
@@ -317,7 +325,7 @@
   .example-text {
     font-size: 15px;
     line-height: 1.7;
-    color: #c8cad4;
+    color: var(--text);
   }
   .example-note {
     font-size: 13px;
@@ -334,7 +342,7 @@
     margin-bottom: 20px;
   }
   .darn-item {
-    background: white;
+    background: var(--ink-raised);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 16px 20px;
@@ -357,7 +365,7 @@
   .darn-def {
     font-size: 14px;
     line-height: 1.6;
-    color: #3a3d4a;
+    color: var(--text);
   }
   .darn-example {
     font-size: 13px;
@@ -365,7 +373,7 @@
     color: var(--muted);
     margin-top: 6px;
     padding-top: 6px;
-    border-top: 1px solid var(--cream);
+    border-top: 1px solid var(--border);
   }
 
   /* PACE GRID */
@@ -376,7 +384,7 @@
     margin-bottom: 20px;
   }
   .pace-item {
-    background: white;
+    background: var(--ink-raised);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 20px 22px;
@@ -394,13 +402,13 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ink);
+    color: var(--warm-white);
     margin-bottom: 8px;
   }
   .pace-def {
     font-size: 14px;
     line-height: 1.65;
-    color: #3a3d4a;
+    color: var(--text);
   }
 
   /* TAGS */
@@ -415,14 +423,14 @@
     font-weight: 500;
     padding: 3px 12px;
     border-radius: 12px;
-    background: var(--cream);
+    background: rgba(255,255,255,0.06);
     color: var(--muted);
     border: 1px solid var(--border);
   }
-  .tag.evidence { background: #ebf3f0; color: #3a7a5a; border-color: #aed1c3; }
-  .tag.caution  { background: #fdf3e7; color: #8a5a1a; border-color: #e8c48a; }
-  .tag.clinical { background: #fdf3e7; color: #8a5a1a; border-color: #e8c48a; }
-  .tag.synthesis { background: #f0ebf7; color: #7a4fa8; border-color: #c9b5e0; }
+  .tag.evidence  { background: rgba(90,160,120,0.15); color: #7ac4a0; border-color: rgba(90,160,120,0.30); }
+  .tag.caution   { background: rgba(200,140,60,0.15);  color: #d9aa66; border-color: rgba(200,140,60,0.30); }
+  .tag.clinical  { background: rgba(200,140,60,0.15);  color: #d9aa66; border-color: rgba(200,140,60,0.30); }
+  .tag.synthesis { background: rgba(140,100,180,0.15); color: #b090d8; border-color: rgba(140,100,180,0.30); }
 
   /* TABLE */
   .ref-table {
@@ -432,7 +440,7 @@
     margin-bottom: 20px;
   }
   .ref-table th {
-    background: var(--ink);
+    background: var(--ink-mid);
     color: var(--gold);
     padding: 10px 14px;
     text-align: left;
@@ -446,20 +454,20 @@
     border-bottom: 1px solid var(--border);
     vertical-align: top;
     line-height: 1.6;
-    color: #3a3d4a;
+    color: var(--text);
   }
-  .ref-table tr:nth-child(even) td { background: var(--cream); }
+  .ref-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
 
   /* REFERENCES SECTION */
   .ref-entry {
-    background: white;
+    background: var(--ink-card);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 18px 22px;
     margin-bottom: 12px;
     font-size: 14px;
     line-height: 1.7;
-    color: #3a3d4a;
+    color: var(--text);
   }
   .ref-entry .ref-type {
     font-size: 11px;
@@ -475,21 +483,21 @@
     font-style: italic;
     margin-top: 6px;
     padding-top: 6px;
-    border-top: 1px solid var(--cream);
+    border-top: 1px solid var(--border);
   }
 
   /* WARNING BANNER */
   .synthesis-banner {
-    background: #f0ebf7;
-    border: 1px solid #c9b5e0;
+    background: rgba(140,100,180,0.12);
+    border: 1px solid rgba(140,100,180,0.30);
     border-radius: 6px;
     padding: 12px 16px;
     font-size: 13px;
-    color: #5a3a7a;
+    color: #b090d8;
     margin-bottom: 20px;
     line-height: 1.55;
   }
-  .synthesis-banner strong { color: #4a2a6a; }
+  .synthesis-banner strong { color: #c5a8e8; }
 
   /* PRINT */
   @media print {
