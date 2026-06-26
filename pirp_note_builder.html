@@ -24,7 +24,12 @@
   --c-action: #6aaa6a;
   --c-ifs: #a07898;
   --c-assert: #c87840;
+  --c-mi: #3a8fa8;
+  --c-cbt: #527a48;
+  --c-dbt: #6d40a0;
+  --c-grief: #8a6850;
 }
+
 *{box-sizing:border-box;margin:0;padding:0;}
 
 body {
@@ -166,6 +171,44 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 .int-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .int-process{font-size:10px;font-weight:500;letter-spacing:.08em;margin-left:auto;white-space:nowrap;opacity:.6;}
 .int-item.hidden{display:none;}
+/* ── DX-SUGGESTED INTERVENTIONS ── */
+.int-item.suggested-int { background: rgba(215,159,85,.07); border-left: 2px solid rgba(215,159,85,.45); }
+.int-item.selected.suggested-int { background: #f0f7f0; border-left: 2px solid var(--gold); }
+.int-suggest-star { color: var(--gold); font-size: 9px; vertical-align: super; margin-left: 2px; }
+.suggested-int-count { font-size: 11px; color: var(--gold); font-style: italic; padding: 4px 2px 2px; display: none; }
+.step-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--gold); padding: 8px 0 5px; border-top: 1px solid var(--border);
+  margin: 8px 0 6px; display: flex; align-items: center; gap: 8px;
+}
+.step-label.first { border-top: none; margin-top: 0; padding-top: 0; }
+.step-num {
+  color: var(--ink); background: var(--gold); border-radius: 50%;
+  width: 16px; height: 16px; display: inline-flex; align-items: center;
+  justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0;
+}
+
+
+/* ── MODALITY FILTER ── */
+.mod-filter-wrap{margin-bottom:10px;}
+.act-sub-row{
+  display:none;flex-wrap:wrap;gap:5px;
+  padding:6px 0 2px;border-top:1px solid var(--border);margin-top:5px;
+  align-items:center;
+}
+.act-sub-label{
+  font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:4px 2px;white-space:nowrap;
+}
+.mod-btn.suggested{
+  border-color:var(--gold) !important;color:var(--gold);
+  background:rgba(215,159,85,.09);
+}
+.mod-btn.suggested::after{content:' ✦';font-size:9px;opacity:.8;}
+.dx-suggest-note{
+  font-size:11px;color:var(--gold);font-style:italic;
+  padding:4px 2px 0;display:none;
+}
 
 /* ── SELECTED INTERVENTIONS ── */
 .selected-int-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
@@ -513,6 +556,11 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
             oninput="onVarChange('topic',this.value);this.classList.toggle('has-value',!!this.value.trim())">
         </div>
         <div class="var-field">
+          <label class="var-label" for="var-experience">Experience / Event</label>
+          <input class="var-input" id="var-experience" type="text" placeholder="e.g. loss of job, panic attack at work"
+            oninput="onVarChange('experience',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
           <label class="var-label" for="var-symptom">Symptom</label>
           <input class="var-input" id="var-symptom" type="text" placeholder="e.g. panic attacks"
             oninput="onVarChange('symptom',this.value);this.classList.toggle('has-value',!!this.value.trim())">
@@ -536,6 +584,21 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
           <label class="var-label" for="var-story">Story Name</label>
           <input class="var-input" id="var-story" type="text" placeholder='e.g. "The Not Enough Story"'
             oninput="onVarChange('story',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-goal">Goal / Session Focus</label>
+          <input class="var-input" id="var-goal" type="text" placeholder="e.g. making a request, setting a limit"
+            oninput="onVarChange('goal',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-distortion">Cognitive Distortion</label>
+          <input class="var-input" id="var-distortion" type="text" placeholder="e.g. catastrophizing, all-or-nothing"
+            oninput="onVarChange('distortion',this.value);this.classList.toggle('has-value',!!this.value.trim())">
+        </div>
+        <div class="var-field">
+          <label class="var-label" for="var-skill">Specific Skill (DBT / other)</label>
+          <input class="var-input" id="var-skill" type="text" placeholder="e.g. TIPP, opposite action"
+            oninput="onVarChange('skill',this.value);this.classList.toggle('has-value',!!this.value.trim())">
         </div>
         <div class="vars-foot">Set values above — they auto-fill bracketed placeholders in interventions when selected. Unedited fields update live if you change a variable.</div>
       </div>
@@ -647,19 +710,34 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       </div>
       <div class="section-body">
 
-        <div class="filter-strip" id="filter-strip">
-          <button class="filt active" data-filter="all" onclick="filterInts('all',this)">All</button>
-          <button class="filt" data-filter="foundational" onclick="filterInts('foundational',this)" style="border-color:var(--c-found);">Foundational</button>
-          <button class="filt" data-filter="defusion" onclick="filterInts('defusion',this)" style="border-color:var(--c-defuse);">Defusion</button>
-          <button class="filt" data-filter="acceptance" onclick="filterInts('acceptance',this)" style="border-color:var(--c-accept);">Acceptance</button>
-          <button class="filt" data-filter="present" onclick="filterInts('present',this)" style="border-color:var(--c-present);">Present Moment</button>
-          <button class="filt" data-filter="self" onclick="filterInts('self',this)" style="border-color:var(--c-self);">Self-as-Context</button>
-          <button class="filt" data-filter="values" onclick="filterInts('values',this)" style="border-color:var(--c-values);">Values</button>
-          <button class="filt" data-filter="action" onclick="filterInts('action',this)" style="border-color:var(--c-action);">Action</button>
-          <button class="filt" data-filter="ifs" onclick="filterInts('ifs',this)" style="border-color:var(--c-ifs);">IFS</button>
-          <button class="filt" data-filter="assertiveness" onclick="filterInts('assertiveness',this)" style="border-color:var(--c-assert);">Assertiveness</button>
+        <div class="mod-filter-wrap">
+          <div class="step-label first"><span class="step-num">1</span>Session Modalities</div>
+        <div class="filter-strip" id="mod-filter-strip">
+            <button class="filt mod-btn active" data-mod="all" onclick="toggleModality('all',this)">Show All</button>
+            <button class="filt mod-btn" data-mod="foundational" onclick="toggleModality('foundational',this)" style="border-color:var(--c-found);">Foundational</button>
+            <button class="filt mod-btn" data-mod="act" onclick="toggleModality('act',this)" style="border-color:var(--c-defuse);">ACT</button>
+            <button class="filt mod-btn" data-mod="mi" onclick="toggleModality('mi',this)" style="border-color:var(--c-mi);">MI</button>
+            <button class="filt mod-btn" data-mod="cbt" onclick="toggleModality('cbt',this)" style="border-color:var(--c-cbt);">CBT</button>
+            <button class="filt mod-btn" data-mod="dbt" onclick="toggleModality('dbt',this)" style="border-color:var(--c-dbt);">DBT</button>
+            <button class="filt mod-btn" data-mod="grief" onclick="toggleModality('grief',this)" style="border-color:var(--c-grief);">Grief</button>
+            <button class="filt mod-btn" data-mod="ifs" onclick="toggleModality('ifs',this)" style="border-color:var(--c-ifs);">IFS</button>
+            <button class="filt mod-btn" data-mod="assertiveness" onclick="toggleModality('assertiveness',this)" style="border-color:var(--c-assert);">Assertiveness</button>
+          </div>
+          <div class="act-sub-row" id="act-sub-filter">
+            <span class="act-sub-label">ACT Process ›</span>
+            <button class="filt act-sub-btn active" data-proc="all" onclick="filterActSub('all',this)">All</button>
+            <button class="filt act-sub-btn" data-proc="defusion" onclick="filterActSub('defusion',this)" style="border-color:var(--c-defuse);">Defusion</button>
+            <button class="filt act-sub-btn" data-proc="acceptance" onclick="filterActSub('acceptance',this)" style="border-color:var(--c-accept);">Acceptance</button>
+            <button class="filt act-sub-btn" data-proc="present" onclick="filterActSub('present',this)" style="border-color:var(--c-present);">Present Moment</button>
+            <button class="filt act-sub-btn" data-proc="self" onclick="filterActSub('self',this)" style="border-color:var(--c-self);">Self-as-Context</button>
+            <button class="filt act-sub-btn" data-proc="values" onclick="filterActSub('values',this)" style="border-color:var(--c-values);">Values</button>
+            <button class="filt act-sub-btn" data-proc="action" onclick="filterActSub('action',this)" style="border-color:var(--c-action);">Action</button>
+          </div>
+          <div class="dx-suggest-note" id="dx-suggest-note"></div>
+          <div class="suggested-int-count" id="suggested-int-count"></div>
         </div>
 
+        <div class="step-label"><span class="step-num">2</span>Select Interventions <span style="font-weight:300;letter-spacing:.04em;color:var(--muted);text-transform:none;font-size:10px;">✦ = suggested for current diagnosis</span></div>
         <div class="int-grid" id="int-grid"></div>
 
         <div class="sub-divider">Selected Interventions</div>
@@ -669,7 +747,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
         <div class="sub-divider">Additional Intervention Notes</div>
         <div class="fb">
-          <textarea class="fi" id="int-extra" rows="2" placeholder="Any additional context, non-ACT interventions, or session-specific details…" oninput="build()"></textarea>
+          <textarea class="fi" id="int-extra" rows="2" placeholder="Any additional narrative detail, session-specific context, or notes not captured by the interventions above…" oninput="build()"></textarea>
         </div>
 
       </div>
@@ -869,7 +947,8 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 // ── SESSION VARIABLES ──
 const sessionVars = {
   emotion:'', sensation:'', value:'', behavior:'', pattern:'',
-  thought:'', topic:'', symptom:'', domain:'', barrier:'', part:'', story:''
+  thought:'', topic:'', symptom:'', domain:'', barrier:'', part:'', story:'',
+  experience:'', goal:'', distortion:'', skill:''
 };
 
 // ── EMOTION WHEEL ──
@@ -1116,8 +1195,10 @@ function substituteVars(text) {
   }
   if (v.emotion) {
     text = text.replaceAll('[internal state/situation]', v.emotion);
-    text = text.replaceAll('[experience]', v.emotion);
   }
+  // [experience] → v.experience if set, falls back to v.emotion for older templates
+  const expVal = v.experience || v.emotion;
+  if (expVal) text = text.replaceAll('[experience]', expVal);
   if (v.behavior) {
     text = text.replaceAll('[control strategy]', v.behavior);
     text = text.replaceAll('[avoidance pattern]', v.behavior);
@@ -1142,6 +1223,21 @@ function substituteVars(text) {
     text = text.replaceAll('[emotion/sensation/thought]', c);
   }
 
+  if (v.goal) {
+    text = text.replaceAll('[goal: making a request / setting a limit / declining a request]', v.goal);
+    text = text.replaceAll('[values-consistent direction]', v.goal);
+  }
+  if (v.distortion) {
+    text = text.replaceAll('[distortion type \u2014 e.g., catastrophizing / all-or-nothing thinking / mind reading \u2014 specify]', v.distortion);
+    text = text.replaceAll('[distortion type \u2014 specify]', v.distortion);
+    text = text.replaceAll('[distortion type]', v.distortion);
+  }
+  if (v.skill) {
+    text = text.replaceAll('[specific TIPP skill]', v.skill);
+    text = text.replaceAll('[GIVE / FAST \u2014 specify]', v.skill);
+    text = text.replaceAll('[specify: brief breath anchor / body scan / mindful daily activity]', v.skill);
+    text = text.replaceAll('[specify: VLQ / Bulls-Eye / domain mapping]', v.skill);
+  }
   // Simple single-key replacements
   const simple = [
     ['[emotion]',          v.emotion],
@@ -1162,6 +1258,9 @@ function substituteVars(text) {
     ['[part]',             v.part],
     ['[part(s)]',          v.part],
     ['[story name]',       v.story],
+    ['[goal]',             v.goal],
+    ['[distortion type]',  v.distortion],
+    ['[skill]',            v.skill],
   ];
   for (const [ph, val] of simple) {
     if (val) text = text.replaceAll(ph, val);
@@ -1193,120 +1292,365 @@ function onVarChange(key, value) {
 
 // ── INTERVENTION DATA ──
 const INTS = [
-  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Reflective Listening & Validation',
+  // ── FOUNDATIONAL ──
+  {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Reflective Listening & Validation',
    d:'Therapist provided reflective listening and validation, supporting client\'s exploration of [experience/theme]. Client demonstrated increased articulation of [internal state/pattern] and reported feeling understood within the therapeutic relationship.'},
-  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Functional Assessment',
+  {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Functional Assessment',
    d:'Therapist conducted functional exploration of [symptom/behavior/avoidance pattern], identifying antecedents, consequences, and the workability of client\'s current response. Client demonstrated emerging awareness of the function [behavior] serves in maintaining [symptom/distress].'},
-  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Collaborative Inquiry (Socratic)',
-   d:'Therapist used collaborative inquiry to facilitate client\'s exploration of [thought/belief/pattern], supporting self-directed insight. Client identified [connection/awareness] and articulated its relationship to [presenting concern/values/behavior].'},
-  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Psychoeducation',
-   d:'Therapist provided psychoeducation regarding [topic: ACT model / experiential avoidance / symptom maintenance]. Client verbalized understanding and connected information to their own experience of [presenting concern].'},
-  {p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Between-Session Practice Review',
-   d:'Therapist reviewed between-session [practice/committed action/self-monitoring]. Client reported [completed/partially completed/did not attempt]; barriers included [barrier if applicable]. Session explored what interfered and identified [adjustment/alternative strategy] for the coming week.'},
-  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Naming the Story',
+  {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Collaborative Inquiry (Socratic)',
+   d:'Therapist used collaborative inquiry to facilitate client\'s exploration of [thought/belief/pattern], supporting self-directed insight. Client identified a connection and articulated its relationship to [presenting concern].'},
+  {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Psychoeducation',
+   d:'Therapist provided psychoeducation regarding [topic]. Client verbalized understanding and connected information to their own experience of [presenting concern].'},
+  {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Between-Session Practice Review',
+   d:'Therapist reviewed between-session [practice/committed action/self-monitoring]. Session explored what interfered and identified [adjustment/alternative strategy] for the coming week. Client reported [completed/partially completed/did not attempt] and identified [barrier] as the primary obstacle.'},
+
+  // ── ACT: DEFUSION ──
+  {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Naming the Story',
    d:'Therapist introduced cognitive defusion via narrative labeling, collaboratively identifying client\'s recurrent cognitive story ["[story name]"]. Client practiced noticing the story as a pattern rather than a fact, demonstrating reduced fusion with its literal content.'},
-  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Thanking the Mind',
-   d:'Therapist introduced defusion technique of acknowledging the mind\'s commentary without engagement ("thanking the mind"); client practiced responding to [specific thought] with observer-stance language, reporting reduced urgency and increased behavioral flexibility in relation to the thought.'},
-  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Physicalization of Thought',
-   d:'Therapist guided client in physicalizing the thought [cognitive content], externalizing it as a tangible object. Client reported increased psychological distance from the thought and reduced experiential fusion with its literal content.'},
-  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Leaves on a Stream',
+  {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Thanking the Mind',
+   d:'Therapist introduced the defusion technique of acknowledging the mind\'s commentary without engagement ("thanking the mind"), practiced in relation to [specific thought]. Client reported reduced urgency and increased behavioral flexibility in relation to the thought.'},
+  {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Physicalization of Thought',
+   d:'Therapist guided client in physicalizing the thought [cognitive content], externalizing it as a tangible object with qualities to explore. Client reported increased psychological distance from the thought and reduced experiential fusion with its literal content.'},
+  {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Leaves on a Stream',
    d:'Therapist facilitated mindfulness-based defusion exercise (leaves on a stream), guiding client to observe thoughts as passing events rather than directives. Client practiced the observer stance and reported [increased detachment / difficulty staying present / noticing pull toward certain thoughts — specify].'},
-  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Passengers on the Bus',
-   d:'Therapist introduced the Passengers on the Bus metaphor to illustrate cognitive defusion and values-based action; client connected the metaphor to their experience of [specific thought/urge] and identified [values-consistent direction] as the driving destination.'},
-  {p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Workability Question',
-   d:'Therapist used workability questioning to evaluate the function of [thought/belief/rule] in client\'s life, shifting from accuracy-evaluation to values-based assessment. Client identified that holding [thought] rigidly has limited [functioning domain] and explored an alternative relationship to the thought.'},
-  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Expanding Around the Feeling',
+  {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Passengers on the Bus',
+   d:'Therapist introduced the Passengers on the Bus metaphor to illustrate cognitive defusion and values-based action. Client connected the metaphor to their experience of [specific thought/urge] and identified [values-consistent direction] as the driving destination.'},
+  {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Workability Question',
+   d:'Therapist used workability questioning to evaluate the function of [thought/belief/rule], shifting from accuracy-evaluation to values-based assessment. Client identified that holding [thought] rigidly has limited [functioning domain] and explored an alternative relationship to the thought.'},
+
+  // ── ACT: ACCEPTANCE ──
+  {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Expanding Around the Feeling',
    d:'Therapist facilitated acceptance-based intervention, guiding client to expand awareness around [emotion/sensation] rather than suppress or escape it. Client practiced making room for [feeling] and reported [reduced urgency / increased tolerance / difficulty staying present — specify].'},
-  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Cost of Avoidance',
-   d:'Therapist explored functional costs of client\'s avoidance of [internal state/situation], identifying behavioral restriction in [domain: occupational / social / relational]. Client articulated awareness that avoidance of [experience] has contributed to [functional limitation], increasing motivation for willingness-based alternatives.'},
-  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Urge Surfing',
-   d:'Therapist introduced urge surfing as an acceptance-based strategy for managing [urge type]; client practiced observing the urge as a transient wave rather than a directive, developing capacity to tolerate the urge without behavioral response.'},
-  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Willingness / Creative Hopelessness',
-   d:'Therapist explored client\'s prior attempts to manage [symptom/emotion] through control strategies, collaboratively examining workability. Client articulated awareness that [control strategy] has not reduced suffering and has produced secondary costs including [cost], increasing openness to acceptance-based alternatives.'},
-  {p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Physicalizing Sensation',
+  {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Cost of Avoidance',
+   d:'Therapist explored functional costs of client\'s avoidance of [internal state/situation], identifying behavioral restriction in [domain]. Client articulated awareness that avoidance of [experience] has contributed to [functional limitation], increasing motivation for willingness-based alternatives.'},
+  {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Urge Surfing',
+   d:'Therapist introduced urge surfing as an acceptance-based strategy for managing [urge type]. Client practiced observing the urge as a transient wave rather than a directive, developing capacity to tolerate it without behavioral response.'},
+  {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Willingness / Creative Hopelessness',
+   d:'Therapist explored client\'s prior attempts to manage [symptom/emotion] through control strategies, collaboratively examining workability. Client articulated awareness that [control strategy] has not reduced suffering and has produced secondary costs, increasing openness to acceptance-based alternatives.'},
+  {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Physicalizing Sensation',
    d:'Therapist guided client in somatic and acceptance-based physicalizing of [emotion/sensation], exploring its physical qualities to facilitate non-defensive contact. Client demonstrated [increased tolerance / shift from avoidance to curiosity / difficulty locating sensation — specify].'},
-  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Brief In-Session Mindfulness',
+
+  // ── ACT: PRESENT MOMENT ──
+  {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Brief In-Session Mindfulness',
    d:'Therapist facilitated brief mindfulness practice [approx. X minutes], anchoring client\'s attention to present-moment experience via breath and body awareness. Client demonstrated [engaged / able to return from distraction / struggled with sustained attention — specify] and reported [response].'},
-  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Grounding / Orienting to Present',
+  {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Grounding / Orienting to Present',
    d:'Therapist used grounding and sensory orienting techniques to facilitate return to present-moment awareness following activation around [topic/content]. Client demonstrated return to window of tolerance and was able to [re-engage with session content / identify current sensory experience].'},
-  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Noticing What\'s Happening Now',
+  {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Noticing What\'s Happening Now',
    d:'Therapist facilitated present-moment awareness by directing client\'s attention to live in-session experience as [topic/affect] arose. Client identified [emotion/sensation/thought] in real time and practiced staying with it rather than narrating away from it.'},
-  {p:'present',c:'var(--c-present)',l:'Present Moment',n:'Assigned Mindfulness Practice',
+  {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Assigned Mindfulness Practice',
    d:'Therapist assigned between-session mindfulness practice [specify: brief breath anchor / body scan / mindful daily activity] to build present-moment awareness and generalize in-session skills. Client verbalized understanding and identified [when/how they will use it].'},
-  {p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Observer Exercise',
+
+  // ── ACT: SELF-AS-CONTEXT ──
+  {m:'act',p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Observer Exercise',
    d:'Therapist facilitated the Observer Exercise, guiding client to access the continuous observing self distinct from changing thoughts, emotions, and self-descriptions. Client demonstrated [ability to access observer perspective / difficulty separating self from content — specify] and reported [response].'},
-  {p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Chessboard / Sky Metaphors',
-   d:'Therapist introduced [Chessboard / Sky and Weather] metaphor to illustrate the distinction between self-as-context and self-as-content; client connected the metaphor to their experience of over-identification with [emotion/diagnosis/role] and practiced describing their experience from the observer perspective.'},
-  {p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Identity-Level Exploration',
-   d:'Therapist facilitated identity-level exploration, supporting client in differentiating self-concept from [symptom / diagnosis / role] with which they have been fused. Client identified [aspect of self] as existing independently of [fused content], demonstrating early access to a more flexible self-concept.'},
-  {p:'values',c:'var(--c-values)',l:'Values',n:'Formal Values Clarification',
+  {m:'act',p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Chessboard / Sky Metaphors',
+   d:'Therapist introduced [Chessboard / Sky and Weather] metaphor to illustrate the distinction between self-as-context and self-as-content. Client connected the metaphor to their experience of over-identification with [emotion/diagnosis/role] and practiced describing their experience from the observer perspective.'},
+  {m:'act',p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Identity-Level Exploration',
+   d:'Therapist facilitated identity-level exploration, supporting client in differentiating self-concept from [symptom / diagnosis / role] with which they have been fused. Client identified an aspect of self as existing independently of [fused content], demonstrating early access to a more flexible self-concept.'},
+
+  // ── ACT: VALUES ──
+  {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Formal Values Clarification',
    d:'Therapist facilitated formal values clarification [specify: VLQ / Bulls-Eye / domain mapping], identifying [domain] as a core area of importance. Client articulated [specific value] as a chosen direction, distinguishing it from [goal / rule / obligation], and connected it to current behavioral patterns and treatment goals.'},
-  {p:'values',c:'var(--c-values)',l:'Values',n:'Obituary / Funeral Exercise',
-   d:'Therapist guided client through obituary/legacy values exercise; client identified [valued qualities / relationships / contributions] as important to who they want to be. Exercise evoked [emotional response] and surfaced awareness of the gap between current behavior and valued direction in [domain].'},
-  {p:'values',c:'var(--c-values)',l:'Values',n:'Connecting Suffering to Values',
+  {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Obituary / Funeral Exercise',
+   d:'Therapist guided client through obituary/legacy values exercise, exploring who the client wants to be. Exercise evoked [emotional response] and surfaced awareness of the gap between current behavior and valued direction in [domain]. Client identified [valued qualities / relationships / contributions] as most significant.'},
+  {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Connecting Suffering to Values',
    d:'Therapist facilitated values identification through exploration of client\'s pain around [presenting concern], connecting the intensity of distress to the underlying value of [value]. Client demonstrated emerging awareness of [value] as a guiding direction and expressed motivation to act in its service despite discomfort.'},
-  {p:'values',c:'var(--c-values)',l:'Values',n:'Chosen vs. Inherited Values',
-   d:'Therapist and client explored the origins of stated value [value], distinguishing between inherited expectations and genuinely chosen direction. Client identified [chosen value] as self-authored, distinct from [inherited expectation from family/cultural context], supporting development of an autonomous values foundation for committed action.'},
-  {p:'values',c:'var(--c-values)',l:'Values',n:'Values–Behavior Gap',
+  {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Chosen vs. Inherited Values',
+   d:'Therapist and client explored the origins of stated value [value], distinguishing between inherited expectations and genuinely chosen direction. Client identified [chosen value] as self-authored, distinct from [inherited expectation from family/cultural context], supporting an autonomous values foundation for committed action.'},
+  {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Values–Behavior Gap',
    d:'Therapist facilitated exploration of the discrepancy between client\'s identified value of [value] and current behavioral pattern of [pattern], identifying [barrier] as the primary obstacle. Client demonstrated self-awareness of the gap without excessive self-criticism and expressed motivation to close it through committed action.'},
-  {p:'action',c:'var(--c-action)',l:'Committed Action',n:'Values-Based Action Planning',
-   d:'Therapist and client collaboratively developed a values-based action plan in the domain of [domain], with client committing to [specific action] by [timeframe]. Anticipated barriers identified: [barrier]. Client identified ACT-based response strategy of [defusion / acceptance / present-moment grounding] for managing barriers without abandoning the committed action.'},
-  {p:'action',c:'var(--c-action)',l:'Committed Action',n:'Barrier Exploration & Response Planning',
-   d:'Therapist and client explored barriers to completion of committed action [action], identifying [barrier type: cognitive fusion / experiential avoidance / practical obstacle]. Session adjusted the action plan to [modification] and reinforced the workability framework for responding to future barriers without behavioral withdrawal.'},
-  {p:'action',c:'var(--c-action)',l:'Committed Action',n:'Relapse Response Planning',
-   d:'Therapist introduced relapse response planning, normalizing setback as part of the change process rather than evidence of failure. Client identified [early warning signs] and developed a values-based response plan for [scenario], including [specific strategy].'},
-  {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Accessing Self-Energy / Unblending',
-   d:'Using an IFS-informed approach, therapist supported client in unblending from [part] and accessing Self-energy, demonstrated by increased curiosity and reduced reactivity toward the part. This parallel process to ACT self-as-context supported client\'s capacity to observe their experience rather than be governed by it.'},
-  {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Legacy Burden / Inherited Values',
+
+  // ── ACT: COMMITTED ACTION ──
+  {m:'act',p:'action',c:'var(--c-action)',l:'Committed Action',n:'Values-Based Action Planning',
+   d:'Therapist and client collaboratively developed a values-based action plan in the domain of [domain], identifying anticipated barriers including [barrier]. Client committed to [specific action] and identified ACT-based response strategies of [defusion / acceptance / present-moment grounding] for managing barriers without abandoning the committed action.'},
+  {m:'act',p:'action',c:'var(--c-action)',l:'Committed Action',n:'Barrier Exploration & Response Planning',
+   d:'Therapist and client explored barriers to completion of committed action, identifying [barrier type: cognitive fusion / experiential avoidance / practical obstacle]. Session reinforced the workability framework for responding to future barriers. Client articulated [adjustment or alternative strategy] and committed to re-engaging with the action plan.'},
+  {m:'act',p:'action',c:'var(--c-action)',l:'Committed Action',n:'Relapse Response Planning',
+   d:'Therapist introduced relapse response planning, normalizing setback as part of the change process rather than evidence of failure. Session identified early warning signs and developed a values-based response plan for [scenario]. Client identified [specific strategy] as their primary response to future barriers and articulated how [value] will guide re-engagement.'},
+
+  // ── IFS ──
+  {m:'ifs',p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Accessing Self-Energy / Unblending',
+   d:'Using an IFS-informed approach, therapist supported client in unblending from [part] and accessing Self-energy, demonstrated by increased curiosity and reduced reactivity toward the part. Client reported increased capacity to observe their experience from a Self-led perspective rather than being governed by [part].'},
+  {m:'ifs',p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Legacy Burden / Inherited Beliefs',
    d:'Using an IFS-informed approach, therapist explored inherited messages or legacy burdens contributing to client\'s [belief/rule/self-concept], tracing their origin to [family/cultural context]. Client identified the burden as external in origin rather than self-authored, supporting differentiation and movement toward chosen values.'},
-  {p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Parts Mapping',
+  {m:'ifs',p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Parts Mapping',
    d:'Therapist and client identified and mapped [part(s)] active in relation to [concern/situation], exploring each part\'s protective role, feared outcome, and relationship to Self. Client demonstrated increased curiosity toward [part] and reduced blending, supporting conditions for deeper internal dialogue.'},
-  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'NVC — Observation, Feeling, Need, Request',
+
+  // ── ASSERTIVENESS ──
+  {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'NVC — Observation, Feeling, Need, Request',
    d:'Therapist introduced the Nonviolent Communication framework (Rosenberg), guiding client to distinguish observation from evaluation in the context of [topic]. Session focused on formulating a needs-based statement using the OFNR structure: observation of [behavior], expression of [emotion], identification of the underlying need ([value]), and a clear, doable request. Client practiced the OFNR sequence and demonstrated [capacity to separate observation from judgment / difficulty identifying the underlying need / readiness to make a direct request — specify].'},
-  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'DESC Script — Assertive Communication',
-   d:'Therapist introduced the DESC framework (Describe, Express, Specify, Consequences) to support assertive communication around [topic]. Client practiced structuring a response: Describe the situation ([behavior]), Express the impact ([emotion]), Specify a clear and concrete request, and identify natural Consequences of the change. Client demonstrated [ability to use the structure without blame / difficulty moving from complaint to direct request / increased confidence in assertive stance — specify].'},
-  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'DEAR MAN — Interpersonal Effectiveness',
+  {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'DESC Script — Assertive Communication',
+   d:'Therapist introduced the DESC framework (Describe, Express, Specify, Consequences) to support assertive communication around [topic]. Session focused on structuring a response without blame: Describe the situation ([behavior]), Express the impact ([emotion]), Specify a concrete request, and identify natural Consequences of the change. Client demonstrated [ability to use the structure without blame / difficulty moving from complaint to direct request / increased confidence in assertive stance — specify].'},
+  {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'DEAR MAN — Interpersonal Effectiveness',
    d:'Therapist introduced the DEAR MAN skill (Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate) to support client in [goal: making a request / setting a limit / declining a request] in the context of [topic]. Session addressed applying the full sequence with attention to the Reinforce and Appear Confident steps. Client practiced structuring the interaction and demonstrated [understanding of the skill structure / readiness to apply in target situation / specific difficulty with a named step — specify].'},
-  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'"I" Statements & Direct Expression',
-   d:'Therapist introduced assertive communication using "I" statements, supporting client in shifting from [pattern] toward direct, needs-based expression in [topic]. Session focused on reformulating [pattern] using the structure: "I feel [emotion] when I observe [behavior] because I need [value]." Client practiced the structure and demonstrated [increased directness / difficulty maintaining a non-blaming stance / readiness to apply in target situation — specify].'},
-  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'Values-Based Boundary Setting',
-   d:'Therapist facilitated exploration of client\'s difficulty asserting limits in [domain], identifying [pattern] as the primary barrier to self-advocacy. Session connected limit-setting to the underlying value of [value] and supported client in identifying and articulating a clear, behaviorally specific limit. Client demonstrated [emerging capacity to assert without guilt / difficulty tolerating the anticipated reaction / reduced sense of responsibility for others\' responses — specify].'},
-  {p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'Communication Styles — Psychoeducation',
-   d:'Therapist provided psychoeducation on passive, aggressive, and assertive communication styles, connecting client\'s habitual pattern of [pattern] to its functional costs in [domain]. Session supported identification of assertive communication as a values-aligned alternative consistent with [value]. Client verbalized understanding of the passive/aggressive/assertive distinction and identified a target situation for applying assertive communication skills.'},
+  {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'"I" Statements & Direct Expression',
+   d:'Therapist introduced assertive communication using "I" statements, supporting client in shifting from [pattern] toward direct, needs-based expression in [topic]. Session focused on reformulating [pattern] using the structure "I feel [emotion] when I observe [behavior] because I need [value]" as a framework for non-blaming direct expression. Client practiced the structure and demonstrated [increased directness / difficulty maintaining a non-blaming stance / readiness to apply in target situation — specify].'},
+  {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'Values-Based Boundary Setting',
+   d:'Therapist facilitated exploration of client\'s difficulty asserting limits in [domain], connecting limit-setting to the underlying value of [value] and supporting identification of a clear, behaviorally specific limit. Client demonstrated [emerging capacity to assert without guilt / difficulty tolerating the anticipated reaction / reduced sense of responsibility for others\' responses — specify].'},
+  {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'Communication Styles — Psychoeducation',
+   d:'Therapist provided psychoeducation on passive, aggressive, and assertive communication styles, connecting client\'s habitual pattern of [pattern] to its functional costs in [domain]. Session supported identification of assertive communication as a values-aligned alternative consistent with [value]. Client verbalized understanding of the passive/aggressive/assertive distinction and identified a target situation for practice.'},
+
+  // ── MOTIVATIONAL INTERVIEWING ──
+  {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'OARS — Open Questions',
+   d:'Therapist employed open-ended questioning (OARS) to elicit client elaboration on [experience]. Clinician refrained from closed questions or unsolicited advice, supporting self-exploration of [topic] without directive guidance. Client articulated [pattern] in their own words, demonstrating increased ownership and reduced defensiveness.'},
+  {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Decisional Balance',
+   d:'Therapist facilitated a decisional balance exercise, collaboratively exploring client\'s perceived benefits and costs of continuing [behavior] alongside the benefits and costs of change. Session identified [value] as a primary motivator for behavioral shift. Client articulated [specific reasons for status quo] alongside [reasons for change], increasing awareness of ambivalence without resolution pressure.'},
+  {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Developing Discrepancy',
+   d:'Therapist used MI technique of developing discrepancy to support client in identifying the gap between current [behavior] and stated value of [value]. The discrepancy between [pattern] and [value] was reflected back without confrontation or argument. Client articulated increasing awareness of this gap, generating internal motivation for change.'},
+  {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Change Talk Elicitation',
+   d:'Therapist used evocative questions and strategic reflections to elicit change talk, prompting client to articulate their own Desire, Ability, Reasons, and Need for change regarding [behavior]. Clinician reflected and amplified change talk while rolling with sustain talk without persuasion. Client identified [experience] as a motivator for change in [domain] and articulated [specific change statement].'},
+  {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Rolling with Resistance / Discord',
+   d:'Therapist applied MI discord-management strategies, reflecting and reframing client resistance around [topic] without argumentation or persuasion. Simple and amplified reflections were used to reduce defensiveness and explore underlying ambivalence regarding [behavior]. Client demonstrated [increased openness / continued ambivalence / shift in resistant stance — specify] by session end.'},
+  {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Importance & Confidence Rulers',
+   d:'Therapist used importance and confidence scaling to assess client\'s readiness to change [behavior]. Session explored the gap between ratings and identified [barrier] as the primary confidence inhibitor and [value] as a potential resource for building self-efficacy. Client rated importance of change at [X/10] and confidence in ability to change at [X/10], and identified [strategy] for increasing confidence.'},
+
+  // ── CBT ──
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Thought Record / Cognitive Restructuring',
+   d:'Therapist introduced cognitive restructuring using a thought record framework, guiding client to identify [thought], examine supporting and disconfirming evidence, and develop a balanced alternative. Cognitive distortions in relation to [topic] were explored collaboratively. Client identified [distortion type — e.g., catastrophizing / all-or-nothing thinking / mind reading — specify] as a predominant pattern and articulated a more balanced appraisal.'},
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Cognitive Distortion Identification',
+   d:'Therapist provided psychoeducation on common cognitive distortions and guided client to identify thought patterns in relation to [topic]. Examination of evidence for and against [thought] was facilitated collaboratively. Client recognized [thought] as consistent with [distortion type — specify] and practiced generating a more evidence-based interpretation.'},
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Behavioral Activation',
+   d:'Therapist introduced behavioral activation, exploring the relationship between behavioral withdrawal and [symptom]. A graduated re-engagement plan in the domain of [domain] was developed, with expected pleasure and mastery ratings assigned to scheduled activities. Client committed to [specific activity] before the next session and identified [barrier] as a potential obstacle.'},
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Behavioral Experiment',
+   d:'Therapist and client collaboratively designed a behavioral experiment to test the prediction [thought], establishing the anticipated outcome, alternative hypothesis, and criteria for evaluating results. The experiment was assigned as [specific task] to be completed before the next session; results will be reviewed to inform cognitive restructuring. Client articulated the rationale for the experiment and criteria for evaluating outcomes.'},
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Structured Problem-Solving',
+   d:'Therapist introduced structured problem-solving (define → generate alternatives → evaluate → select → implement → review) and applied the model to [topic]. Alternatives were generated and evaluated against the criteria of [value]. Client committed to implementing [selected solution] before the next session and identified [barrier] as a potential obstacle with [strategy] as a planned response.'},
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Activity Monitoring / Mood Log',
+   d:'Therapist introduced activity monitoring and mood logging as a self-awareness and behavioral intervention tool. The rationale for tracking [activity / mood / thought — specify] between sessions was reviewed, including how data will inform pattern identification and behavioral intervention. Client verbalized understanding of the assignment and identified [when/how they will complete it].'},
+
+  // ── DBT ──
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'Chain Analysis',
+   d:'Therapist conducted a behavioral chain analysis of [behavior], tracing the sequence of vulnerability factors, prompting event, links, and consequences preceding the target behavior. Session normalized the functional nature of [behavior] while maintaining a change orientation. Client identified [key link] as a primary intervention point and collaboratively developed a solution analysis targeting [barrier].'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'TIPP — Distress Tolerance',
+   d:'Therapist introduced TIPP distress tolerance skills (Temperature, Intense exercise, Paced breathing, Progressive muscle relaxation), providing rationale for their neurobiological mechanism in reducing extreme emotional arousal. The rationale for each skill was reviewed and practice opportunities were identified. Client identified [specific TIPP skill] as most accessible and articulated a plan to use TIPP in response to [symptom].'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'Opposite Action (Emotion Regulation)',
+   d:'Therapist introduced the Opposite Action skill, guiding client to identify the action urge associated with [emotion] and evaluate whether the emotion fits the facts of [experience]. The full skill structure was reviewed, including identifying emotion, checking whether it fits the facts, and identifying the opposite action. Client identified the action urge as [behavior] and committed to practicing [specific opposite action] in response to [pattern].'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'Check the Facts (Emotion Regulation)',
+   d:'Therapist introduced the Check the Facts skill, supporting client in evaluating whether [emotion] fits the facts of [experience]. The distinction between facts and interpretations was reviewed in relation to [thought]. Client identified [thought] as an interpreted rather than factual basis for [emotion] and practiced generating a fact-based reappraisal.'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'Validation Strategies',
+   d:'Therapist applied DBT validation strategies throughout session, including finding the kernel of wisdom in [behavior] and communicating that client\'s [emotion] made sense given their history and current context. Validation was balanced with change-orientation to reduce shame and support willingness to engage with [topic]. Client demonstrated [increased openness to change-oriented work / reduced shame affect / greater willingness to discuss difficult content — specify].'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'GIVE / FAST Skills (Interpersonal)',
+   d:'Therapist introduced GIVE (Gentle, Interested, Validate, Easy manner) and FAST (Fair, no Apologies, Stick to values, Truthful) skills to support interpersonal effectiveness in the context of [topic]. Application to client\'s identified interpersonal scenario was reviewed, with attention to balancing relationship goals with self-respect. Client identified [specific scenario] for practicing [GIVE / FAST — specify] skills and articulated how they would apply the skill sequence.'},
+
+  // ── GRIEF PROCESSING ──
+  {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Grief Psychoeducation (Dual Process Model)',
+   d:'Therapist provided psychoeducation on the Dual Process Model of grief (Stroebe & Schut), explaining the oscillation between loss-orientation and restoration-orientation coping. The normalizing function of oscillation was emphasized, including its non-linear trajectory and individual variability. Client connected the model to their experience of [experience], identifying [symptom] as loss-oriented and [behavior] as restoration-oriented coping.'},
+  {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Narrative Retelling / Grief Processing',
+   d:'Therapist facilitated grief narrative work, inviting client to give voice to [experience] as part of meaning-making and loss integration. Session focused on bearing witness to the loss without premature closure, reassurance, or redirection toward resolution. Client described [topic] with [emotion], demonstrating [increased coherence in narrative / ongoing fragmentation / capacity to tolerate affect while narrating — specify].'},
+  {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Continuing Bonds',
+   d:'Therapist introduced continuing bonds theory (Klass et al.), framing an ongoing internal relationship with [experience] as a resource for adaptation rather than an obstacle to it. Ways in which connection can be integrated into present-day life and [value] were explored. Client identified [specific way of maintaining connection] and explored how this relationship can be sustained alongside engagement in ongoing life.'},
+  {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Meaning-Making in Grief',
+   d:'Therapist facilitated meaning-making work (Park & Folkman framework), exploring how client is constructing meaning from [experience]. The distinction between making sense of the loss and finding benefit was reviewed without implying meaning must be reached on a prescribed timeline. Client identified [emerging sense of meaning / struggle to find meaning / conflict between global and situational meaning — specify] and articulated what would support greater integration.'},
+  {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Secondary Loss Mapping',
+   d:'Therapist and client collaboratively mapped secondary losses associated with [experience], identifying losses in the domains of [identity / routine / relationship / role / aspiration — specify]. Recognition of secondary losses was used to validate the complexity of client\'s grief and identify which losses are most active in maintaining [symptom]. Client identified [primary secondary loss domain] as the current area of greatest impact and articulated [grief response] in relation to it.'},
+  {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Complicated / Prolonged Grief Intervention',
+   d:'Therapist addressed features of prolonged grief in relation to client\'s loss of [experience], including [difficulty accepting the loss / identity disruption / avoidance of reminders / intense yearning — specify]. Targeted intervention [situational revisiting / imaginal conversation / restoration work — specify] was employed, consistent with evidence-based treatment for prolonged grief disorder (Shear et al.). Client engaged with [intervention component] and demonstrated [increased tolerance of loss-related affect / shift in avoidant stance — specify].'},
 ];
 
 // Track selected interventions
 // Each entry: {idx, id, origI, origR, lastGenI, lastGenR}
-// origI/origR = raw template text before any substitution
-// lastGenI/lastGenR = last generated text (used to detect manual edits)
 let selectedInts = [];
 let intCounter = 0;
-let currentFilter = 'all';
+
+// ── MODALITY FILTER STATE ──
+let selectedModalities = new Set(); // empty = show all
+let actSubFilter = 'all';
+
+const MODALITY_LABELS = {
+  foundational:'Foundational', act:'ACT', mi:'Motivational Interviewing',
+  cbt:'CBT', dbt:'DBT', grief:'Grief Processing', ifs:'IFS', assertiveness:'Assertiveness'
+};
+
+// Diagnosis → suggested modalities map (ICD-10 prefix matching)
+const DX_SUGGEST = {
+  'F41.1':['act','cbt'],        // GAD
+  'F41.0':['act','cbt'],        // Panic Disorder
+  'F40.1':['cbt','act'],        // Social Anxiety
+  'F40.0':['cbt','act'],        // Agoraphobia
+  'F33':  ['cbt','act','mi'],   // MDD (all subtypes)
+  'F34.1':['cbt','act','dbt'],  // Dysthymia / PDD
+  'F43.1':['act','grief'],      // PTSD
+  'F43.2':['mi','cbt','act'],   // Adjustment Disorder
+  'F60.3':['dbt','mi'],         // BPD
+  'F42.2':['cbt','act'],        // OCD
+  'F31':  ['dbt','mi','cbt'],   // Bipolar
+  'F90':  ['cbt','act'],        // ADHD
+};
+
+
+// Diagnosis → evidence-based specific interventions (by intervention name)
+const DX_SUGGEST_INTS = {
+  'F41.1': ['Workability Question','Cost of Avoidance','Thought Record / Cognitive Restructuring',
+            'Brief In-Session Mindfulness','Importance & Confidence Rulers','Behavioral Experiment'],
+  'F41.0': ['TIPP — Distress Tolerance','Physicalizing Sensation','Expanding Around the Feeling',
+            'Thought Record / Cognitive Restructuring','Grounding / Orienting to Present','Urge Surfing'],
+  'F40.1': ['Thought Record / Cognitive Restructuring','Behavioral Experiment','Cost of Avoidance',
+            'Developing Discrepancy','Values-Based Action Planning'],
+  'F40.0': ['Behavioral Experiment','Cost of Avoidance','Expanding Around the Feeling','Urge Surfing'],
+  'F33':   ['Behavioral Activation','Activity Monitoring / Mood Log','Opposite Action (Emotion Regulation)',
+            'Values-Based Action Planning','Behavioral Experiment','Connecting Suffering to Values'],
+  'F34.1': ['Behavioral Activation','Values\u2013Behavior Gap','Developing Discrepancy',
+            'Activity Monitoring / Mood Log','Committed Action'],
+  'F43.1': ['Narrative Retelling / Grief Processing','Expanding Around the Feeling',
+            'Grounding / Orienting to Present','Physicalizing Sensation','Meaning-Making in Grief',
+            'Secondary Loss Mapping'],
+  'F43.2': ['Decisional Balance','Developing Discrepancy','Change Talk Elicitation',
+            'Cost of Avoidance','Reflective Listening & Validation','Structured Problem-Solving'],
+  'F60.3': ['Chain Analysis','TIPP — Distress Tolerance','Opposite Action (Emotion Regulation)',
+            'Validation Strategies','GIVE / FAST Skills (Interpersonal)','Check the Facts (Emotion Regulation)',
+            'DEAR MAN — Interpersonal Effectiveness'],
+  'F42.2': ['Cost of Avoidance','Urge Surfing','Workability Question','Values-Based Action Planning',
+            'Thought Record / Cognitive Restructuring'],
+  'F31':   ['Chain Analysis','Check the Facts (Emotion Regulation)','TIPP — Distress Tolerance',
+            'Activity Monitoring / Mood Log','Validation Strategies'],
+  'F90':   ['Behavioral Activation','Structured Problem-Solving','Values-Based Action Planning',
+            'Activity Monitoring / Mood Log'],
+};
+
+function getSuggestedInts(dx) {
+  if (!dx) return [];
+  for (const [code, ints] of Object.entries(DX_SUGGEST_INTS)) {
+    if (dx.includes(code)) return ints;
+  }
+  return [];
+}
+
+function updateIntSuggestions() {
+  const dx = document.getElementById('sb-dx')?.value || '';
+  const suggested = getSuggestedInts(dx);
+  let visibleSuggested = 0;
+
+  document.querySelectorAll('.int-item').forEach(item => {
+    // Name is in the second span (after the dot)
+    const nameEl = item.querySelectorAll('span')[1];
+    if (!nameEl) return;
+    // Strip any existing star from the name text for comparison
+    const name = nameEl.textContent.replace(/\s*✦$/, '').trim();
+    const isSugg = suggested.includes(name);
+    item.classList.toggle('suggested-int', isSugg);
+
+    // Add / remove the ✦ star within the name span
+    let star = nameEl.querySelector('.int-suggest-star');
+    if (isSugg && !star) {
+      star = document.createElement('span');
+      star.className = 'int-suggest-star';
+      star.textContent = '✦';
+      nameEl.appendChild(star);
+    } else if (!isSugg && star) {
+      star.remove();
+    }
+
+    if (isSugg && !item.classList.contains('hidden')) visibleSuggested++;
+  });
+
+  const countEl = document.getElementById('suggested-int-count');
+  if (!countEl) return;
+  if (suggested.length && dx) {
+    const dxCode = dx.split('\u2014')[0].trim().split(' ')[0];
+    if (visibleSuggested) {
+      countEl.textContent =
+        visibleSuggested + ' intervention' + (visibleSuggested !== 1 ? 's' : '') +
+        ' highlighted for ' + dxCode;
+    } else {
+      countEl.textContent =
+        'No highlighted interventions visible \u2014 select the relevant modality above, or choose \u201cShow All\u201d';
+    }
+    countEl.style.display = '';
+  } else {
+    countEl.style.display = 'none';
+  }
+}
+
+function getSuggestedModalities(dx) {
+  if (!dx) return [];
+  for (const [code, mods] of Object.entries(DX_SUGGEST)) {
+    if (dx.includes(code)) return mods;
+  }
+  return [];
+}
+
+function updateDxSuggestions() {
+  const dx = document.getElementById('sb-dx')?.value || '';
+  const suggested = getSuggestedModalities(dx);
+  document.querySelectorAll('.mod-btn').forEach(btn => {
+    const m = btn.dataset.mod;
+    btn.classList.toggle('suggested', suggested.includes(m));
+  });
+  const note = document.getElementById('dx-suggest-note');
+  if (!note) return;
+  if (suggested.length && dx) {
+    const dxCode = dx.split('—')[0].trim().split(' ')[0];
+    const labels = suggested.map(m => MODALITY_LABELS[m] || m).join(', ');
+    note.textContent = `Evidence-based for ${dxCode}: ${labels}`;
+    note.style.display = '';
+  } else {
+    note.style.display = 'none';
+  }
+  updateIntSuggestions();
+}
+
+function toggleModality(mod, btn) {
+  if (mod === 'all') {
+    selectedModalities.clear();
+    actSubFilter = 'all';
+    document.querySelectorAll('.act-sub-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.proc === 'all'));
+  } else {
+    if (selectedModalities.has(mod)) {
+      selectedModalities.delete(mod);
+    } else {
+      selectedModalities.add(mod);
+    }
+  }
+  refreshModFilters();
+}
+
+function filterActSub(proc, btn) {
+  actSubFilter = proc;
+  document.querySelectorAll('.act-sub-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  refreshModFilters();
+}
+
+function refreshModFilters() {
+  const allActive = selectedModalities.size === 0;
+  document.querySelectorAll('.mod-btn').forEach(btn => {
+    const m = btn.dataset.mod;
+    btn.classList.toggle('active', m === 'all' ? allActive : selectedModalities.has(m));
+  });
+  // ACT sub-filter row only appears when ACT is explicitly selected
+  const actRow = document.getElementById('act-sub-filter');
+  if (actRow) actRow.style.display = selectedModalities.has('act') ? 'flex' : 'none';
+  // Update intervention item visibility
+  document.querySelectorAll('.int-item').forEach(item => {
+    const m = item.dataset.mod;
+    const p = item.dataset.process;
+    let show = allActive || selectedModalities.has(m);
+    if (show && m === 'act' && actSubFilter !== 'all' && p !== actSubFilter) show = false;
+    item.classList.toggle('hidden', !show);
+  });
+  updateIntSuggestions();
+}
 
 // ── BUILD INTERVENTION GRID ──
 function buildIntGrid() {
   const grid = document.getElementById('int-grid');
   grid.innerHTML = '';
+  const allActive = selectedModalities.size === 0;
   INTS.forEach((int, idx) => {
     const item = document.createElement('div');
     item.className = 'int-item';
+    item.dataset.mod = int.m;
     item.dataset.process = int.p;
     item.dataset.idx = idx;
-    if (currentFilter !== 'all' && int.p !== currentFilter) item.classList.add('hidden');
+    let show = allActive || selectedModalities.has(int.m);
+    if (show && int.m === 'act' && actSubFilter !== 'all' && int.p !== actSubFilter) show = false;
+    if (!show) item.classList.add('hidden');
     item.innerHTML = `<span class="int-dot" style="background:${int.c}"></span>
       <span>${int.n}</span>
       <span class="int-process" style="color:${int.c}">${int.l}</span>`;
     item.addEventListener('click', () => toggleInt(idx, item));
     grid.appendChild(item);
-  });
-}
-
-function filterInts(filter, btn) {
-  currentFilter = filter;
-  document.querySelectorAll('.filt').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.int-item').forEach(item => {
-    item.classList.toggle('hidden', filter !== 'all' && item.dataset.process !== filter);
   });
 }
 
@@ -1424,6 +1768,7 @@ function build() {
   buildR();
   buildPlan();
   buildMN();
+  updateDxSuggestions();
 }
 
 // ── BUILD MEDICAL NECESSITY ──
@@ -1452,8 +1797,8 @@ function buildMN() {
   // Session variables
   const v = sessionVars;
 
-  // Deduplicated intervention modalities
-  const modalities = [...new Set(selectedInts.map(s => INTS[s.idx].l))];
+  // Deduplicated intervention modalities (modality-level labels)
+  const modalities = [...new Set(selectedInts.map(s => MODALITY_LABELS[INTS[s.idx].m] || INTS[s.idx].l))];
 
   // CPT time descriptor
   const cptDesc = {
@@ -1715,6 +2060,13 @@ function copyAll() {
 // ── CLEAR ──
 function clearAll() {
   if (!confirm('Clear all fields and selections?')) return;
+
+  // Reset modality filters
+  selectedModalities.clear();
+  actSubFilter = 'all';
+  document.querySelectorAll('.act-sub-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.proc === 'all'));
+  refreshModFilters();
 
   // Reset radios + checkboxes
   document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
