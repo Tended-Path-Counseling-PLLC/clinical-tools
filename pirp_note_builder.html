@@ -519,7 +519,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
         <div class="var-field full-width">
           <label class="var-label">Emotion / Feeling <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">click segments to select multiple</span></label>
           <div class="emotion-wheel-wrap">
-            <svg id="emotion-wheel-svg" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg"></svg>
+            <svg id="emotion-wheel-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"></svg>
             <div class="emotion-chips" id="emotion-chips">
               <span style="font-size:11px;color:#bbb5b0;font-style:italic;">Click wheel to select</span>
             </div>
@@ -952,15 +952,64 @@ const sessionVars = {
 };
 
 // ── EMOTION WHEEL ──
+// 3-ring wheel: 7 core → 3 mid each → 2 specific each (42 outer segments total)
 const EMOTION_WHEEL_DATA = [
-  { name:'joy',          color:'#c9952a', light:'#e8cc72', subs:['content','happy','elated'] },
-  { name:'trust',        color:'#5a9a28', light:'#90c858', subs:['secure','trusting','admiring'] },
-  { name:'fear',         color:'#1e9870', light:'#52c8a0', subs:['uneasy','anxious','terrified'] },
-  { name:'surprise',     color:'#1880b8', light:'#58b0d8', subs:['uncertain','startled','amazed'] },
-  { name:'sadness',      color:'#2858a8', light:'#6090d0', subs:['lonely','sad','grief'] },
-  { name:'disgust',      color:'#6040a0', light:'#9878c8', subs:['displeased','disgusted','loathing'] },
-  { name:'anger',        color:'#b03030', light:'#d87070', subs:['annoyed','frustrated','rage'] },
-  { name:'anticipation', color:'#b07020', light:'#d8a058', subs:['attentive','interested','eager'] },
+  {
+    name:'happy', color:'#c07820', midColor:'#d89030', outerColor:'#f0b848',
+    mids:[
+      {name:'playful',      subs:['aroused',    'cheeky']       },
+      {name:'content',      subs:['peaceful',   'joyful']       },
+      {name:'proud',        subs:['successful', 'confident']    },
+    ]
+  },
+  {
+    name:'surprised', color:'#5a9a20', midColor:'#7dbb38', outerColor:'#a8d870',
+    mids:[
+      {name:'startled',     subs:['shocked',    'dismayed']     },
+      {name:'confused',     subs:['perplexed',  'disillusioned']},
+      {name:'amazed',       subs:['astonished', 'awe-struck']   },
+    ]
+  },
+  {
+    name:'bad', color:'#2878a8', midColor:'#4090c8', outerColor:'#70b4e4',
+    mids:[
+      {name:'bored',        subs:['indifferent','apathetic']    },
+      {name:'tired',        subs:['exhausted',  'lethargic']    },
+      {name:'stressed',     subs:['pressured',  'rushed']       },
+    ]
+  },
+  {
+    name:'fearful', color:'#1e9878', midColor:'#30b890', outerColor:'#65d0b0',
+    mids:[
+      {name:'scared',       subs:['helpless',   'frightened']   },
+      {name:'anxious',      subs:['overwhelmed','worried']      },
+      {name:'insecure',     subs:['vulnerable', 'inferior']     },
+    ]
+  },
+  {
+    name:'angry', color:'#7038a8', midColor:'#9058c8', outerColor:'#b888e0',
+    mids:[
+      {name:'let down',     subs:['betrayed',   'resentful']    },
+      {name:'humiliated',   subs:['ridiculed',  'disrespected'] },
+      {name:'bitter',       subs:['indignant',  'furious']      },
+    ]
+  },
+  {
+    name:'disgusted', color:'#a03860', midColor:'#c85880', outerColor:'#e088a8',
+    mids:[
+      {name:'disapproving', subs:['critical',   'judgmental']   },
+      {name:'awful',        subs:['nauseated',  'appalled']     },
+      {name:'repelled',     subs:['horrified',  'revolted']     },
+    ]
+  },
+  {
+    name:'sad', color:'#8060a8', midColor:'#a080c8', outerColor:'#c8a8e0',
+    mids:[
+      {name:'lonely',       subs:['abandoned',  'isolated']     },
+      {name:'guilty',       subs:['ashamed',    'remorseful']   },
+      {name:'despair',      subs:['powerless',  'grief']        },
+    ]
+  },
 ];
 
 const selectedEmotions = new Set();
@@ -988,82 +1037,121 @@ function buildEmotionWheel() {
   const svg = document.getElementById('emotion-wheel-svg');
   if (!svg) return;
   svg.innerHTML = '';
+  svg.setAttribute('viewBox','0 0 400 400');
 
-  const cx = 140, cy = 140;
-  const r0 = 33, r1 = 35, r2 = 80, r3 = 82, r4 = 126;
+  const cx = 200, cy = 200;
+  const rC0 = 44,  rC1 = 90;   // core ring
+  const rM0 = 93,  rM1 = 142;  // mid ring
+  const rO0 = 145, rO1 = 190;  // outer ring
   const n = EMOTION_WHEEL_DATA.length;
   const step = (Math.PI * 2) / n;
   const offset = -Math.PI / 2;
-  const shortDisplay = { 'anticipation': 'ANTICI.', 'surprise': 'SURPRS.' };
+  const shortCore = { 'surprised':'SURPRIS.', 'disgusted':'DISGUST', 'fearful':'FEARFUL' };
 
   EMOTION_WHEEL_DATA.forEach((em, i) => {
     const sa = offset + i * step;
     const ea = sa + step;
-    const mid = (sa + ea) / 2;
+    const cmid = (sa + ea) / 2;
+    const nMids = em.mids.length;
+    const midStep = step / nMids;
 
-    // Inner ring — primary emotion
-    const inner = svgEl('path', {
-      d: arcPath(cx, cy, r1, r2, sa, ea),
-      fill: em.color, stroke: '#f2ede6', 'stroke-width': '1', cursor: 'pointer',
-      'data-emotion': em.name,
+    // ── Core ring ──
+    const coreSeg = svgEl('path',{
+      d: arcPath(cx,cy,rC0,rC1,sa,ea),
+      fill:em.color, stroke:'#f2ede6', 'stroke-width':'1', cursor:'pointer',
+      'data-emotion':em.name,
     });
-    const t1 = svgEl('title', {}); t1.textContent = em.name;
-    inner.appendChild(t1);
-    inner.addEventListener('click', () => toggleWheelEmotion(em.name));
-    svg.appendChild(inner);
+    const t1 = svgEl('title',{}); t1.textContent = em.name;
+    coreSeg.appendChild(t1);
+    coreSeg.addEventListener('click', () => toggleWheelEmotion(em.name));
+    svg.appendChild(coreSeg);
 
-    // Primary label (rotated radially, always readable)
-    const tr = (r1 + r2) / 2;
-    const tx = cx + tr * Math.cos(mid), ty = cy + tr * Math.sin(mid);
-    let rot = mid * 180 / Math.PI;
-    if (Math.cos(mid) < 0) rot += 180; // flip left-half so text reads inward
-    const label = svgEl('text', {
-      x: tx, y: ty, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': '9', 'font-family': 'Jost, sans-serif',
-      fill: '#fff', 'font-weight': '500', 'letter-spacing': '0.05em',
-      transform: `rotate(${rot},${tx},${ty})`, 'pointer-events': 'none',
+    // Core label
+    const ctr = (rC0+rC1)/2;
+    const ctx2 = cx + ctr*Math.cos(cmid), cty2 = cy + ctr*Math.sin(cmid);
+    let crot = cmid*180/Math.PI;
+    if (Math.cos(cmid) < 0) crot += 180;
+    const cLabel = svgEl('text',{
+      x:ctx2, y:cty2, 'text-anchor':'middle', 'dominant-baseline':'middle',
+      'font-size':'9.5', 'font-family':'Jost, sans-serif',
+      fill:'#fff', 'font-weight':'600', 'letter-spacing':'0.04em',
+      transform:`rotate(${crot},${ctx2},${cty2})`, 'pointer-events':'none',
     });
-    label.textContent = (shortDisplay[em.name] || em.name).toUpperCase();
-    svg.appendChild(label);
+    cLabel.textContent = (shortCore[em.name] || em.name).toUpperCase();
+    svg.appendChild(cLabel);
 
-    // Outer ring — secondary emotions
-    const subStep = step / em.subs.length;
-    em.subs.forEach((sub, j) => {
-      const ssa = sa + j * subStep, sea = ssa + subStep;
-      const smid = (ssa + sea) / 2;
+    // ── Mid ring + Outer ring ──
+    em.mids.forEach((m, j) => {
+      const msa = sa + j*midStep;
+      const mea = msa + midStep;
+      const mmid = (msa+mea)/2;
+      const nSubs = m.subs.length;
+      const subStep = midStep / nSubs;
 
-      const outer = svgEl('path', {
-        d: arcPath(cx, cy, r3, r4, ssa, sea),
-        fill: em.light, stroke: '#f2ede6', 'stroke-width': '1', cursor: 'pointer',
-        'data-emotion': sub,
+      // Mid segment
+      const midSeg = svgEl('path',{
+        d: arcPath(cx,cy,rM0,rM1,msa,mea),
+        fill:em.midColor, stroke:'#f2ede6', 'stroke-width':'1', cursor:'pointer',
+        'data-emotion':m.name,
       });
-      const t2 = svgEl('title', {}); t2.textContent = sub + ' (' + em.name + ')';
-      outer.appendChild(t2);
-      outer.addEventListener('click', (e) => { e.stopPropagation(); toggleWheelEmotion(sub); });
-      svg.appendChild(outer);
+      const t2 = svgEl('title',{}); t2.textContent = m.name + ' (' + em.name + ')';
+      midSeg.appendChild(t2);
+      midSeg.addEventListener('click', e => { e.stopPropagation(); toggleWheelEmotion(m.name); });
+      svg.appendChild(midSeg);
 
-      // Secondary label
-      const sr = (r3 + r4) / 2;
-      const stx = cx + sr * Math.cos(smid), sty = cy + sr * Math.sin(smid);
-      let srot = smid * 180 / Math.PI;
-      if (Math.cos(smid) < 0) srot += 180;
-      const subLabel = svgEl('text', {
-        x: stx, y: sty, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-        'font-size': '7.5', 'font-family': 'Jost, sans-serif',
-        fill: '#242733', 'font-weight': '400',
-        transform: `rotate(${srot},${stx},${sty})`, 'pointer-events': 'none',
+      // Mid label
+      const mtr = (rM0+rM1)/2;
+      const mtx = cx + mtr*Math.cos(mmid), mty = cy + mtr*Math.sin(mmid);
+      let mrot = mmid*180/Math.PI;
+      if (Math.cos(mmid) < 0) mrot += 180;
+      const mLabel = svgEl('text',{
+        x:mtx, y:mty, 'text-anchor':'middle', 'dominant-baseline':'middle',
+        'font-size':'7.5', 'font-family':'Jost, sans-serif',
+        fill:'#fff', 'font-weight':'500',
+        transform:`rotate(${mrot},${mtx},${mty})`, 'pointer-events':'none',
       });
-      subLabel.textContent = sub;
-      svg.appendChild(subLabel);
+      mLabel.textContent = m.name;
+      svg.appendChild(mLabel);
+
+      // Outer segments
+      m.subs.forEach((sub, k) => {
+        const ssa = msa + k*subStep;
+        const sea = ssa + subStep;
+        const smid = (ssa+sea)/2;
+
+        const outerSeg = svgEl('path',{
+          d: arcPath(cx,cy,rO0,rO1,ssa,sea),
+          fill:em.outerColor, stroke:'#f2ede6', 'stroke-width':'1', cursor:'pointer',
+          'data-emotion':sub,
+        });
+        const t3 = svgEl('title',{}); t3.textContent = sub + ' (' + m.name + ')';
+        outerSeg.appendChild(t3);
+        outerSeg.addEventListener('click', e => { e.stopPropagation(); toggleWheelEmotion(sub); });
+        svg.appendChild(outerSeg);
+
+        // Outer label
+        const otr = (rO0+rO1)/2;
+        const otx = cx + otr*Math.cos(smid), oty = cy + otr*Math.sin(smid);
+        let orot = smid*180/Math.PI;
+        if (Math.cos(smid) < 0) orot += 180;
+        const oLabel = svgEl('text',{
+          x:otx, y:oty, 'text-anchor':'middle', 'dominant-baseline':'middle',
+          'font-size':'6.5', 'font-family':'Jost, sans-serif',
+          fill:'#242733', 'font-weight':'400',
+          transform:`rotate(${orot},${otx},${oty})`, 'pointer-events':'none',
+        });
+        oLabel.textContent = sub;
+        svg.appendChild(oLabel);
+      });
     });
   });
 
   // Center circle
-  svg.appendChild(svgEl('circle', { cx, cy, r: r0, fill: '#f2ede6', stroke: '#d6d0c8', 'stroke-width': '1' }));
-  const centerLabel = svgEl('text', {
-    x: cx, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-    'font-size': '7', 'font-family': 'Jost, sans-serif',
-    fill: '#8a8490', 'font-weight': '500', 'letter-spacing': '0.12em',
+  svg.appendChild(svgEl('circle',{ cx, cy, r:rC0-3, fill:'#f2ede6', stroke:'#d6d0c8', 'stroke-width':'1' }));
+  const centerLabel = svgEl('text',{
+    x:cx, y:cy, 'text-anchor':'middle', 'dominant-baseline':'middle',
+    'font-size':'8', 'font-family':'Jost, sans-serif',
+    fill:'#8a8490', 'font-weight':'500', 'letter-spacing':'0.12em',
   });
   centerLabel.textContent = 'EMOTION';
   svg.appendChild(centerLabel);
