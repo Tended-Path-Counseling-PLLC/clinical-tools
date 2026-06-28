@@ -1914,8 +1914,13 @@ function buildMN() {
   // Session variables
   const v = sessionVars;
 
-  // Deduplicated intervention modalities
-  const modalities = [...new Set(selectedInts.map(s => MODALITY_LABELS[INTS[s.idx].m] || INTS[s.idx].l))];
+  // Specific intervention references: "Intervention Name (Modality)" format
+  // ACT gets its process label (e.g. ACT — Defusion); all others use their modality label
+  const interventionRefs = selectedInts.map(s => {
+    const int = INTS[s.idx];
+    const tag = int.m === 'act' ? `ACT — ${int.l}` : int.l;
+    return `${int.n} (${tag})`;
+  });
 
   // CPT time descriptor
   const cptDesc = {
@@ -1970,11 +1975,11 @@ function buildMN() {
   if (timeParts.length) sessionLine += ` (${timeParts.join(', ')})`;
   sessionLine += ` via ${pos}.`;
 
-  if (modalities.length) {
+  if (interventionRefs.length) {
     const topic = v.topic || v.symptom || '';
-    sessionLine += ` Evidence-based interventions (${modalities.join(', ')}) were employed`;
+    sessionLine += ` The following evidence-based interventions were employed`;
     if (topic) sessionLine += ` targeting ${topic}`;
-    sessionLine += `, consistent with the client's individualized treatment plan.`;
+    sessionLine += `: ${interventionRefs.join('; ')}, consistent with the client's individualized treatment plan.`;
   } else {
     sessionLine += ` Session was consistent with the client's individualized treatment plan.`;
   }
