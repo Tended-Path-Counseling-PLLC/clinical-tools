@@ -877,6 +877,29 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
           </div>
         </div>
 
+        <div class="mse-row">
+          <div class="fl">Clinical Progress</div>
+          <div class="radio-group" id="rg-mn-progress" onchange="build()">
+            <label><input type="radio" name="mn-progress" value="significant"> Significant improvement</label>
+            <label><input type="radio" name="mn-progress" value="moderate"> Moderate improvement</label>
+            <label><input type="radio" name="mn-progress" value="stable"> Maintaining stability</label>
+            <label><input type="radio" name="mn-progress" value="minimal"> Minimal progress — continued tx indicated</label>
+            <label><input type="radio" name="mn-progress" value="regression"> Regression noted</label>
+          </div>
+        </div>
+
+        <div class="fb">
+          <div class="fl">Current Treatment Goals / Focus <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">brief — flows into MN conclusion</span></div>
+          <input class="fi" type="text" id="mn-goals" placeholder="e.g. reducing panic frequency, improving distress tolerance, processing grief" oninput="build()" style="padding:7px 10px;">
+        </div>
+
+        <div class="mse-row" style="padding-bottom:6px;">
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;font-weight:300;">
+            <input type="checkbox" id="mn-without" onchange="build()" style="accent-color:var(--gold);cursor:pointer;">
+            Include "without continued treatment" risk statement
+          </label>
+        </div>
+
         <div class="sub-divider">Additional MN Context</div>
         <div class="fb">
           <textarea class="fi" id="mn-notes" rows="2" placeholder="Payer-specific language, prior authorization context, coordination of care rationale, or other MN documentation…" oninput="build()"></textarea>
@@ -1037,8 +1060,6 @@ function buildEmotionWheel() {
   const svg = document.getElementById('emotion-wheel-svg');
   if (!svg) return;
   svg.innerHTML = '';
-  svg.setAttribute('viewBox','0 0 400 400');
-
   const cx = 200, cy = 200;
   const rC0 = 44,  rC1 = 90;   // core ring
   const rM0 = 93,  rM1 = 142;  // mid ring
@@ -1068,14 +1089,14 @@ function buildEmotionWheel() {
 
     // Core label
     const ctr = (rC0+rC1)/2;
-    const ctx2 = cx + ctr*Math.cos(cmid), cty2 = cy + ctr*Math.sin(cmid);
+    const clx = cx + ctr*Math.cos(cmid), cly = cy + ctr*Math.sin(cmid);
     let crot = cmid*180/Math.PI;
     if (Math.cos(cmid) < 0) crot += 180;
     const cLabel = svgEl('text',{
-      x:ctx2, y:cty2, 'text-anchor':'middle', 'dominant-baseline':'middle',
+      x:clx, y:cly, 'text-anchor':'middle', 'dominant-baseline':'middle',
       'font-size':'9.5', 'font-family':'Jost, sans-serif',
       fill:'#fff', 'font-weight':'600', 'letter-spacing':'0.04em',
-      transform:`rotate(${crot},${ctx2},${cty2})`, 'pointer-events':'none',
+      transform:`rotate(${crot},${clx},${cly})`, 'pointer-events':'none',
     });
     cLabel.textContent = (shortCore[em.name] || em.name).toUpperCase();
     svg.appendChild(cLabel);
@@ -1840,8 +1861,9 @@ function radio(name) {
 function checks(containerId) {
   return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(c => c.value);
 }
+// note() / ta() — unified helper for any input or textarea value
 function note(id) { return document.getElementById(id)?.value.trim() || ''; }
-function ta(id)   { return document.getElementById(id)?.value.trim() || ''; }
+function ta(id)   { return note(id); }
 
 function listify(arr) {
   if (!arr.length) return null;
@@ -1877,15 +1899,22 @@ function buildMN() {
   const cognition = radio('cognition');
 
   // MN-specific inputs
-  const impairment = checks('cg-impairment');
-  const acuity     = checks('cg-acuity');
-  const stage      = radio('tx-stage');
-  const mnNotes    = ta('mn-notes');
+  const impairment  = checks('cg-impairment');
+  const acuity      = checks('cg-acuity');
+  const stage       = radio('tx-stage');
+  const mnNotes     = ta('mn-notes');
+  const mnProgress  = radio('mn-progress');
+  const mnGoals     = note('mn-goals');
+  const mnWithout   = document.getElementById('mn-without')?.checked;
+
+  // Client response pulled from R section
+  const engagement    = radio('engagement');
+  const responseToInt = radio('response');
 
   // Session variables
   const v = sessionVars;
 
-  // Deduplicated intervention modalities (modality-level labels)
+  // Deduplicated intervention modalities
   const modalities = [...new Set(selectedInts.map(s => MODALITY_LABELS[INTS[s.idx].m] || INTS[s.idx].l))];
 
   // CPT time descriptor
@@ -1910,7 +1939,7 @@ function buildMN() {
   if (v.pattern) symptoms.push(v.pattern);
   if (v.thought) symptoms.push(`cognitive content: ${v.thought}`);
 
-  if (symptoms.length) clinicalLines.push(`Presenting clinical indicators include ${symptoms.join(', ')}.`);
+  if (symptoms.length) clinicalLines.push(`Presenting clinical indicators this session include ${symptoms.join(', ')}.`);
   if (safety && safety !== 'No SI or HI reported') clinicalLines.push(`Safety / risk: ${safety}.`);
   if (insight && ['limited', 'poor'].includes(insight)) clinicalLines.push(`Insight and judgment are ${insight}, indicating ongoing clinical need.`);
   if (cognition && cognition !== 'Alert and oriented x4') clinicalLines.push(`${cognition}.`);
@@ -1943,7 +1972,7 @@ function buildMN() {
 
   if (modalities.length) {
     const topic = v.topic || v.symptom || '';
-    sessionLine += ` Session employed evidence-based interventions (${modalities.join(', ')})`;
+    sessionLine += ` Evidence-based interventions (${modalities.join(', ')}) were employed`;
     if (topic) sessionLine += ` targeting ${topic}`;
     sessionLine += `, consistent with the client's individualized treatment plan.`;
   } else {
@@ -1951,31 +1980,82 @@ function buildMN() {
   }
   parts.push(sessionLine);
 
-  // ── 5. Treatment phase ──
+  // ── 5. Treatment phase + goals ──
   const stageMap = {
-    'initial':     'Treatment is in the initial/engagement phase; session focus includes therapeutic alliance building, comprehensive assessment, and treatment planning.',
-    'active':      'Treatment is in the active phase, with ongoing work targeting core clinical concerns identified in the treatment plan.',
-    'maintenance': 'Treatment is in the maintenance/consolidation phase, focused on relapse prevention, generalizing gains, and sustaining functional improvement.',
-    'termination': 'Treatment is in the termination/transition phase; session addressed consolidation of progress, review of treatment goals, and discharge planning.'
+    'initial':
+      `Treatment is in the initial/engagement phase; session focus includes therapeutic alliance building, comprehensive assessment, and treatment planning${mnGoals ? ' targeting ' + mnGoals : ''}.`,
+    'active':
+      `Treatment is in the active phase, targeting ${mnGoals || 'core clinical concerns identified in the treatment plan'}.`,
+    'maintenance':
+      `Treatment is in the maintenance/consolidation phase, focused on ${mnGoals || 'relapse prevention, generalizing gains, and sustaining functional improvement'}.`,
+    'termination':
+      `Treatment is in the termination/transition phase; session addressed consolidation of progress, review of treatment goals${mnGoals ? ' (' + mnGoals + ')' : ''}, and discharge planning.`
   };
   if (stage && stageMap[stage]) parts.push(stageMap[stage]);
+  else if (mnGoals && !stage) parts.push(`Current treatment focus: ${mnGoals}.`);
 
-  // ── 6. Conclusion ──
+  // ── 6. Client response (from R section) + clinical progress ──
+  const progressLines = [];
+
+  if (engagement || responseToInt) {
+    const rParts = [];
+    if (engagement) rParts.push(engagement.toLowerCase());
+    if (responseToInt) rParts.push(responseToInt.toLowerCase());
+    progressLines.push(
+      `Within this session, client was ${rParts.join('; ')}, supporting the clinical rationale for continued psychotherapy.`
+    );
+  }
+
+  const progressMap = {
+    'significant':
+      `Client is demonstrating significant improvement relative to clinical baseline${mnGoals ? ', with meaningful progress toward ' + mnGoals : ''}. Continued treatment is medically supported to consolidate gains and prevent relapse.`,
+    'moderate':
+      `Client is demonstrating moderate improvement. Continued treatment is necessary to build upon therapeutic gains${mnGoals ? ' and further address ' + mnGoals : ' and address remaining clinical concerns'}.`,
+    'stable':
+      `Client is maintaining clinical stability through consistent therapeutic engagement. Continued treatment is necessary to sustain functional gains and prevent symptom recurrence.`,
+    'minimal':
+      `Progress has been gradual; continued treatment remains clinically indicated given the complexity of the presenting concerns, the client's diagnostic history, and their sustained engagement in the therapeutic process.`,
+    'regression':
+      `A period of clinical regression has been noted. Continued treatment at the current frequency is medically necessary to address destabilization and prevent escalation to a higher level of care.`,
+  };
+  if (mnProgress && progressMap[mnProgress]) progressLines.push(progressMap[mnProgress]);
+
+  if (progressLines.length) parts.push(progressLines.join(' '));
+
+  // ── 7. Without continued treatment (conditional) ──
+  if (mnWithout) {
+    const riskParts = [];
+    if (acuity.some(a => a.includes('decompensation'))) riskParts.push('clinical decompensation requiring a higher level of care');
+    if (acuity.some(a => a.includes('safety'))) riskParts.push('inadequate monitoring of active safety concerns');
+    if (impairment.length) riskParts.push(`further deterioration in ${listify(impairment)}`);
+    if (!riskParts.length) riskParts.push('symptom recurrence and functional deterioration');
+    parts.push(`Without continued psychotherapy at this level of care, the client is at risk for ${listify(riskParts)}.`);
+  }
+
+  // ── 8. Conclusion — individualized by progress level ──
   if (dx || symptoms.length || impairment.length) {
-    let conclusion = 'Continued individual psychotherapy at this level of care is medically necessary';
-    if (dx) conclusion += ` for the treatment of ${dx}`;
-    const goals = [];
-    if (impairment.length) goals.push(`restore and maintain functioning in ${listify(impairment)}`);
-    goals.push('reduce symptom severity and clinical distress');
-    goals.push('prevent deterioration or need for a higher level of care');
-    conclusion += ` to ${goals.join(', ')}.`;
+    const conclusionMap = {
+      'significant':
+        `Continued individual psychotherapy is medically necessary to consolidate therapeutic gains, prevent relapse${dx ? ' related to ' + dx : ''}, and support ${mnGoals || 'ongoing functional recovery'} in preparation for eventual termination.`,
+      'moderate':
+        `Continued individual psychotherapy is medically necessary to build upon progress, reduce residual symptom severity${dx ? ' associated with ' + dx : ''}, and advance ${mnGoals || 'treatment plan goals'}.`,
+      'stable':
+        `Continued individual psychotherapy is medically necessary to maintain stability, prevent recurrence${dx ? ' of symptoms related to ' + dx : ''}, and preserve functional gains in ${impairment.length ? listify(impairment) : 'identified domains'}.`,
+      'minimal':
+        `Continued individual psychotherapy is medically necessary given the complexity of the presentation${dx ? ' (' + dx + ')' : ''}, the client's active participation, and the clinical risk of premature termination.`,
+      'regression':
+        `Continued individual psychotherapy at this level of care is medically necessary to address clinical regression, restabilize functioning, and prevent a higher level of care${dx ? ' in the context of ' + dx : ''}.`,
+    };
+    const conclusion = (mnProgress && conclusionMap[mnProgress])
+      ? conclusionMap[mnProgress]
+      : `Continued individual psychotherapy at this level of care is medically necessary${dx ? ' for the treatment of ' + dx : ''}${impairment.length ? ' to restore and maintain functioning in ' + listify(impairment) + ',' : ''} to reduce symptom severity and clinical distress, and to prevent deterioration or need for a higher level of care.`;
     parts.push(conclusion);
   }
 
-  // ── 7. Additional MN notes ──
+  // ── 9. Additional MN notes ──
   if (mnNotes) parts.push(mnNotes);
 
-  const hasContent = dx || symptoms.length || impairment.length || acuity.length || stage;
+  const hasContent = dx || symptoms.length || impairment.length || acuity.length || stage || mnProgress || engagement;
   setPreview(
     'prev-mn',
     hasContent && parts.length ? parts.join('\n\n') : '',
@@ -2164,17 +2244,18 @@ function clearAll() {
   document.querySelectorAll('.notes-row input').forEach(i => i.value = '');
 
   // Reset textareas
-  ['presenting-content','int-extra','response-narrative','plan-homework','plan-focus','plan-coordination','mn-notes']
+  ['presenting-content','int-extra','response-narrative','plan-homework','plan-focus','plan-coordination','mn-notes','mn-goals']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 
   // Reset diagnosis field
   const dxEl = document.getElementById('sb-dx');
   if (dxEl) dxEl.value = '';
 
-  // Reset interventions
+  // Reset interventions — remove generated blocks, reveal the persistent no-int-msg
   selectedInts = [];
-  document.getElementById('selected-int-list').innerHTML = '<div class="no-int-msg" id="no-int-msg">No interventions selected yet.</div>';
+  document.querySelectorAll('#selected-int-list .sel-int').forEach(el => el.remove());
   document.querySelectorAll('.int-item').forEach(i => i.classList.remove('selected'));
+  updateNoIntMsg();
 
   // Reset session variables
   Object.keys(sessionVars).forEach(k => sessionVars[k] = '');
