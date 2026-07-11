@@ -243,32 +243,50 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
 .no-int-msg{font-size:13px;color:var(--muted);font-style:italic;padding:6px 2px;}
 
-/* ── SESSION VARIABLES PANEL ── */
-.vars-panel{border-bottom:1px solid var(--border);}
-.vars-toggle{
-  display:flex;align-items:center;gap:10px;padding:9px 16px;
-  background:var(--ink);cursor:pointer;user-select:none;
-  position:sticky;top:0;z-index:11;
+/* ── REVIEW STATUS ── */
+.review-summary{
+  font-size:12px;font-weight:500;padding:6px 10px;margin-bottom:8px;border-radius:1px;
 }
-.vars-toggle-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;}
-.vars-toggle-label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);flex:1;}
-.vars-toggle-count{font-size:10px;color:var(--gold);font-weight:500;letter-spacing:.06em;background:rgba(215,159,85,.15);padding:1px 7px;border-radius:10px;}
-.vars-toggle-arrow{font-size:10px;color:var(--muted);transition:transform .15s;display:inline-block;}
-.vars-toggle-arrow.open{transform:rotate(180deg);}
-.vars-body{padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;}
-.vars-body.collapsed{display:none;}
-.var-field{display:flex;flex-direction:column;gap:3px;}
-.var-field.full-width{grid-column:1/-1;}
-.var-label{font-size:10px;font-weight:500;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);}
-.var-input{
-  width:100%;font-family:'Jost',sans-serif;font-size:13px;font-weight:300;color:var(--ink);
-  background:var(--warm-white);border:1px solid var(--border);border-radius:1px;
-  padding:5px 8px;outline:none;transition:border-color .15s;
+.review-summary.needs-review{background:rgba(215,159,85,.12);color:#9a6c1e;border:1px solid rgba(215,159,85,.35);}
+.review-summary.all-reviewed{background:rgba(90,170,152,.12);color:#2f6a5a;border:1px solid rgba(90,170,152,.35);}
+.sel-int.unreviewed{border-left:3px solid var(--gold);}
+.sel-int-badge{font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:10px;margin-left:4px;}
+.sel-int-badge.auto{background:rgba(215,159,85,.15);color:#9a6c1e;}
+.sel-int-badge.reviewed{background:rgba(90,170,152,.15);color:#2f6a5a;}
+
+/* ── SESSION TYPE BAR ── */
+.session-type-bar{
+  background:#1e2130;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:8px 32px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex-shrink:0;
 }
-.var-input:focus{border-color:var(--gold);}
-.var-input::placeholder{color:#bbb5b0;font-style:italic;}
-.var-input.has-value{border-color:rgba(215,159,85,.6);background:#fffdf5;}
-.vars-foot{grid-column:1/-1;font-size:11px;color:var(--muted);font-style:italic;padding-top:2px;border-top:1px solid var(--border);margin-top:2px;}
+.st-label{font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-right:6px;}
+.st-btn{
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.04em;
+  padding:5px 12px;border-radius:20px;border:1px solid rgba(215,159,85,.3);
+  cursor:pointer;background:transparent;color:var(--gold-light);transition:all .12s;
+}
+.st-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+
+/* ── COMPLETENESS BAR ── */
+.completeness-bar{
+  display:flex;flex-wrap:wrap;gap:8px;padding:8px 14px;background:#f2ede6;
+  border:1px solid var(--border);border-radius:1px;font-size:11px;flex-shrink:0;
+}
+.cb-item{display:flex;align-items:center;gap:5px;font-weight:500;letter-spacing:.04em;}
+.cb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cb-dot.done{background:#5c9a52;}
+.cb-dot.pending{background:#d6d0c8;}
+.cb-item.pending{color:var(--muted);}
+
+/* ── MN QUICK PRESETS ── */
+.mn-preset-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.mn-preset-btn{
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.04em;
+  padding:5px 11px;border-radius:20px;border:1px solid rgba(215,159,85,.4);
+  cursor:pointer;background:var(--warm-white);color:var(--ink);transition:all .12s;
+}
+.mn-preset-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+.mn-preset-hint{font-size:10px;color:var(--muted);font-style:italic;margin-bottom:8px;}
 
 /* ── RIGHT PANEL ── */
 .right-panel{
@@ -307,6 +325,23 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 }
 .preview-text .blank{color:var(--gold);font-style:italic;}
 
+/* ── NARRATIVE FILL-IN LINES (right panel) ── */
+.narr-lines{outline:none;}
+.narr-lines:focus{box-shadow:inset 0 0 0 2px rgba(215,159,85,.3);}
+.narr-line{
+  border-left:3px solid var(--border);
+  padding:3px 0 3px 10px;margin-bottom:8px;
+}
+.narr-line:last-child{margin-bottom:0;}
+.narr-derived{margin-bottom:8px;}
+.narr-derived:empty{display:none;}
+.narr-empty{color:var(--muted);font-style:italic;}
+.fillspan{
+  background:rgba(215,159,85,.10);border-bottom:1px dashed rgba(215,159,85,.55);
+  border-radius:2px;padding:0 2px;cursor:text;
+}
+.fillspan.unfilled{color:var(--gold);font-style:italic;}
+
 .copy-all-bar{
   display:flex;align-items:center;justify-content:space-between;
   padding:12px 16px;background:var(--ink);border-radius:1px;margin-top:4px;
@@ -337,29 +372,12 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   background:#f7f4f0;
 }
 
-/* ── EMOTION WHEEL ── */
-.emotion-wheel-wrap { width:100%; }
-.emotion-wheel-wrap svg { display:block; width:100%; max-height:560px; }
-
 /* ── PANEL DRAG RESIZER ── */
 .panel-resizer {
   position:absolute; right:0; top:0; bottom:0; width:5px;
   cursor:col-resize; z-index:50; background:transparent; transition:background .15s;
 }
 .panel-resizer:hover, .panel-resizer.active { background:rgba(215,159,85,.4); }
-.emotion-chips {
-  display:flex; flex-wrap:wrap; gap:4px;
-  margin-top:6px; min-height:20px; align-items:center;
-}
-.emotion-chip {
-  display:inline-flex; align-items:center; gap:4px;
-  background:var(--gold-light); color:var(--ink);
-  font-size:11px; font-weight:500; font-family:'Jost',sans-serif;
-  padding:2px 8px 2px 7px; border-radius:10px;
-  border:1px solid rgba(215,159,85,.6);
-}
-.chip-x { cursor:pointer; color:var(--muted); font-size:10px; line-height:1; }
-.chip-x:hover { color:#c07868; }
 
 /* ── WALK-AND-TALK BAR ── */
 .ww-bar {
@@ -395,7 +413,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       <div class="practice-tag">Tended Path Counseling, PLLC</div>
       <div class="doc-title">PIRP Note Builder</div>
     </div>
-    <div class="header-hint">Click interventions → edit in place → copy by section</div>
+    <div class="header-hint">Click interventions → click or Tab into gold fields to fill → copy by section</div>
   </div>
 </div>
 
@@ -466,6 +484,17 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   </div>
 </div>
 
+<!-- SESSION TYPE BAR -->
+<div class="session-type-bar">
+  <span class="st-label">Session Type</span>
+  <button type="button" class="st-btn" onclick="applySessionType('standard')">Standard Weekly</button>
+  <button type="button" class="st-btn" onclick="applySessionType('walktalk')">Walk-and-Talk</button>
+  <button type="button" class="st-btn" onclick="applySessionType('intake')">Intake / Early Tx</button>
+  <button type="button" class="st-btn" onclick="applySessionType('termination')">Termination / Transition</button>
+  <button type="button" class="st-btn" onclick="applySessionType('maintenance')">Maintenance</button>
+  <span style="font-size:10px;color:var(--muted);font-style:italic;margin-left:6px;">sets treatment phase &amp; format only — clinical content still yours to enter</span>
+</div>
+
 <!-- WALK-AND-TALK BAR -->
 <div class="ww-bar" id="ww-bar" style="display:none;">
   <span class="ww-bar-label">Walk-and-Talk</span>
@@ -507,184 +536,15 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   <div class="left-panel">
     <div class="panel-resizer" id="panel-resizer" title="Drag to resize panel"></div>
 
-    <!-- SESSION VARIABLES -->
-    <div class="vars-panel">
-      <div class="vars-toggle" onclick="toggleVarsPanel()">
-        <span class="vars-toggle-dot"></span>
-        <span class="vars-toggle-label">Session Variables</span>
-        <span class="vars-toggle-count" id="vars-count" style="display:none"></span>
-        <span class="vars-toggle-arrow open" id="vars-arrow">▾</span>
-      </div>
-      <div class="vars-body" id="vars-body">
-        <div class="var-field full-width">
-          <label class="var-label">Emotion / Feeling <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">click segments to select multiple</span></label>
-          <div class="emotion-wheel-wrap">
-            <svg id="emotion-wheel-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"></svg>
-            <div class="emotion-chips" id="emotion-chips">
-              <span style="font-size:11px;color:#bbb5b0;font-style:italic;">Click wheel to select</span>
-            </div>
-          </div>
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-sensation">Sensation</label>
-          <input class="var-input" id="var-sensation" type="text" placeholder="e.g. tightness in chest"
-            oninput="onVarChange('sensation',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-value">Value</label>
-          <input class="var-input" id="var-value" type="text" placeholder="e.g. connection"
-            oninput="onVarChange('value',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-behavior">Behavior / Avoidance</label>
-          <input class="var-input" id="var-behavior" type="text" placeholder="e.g. withdrawal"
-            oninput="onVarChange('behavior',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-pattern">Pattern</label>
-          <input class="var-input" id="var-pattern" type="text" placeholder="e.g. avoidance loop"
-            oninput="onVarChange('pattern',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-thought">Thought / Belief</label>
-          <input class="var-input" id="var-thought" type="text" placeholder='e.g. "I am a burden"'
-            oninput="onVarChange('thought',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-topic">Topic / Theme</label>
-          <input class="var-input" id="var-topic" type="text" placeholder="e.g. relationship conflict"
-            oninput="onVarChange('topic',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-experience">Experience / Event</label>
-          <input class="var-input" id="var-experience" type="text" placeholder="e.g. loss of job, panic attack at work"
-            oninput="onVarChange('experience',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-symptom">Symptom</label>
-          <input class="var-input" id="var-symptom" type="text" placeholder="e.g. panic attacks"
-            oninput="onVarChange('symptom',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-domain">Domain / Area</label>
-          <input class="var-input" id="var-domain" type="text" placeholder="e.g. relationships"
-            oninput="onVarChange('domain',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-barrier">Barrier</label>
-          <input class="var-input" id="var-barrier" type="text" placeholder="e.g. cognitive fusion"
-            oninput="onVarChange('barrier',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-part">Part (IFS)</label>
-          <input class="var-input" id="var-part" type="text" placeholder="e.g. protector part"
-            oninput="onVarChange('part',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-story">Story Name</label>
-          <input class="var-input" id="var-story" type="text" placeholder='e.g. "The Not Enough Story"'
-            oninput="onVarChange('story',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-goal">Goal / Session Focus</label>
-          <input class="var-input" id="var-goal" type="text" placeholder="e.g. making a request, setting a limit"
-            oninput="onVarChange('goal',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-distortion">Cognitive Distortion</label>
-          <input class="var-input" id="var-distortion" type="text" placeholder="e.g. catastrophizing, all-or-nothing"
-            oninput="onVarChange('distortion',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="var-field">
-          <label class="var-label" for="var-skill">Specific Skill (DBT / other)</label>
-          <input class="var-input" id="var-skill" type="text" placeholder="e.g. TIPP, opposite action"
-            oninput="onVarChange('skill',this.value);this.classList.toggle('has-value',!!this.value.trim())">
-        </div>
-        <div class="vars-foot">Set values above — they auto-fill bracketed placeholders in interventions when selected. Unedited fields update live if you change a variable.</div>
-      </div>
-    </div>
-
-    <!-- P: PRESENTATION -->
+    <!-- SAFETY / RISK — required every session, always manual, never touched by presets -->
     <div class="section-block">
       <div class="section-header">
-        <span class="section-letter">P</span>
-        <span class="section-title">Presentation</span>
-        <span class="section-subtitle">MSE + presenting content</span>
+        <span class="section-letter">S</span>
+        <span class="section-title">Safety / Risk</span>
+        <span class="section-subtitle">required every session — always manual</span>
       </div>
       <div class="section-body">
-
         <div class="mse-row">
-          <div class="fl">Appearance</div>
-          <div class="radio-group" id="rg-appearance" onchange="build()">
-            <label><input type="radio" name="appearance" value="well-groomed and appropriately dressed"> Well-groomed / appropriate</label>
-            <label><input type="radio" name="appearance" value="casually but appropriately dressed"> Casual / appropriate</label>
-            <label><input type="radio" name="appearance" value="disheveled and unkempt"> Disheveled / unkempt</label>
-          </div>
-        </div>
-
-        <div class="mse-row">
-          <div class="fl">Affect <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">select all that apply</span></div>
-          <div class="check-group" id="cg-affect" onchange="build()">
-            <label><input type="checkbox" value="euthymic / full range"> Euthymic / full range</label>
-            <label><input type="checkbox" value="constricted"> Constricted</label>
-            <label><input type="checkbox" value="flat"> Flat</label>
-            <label><input type="checkbox" value="labile"> Labile</label>
-            <label><input type="checkbox" value="anxious"> Anxious</label>
-            <label><input type="checkbox" value="dysphoric"> Dysphoric</label>
-            <label><input type="checkbox" value="elevated / expansive"> Elevated / expansive</label>
-            <label><input type="checkbox" value="irritable"> Irritable</label>
-          </div>
-          <div class="notes-row"><input type="text" id="notes-affect" placeholder="Affect notes…" oninput="build()"></div>
-        </div>
-
-        <div class="mse-row">
-          <div class="fl">Mood (client-reported)</div>
-          <div class="radio-group" onchange="build()">
-            <label><input type="radio" name="mood" value="good / positive"> Good / positive</label>
-            <label><input type="radio" name="mood" value="neutral / stable"> Neutral / stable</label>
-            <label><input type="radio" name="mood" value="anxious / worried"> Anxious / worried</label>
-            <label><input type="radio" name="mood" value="sad / down"> Sad / down</label>
-            <label><input type="radio" name="mood" value="stressed / overwhelmed"> Stressed / overwhelmed</label>
-            <label><input type="radio" name="mood" value="happy / elated"> Happy / elated</label>
-            <label><input type="radio" name="mood" value="mixed"> Mixed</label>
-          </div>
-          <div class="notes-row"><input type="text" id="notes-mood" placeholder="Mood notes…" oninput="build()"></div>
-        </div>
-
-        <div class="mse-row">
-          <div class="fl">Cognition / Orientation</div>
-          <div class="radio-group" onchange="build()">
-            <label><input type="radio" name="cognition" value="Alert and oriented x4"> AOx4</label>
-            <label><input type="radio" name="cognition" value="Alert; mild cognitive fog noted"> Mild cognitive fog</label>
-            <label><input type="radio" name="cognition" value="Disorganized thinking noted"> Disorganized thinking</label>
-          </div>
-          <div class="notes-row"><input type="text" id="notes-cog" placeholder="Cognition notes…" oninput="build()"></div>
-        </div>
-
-        <div class="mse-row">
-          <div class="fl">Speech</div>
-          <div class="radio-group" onchange="build()">
-            <label><input type="radio" name="speech" value="normal in rate and volume"> Normal rate / volume</label>
-            <label><input type="radio" name="speech" value="pressured"> Pressured</label>
-            <label><input type="radio" name="speech" value="slow and latent"> Slow / latent</label>
-            <label><input type="radio" name="speech" value="soft and quiet"> Soft / quiet</label>
-          </div>
-          <div class="notes-row"><input type="text" id="notes-speech" placeholder="Speech notes…" oninput="build()"></div>
-        </div>
-
-        <div class="mse-row">
-          <div class="fl">Insight / Judgment</div>
-          <div class="radio-group" onchange="build()">
-            <label><input type="radio" name="insight" value="good"> Good</label>
-            <label><input type="radio" name="insight" value="fair"> Fair</label>
-            <label><input type="radio" name="insight" value="limited"> Limited</label>
-            <label><input type="radio" name="insight" value="poor"> Poor</label>
-          </div>
-          <div class="notes-row"><input type="text" id="notes-insight" placeholder="Insight / judgment notes…" oninput="build()"></div>
-        </div>
-
-        <div class="mse-row">
-          <div class="fl">Safety / Risk</div>
           <div class="radio-group" onchange="build()">
             <label><input type="radio" name="safety" value="No SI or HI reported"> No SI / HI</label>
             <label><input type="radio" name="safety" value="Passive ideation noted; safety assessed"> Passive ideation</label>
@@ -692,12 +552,6 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
           </div>
           <div class="notes-row"><input type="text" id="notes-safety" placeholder="Risk / safety notes…" oninput="build()"></div>
         </div>
-
-        <div class="sub-divider">Presenting Content</div>
-        <div class="fb">
-          <textarea class="fi" id="presenting-content" rows="3" placeholder="What did the client bring to session today? Key themes, concerns, or content…" oninput="build()"></textarea>
-        </div>
-
       </div>
     </div>
 
@@ -741,6 +595,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
         <div class="int-grid" id="int-grid"></div>
 
         <div class="sub-divider">Selected Interventions</div>
+        <div class="review-summary" id="review-summary" style="display:none;"></div>
         <div class="selected-int-list" id="selected-int-list">
           <div class="no-int-msg" id="no-int-msg">No interventions selected yet.</div>
         </div>
@@ -793,43 +648,6 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       </div>
     </div>
 
-    <!-- P: PLAN -->
-    <div class="section-block">
-      <div class="section-header">
-        <span class="section-letter">P</span>
-        <span class="section-title">Plan</span>
-      </div>
-      <div class="section-body">
-
-        <div class="fb">
-          <div class="fl">Frequency Going Forward</div>
-          <div class="radio-group" style="margin-bottom:8px;" onchange="build()">
-            <label><input type="radio" name="frequency" value="weekly"> Weekly</label>
-            <label><input type="radio" name="frequency" value="every other week"> Biweekly</label>
-            <label><input type="radio" name="frequency" value="monthly"> Monthly</label>
-            <label><input type="radio" name="frequency" value="as needed"> As needed</label>
-            <label><input type="radio" name="frequency" value="transition / termination planning underway"> Termination planning</label>
-          </div>
-        </div>
-
-        <div class="fb">
-          <div class="fl">Between-Session Assignment / Goals</div>
-          <textarea class="fi" id="plan-homework" rows="2" placeholder="e.g. Practice brief breath anchor once daily; return to values worksheet before next session…" oninput="build()"></textarea>
-        </div>
-
-        <div class="fb">
-          <div class="fl">Clinical Focus for Next Session</div>
-          <textarea class="fi" id="plan-focus" rows="2" placeholder="e.g. Continue defusion work; revisit committed action from this session; begin values-behavior gap exploration…" oninput="build()"></textarea>
-        </div>
-
-        <div class="fb">
-          <div class="fl">Coordination of Care / Referrals / Collateral</div>
-          <textarea class="fi" id="plan-coordination" rows="2" placeholder="e.g. No coordination indicated. / Pending release for PCP communication…" oninput="build()"></textarea>
-        </div>
-
-      </div>
-    </div>
-
     <!-- MN: MEDICAL NECESSITY -->
     <div class="section-block">
       <div class="section-header">
@@ -841,6 +659,15 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
         Template only — verify language against payer requirements before use. CPT medical necessity criteria require documented diagnosis, functional impairment, and clinical justification.
       </div>
       <div class="section-body">
+
+        <div class="mn-preset-hint">Quick presets — apply a typical pattern below, then adjust as needed</div>
+        <div class="mn-preset-row">
+          <button type="button" class="mn-preset-btn" onclick="applyMNPreset('anxiety')">Anxiety — Active Tx</button>
+          <button type="button" class="mn-preset-btn" onclick="applyMNPreset('depression')">Depression — Active Tx</button>
+          <button type="button" class="mn-preset-btn" onclick="applyMNPreset('trauma')">Trauma — Active Tx</button>
+          <button type="button" class="mn-preset-btn" onclick="applyMNPreset('maintenance')">Maintenance / Stable</button>
+          <button type="button" class="mn-preset-btn" onclick="applyMNPreset('safety')">Safety-Focused</button>
+        </div>
 
         <div class="mse-row">
           <div class="fl">Functional Impairment Domains <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">select all that apply</span></div>
@@ -913,13 +740,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   <!-- RIGHT PANEL: PREVIEW -->
   <div class="right-panel" id="right-panel">
 
-    <div class="preview-section">
-      <div class="preview-section-header">
-        <span class="ps-label">P — Presentation</span>
-        <button class="ps-copy" onclick="copySection('prev-p', this)">Copy</button>
-      </div>
-      <div class="preview-text" id="prev-p"></div>
-    </div>
+    <div class="completeness-bar" id="completeness-bar"></div>
 
     <div class="preview-section">
       <div class="preview-section-header">
@@ -935,14 +756,6 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
         <button class="ps-copy" onclick="copySection('prev-r', this)">Copy</button>
       </div>
       <div class="preview-text" id="prev-r"></div>
-    </div>
-
-    <div class="preview-section">
-      <div class="preview-section-header">
-        <span class="ps-label">P — Plan</span>
-        <button class="ps-copy" onclick="copySection('prev-plan', this)">Copy</button>
-      </div>
-      <div class="preview-text" id="prev-plan"></div>
     </div>
 
     <div class="preview-section">
@@ -967,275 +780,20 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 </div><!-- /main -->
 
 <script>
-// ── SESSION VARIABLES ──
-const sessionVars = {
-  emotion:'', sensation:'', value:'', behavior:'', pattern:'',
-  thought:'', topic:'', symptom:'', domain:'', barrier:'', part:'', story:'',
-  experience:'', goal:'', distortion:'', skill:''
-};
-
-// ── EMOTION WHEEL ──
-// 3-ring wheel: 7 core → 3 mid each → 2 specific each (42 outer segments total)
-const EMOTION_WHEEL_DATA = [
-  {
-    name:'happy', color:'#c07820', midColor:'#d89030', outerColor:'#f0b848',
-    mids:[
-      {name:'playful',      subs:['aroused',    'cheeky']       },
-      {name:'content',      subs:['peaceful',   'joyful']       },
-      {name:'proud',        subs:['successful', 'confident']    },
-    ]
-  },
-  {
-    name:'surprised', color:'#5a9a20', midColor:'#7dbb38', outerColor:'#a8d870',
-    mids:[
-      {name:'startled',     subs:['shocked',    'dismayed']     },
-      {name:'confused',     subs:['perplexed',  'disillusioned']},
-      {name:'amazed',       subs:['astonished', 'awe-struck']   },
-    ]
-  },
-  {
-    name:'bad', color:'#2878a8', midColor:'#4090c8', outerColor:'#70b4e4',
-    mids:[
-      {name:'bored',        subs:['indifferent','apathetic']    },
-      {name:'tired',        subs:['exhausted',  'lethargic']    },
-      {name:'stressed',     subs:['pressured',  'rushed']       },
-    ]
-  },
-  {
-    name:'fearful', color:'#1e9878', midColor:'#30b890', outerColor:'#65d0b0',
-    mids:[
-      {name:'scared',       subs:['helpless',   'frightened']   },
-      {name:'anxious',      subs:['overwhelmed','worried']      },
-      {name:'insecure',     subs:['vulnerable', 'inferior']     },
-    ]
-  },
-  {
-    name:'angry', color:'#c03828', midColor:'#d85838', outerColor:'#f09070',
-    mids:[
-      {name:'irritable',    subs:['irritated',   'annoyed']      },
-      {name:'agitated',     subs:['frustrated',  'resentful']    },
-      {name:'wronged',      subs:['betrayed',    'disrespected'] },
-    ]
-  },
-  {
-    name:'disgusted', color:'#a03860', midColor:'#c85880', outerColor:'#e088a8',
-    mids:[
-      {name:'disapproving', subs:['critical',   'judgmental']   },
-      {name:'awful',        subs:['nauseated',  'appalled']     },
-      {name:'repelled',     subs:['horrified',  'revolted']     },
-    ]
-  },
-  {
-    name:'sad', color:'#8060a8', midColor:'#a080c8', outerColor:'#c8a8e0',
-    mids:[
-      {name:'lonely',       subs:['abandoned',  'isolated']     },
-      {name:'guilty',       subs:['ashamed',    'remorseful']   },
-      {name:'despair',      subs:['powerless',  'grief']        },
-    ]
-  },
-];
-
-const selectedEmotions = new Set();
-
-function arcPath(cx, cy, r1, r2, startAngle, endAngle) {
-  const gap = 0.018;
-  const sa = startAngle + gap, ea = endAngle - gap;
-  const c = Math.cos, s = Math.sin;
-  const large = (ea - sa > Math.PI) ? 1 : 0;
-  return [
-    `M ${cx+r2*c(sa)} ${cy+r2*s(sa)}`,
-    `A ${r2} ${r2} 0 ${large} 1 ${cx+r2*c(ea)} ${cy+r2*s(ea)}`,
-    `L ${cx+r1*c(ea)} ${cy+r1*s(ea)}`,
-    `A ${r1} ${r1} 0 ${large} 0 ${cx+r1*c(sa)} ${cy+r1*s(sa)}`, 'Z'
-  ].join(' ');
-}
-
-function svgEl(tag, attrs) {
-  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
-  return el;
-}
-
-function buildEmotionWheel() {
-  const svg = document.getElementById('emotion-wheel-svg');
-  if (!svg) return;
-  svg.innerHTML = '';
-  const cx = 200, cy = 200;
-  const rC0 = 44,  rC1 = 90;   // core ring
-  const rM0 = 93,  rM1 = 142;  // mid ring
-  const rO0 = 145, rO1 = 190;  // outer ring
-  const n = EMOTION_WHEEL_DATA.length;
-  const step = (Math.PI * 2) / n;
-  const offset = -Math.PI / 2;
-  const shortCore = { 'surprised':'SURPRIS.', 'disgusted':'DISGUST', 'fearful':'FEARFUL' };
-
-  EMOTION_WHEEL_DATA.forEach((em, i) => {
-    const sa = offset + i * step;
-    const ea = sa + step;
-    const cmid = (sa + ea) / 2;
-    const nMids = em.mids.length;
-    const midStep = step / nMids;
-
-    // ── Core ring ──
-    const coreSeg = svgEl('path',{
-      d: arcPath(cx,cy,rC0,rC1,sa,ea),
-      fill:em.color, stroke:'#f2ede6', 'stroke-width':'1', cursor:'pointer',
-      'data-emotion':em.name,
-    });
-    const t1 = svgEl('title',{}); t1.textContent = em.name;
-    coreSeg.appendChild(t1);
-    coreSeg.addEventListener('click', () => toggleWheelEmotion(em.name));
-    svg.appendChild(coreSeg);
-
-    // Core label
-    const ctr = (rC0+rC1)/2;
-    const clx = cx + ctr*Math.cos(cmid), cly = cy + ctr*Math.sin(cmid);
-    let crot = cmid*180/Math.PI;
-    if (Math.cos(cmid) < 0) crot += 180;
-    const cLabel = svgEl('text',{
-      x:clx, y:cly, 'text-anchor':'middle', 'dominant-baseline':'middle',
-      'font-size':'9.5', 'font-family':'Jost, sans-serif',
-      fill:'#fff', 'font-weight':'600', 'letter-spacing':'0.04em',
-      transform:`rotate(${crot},${clx},${cly})`, 'pointer-events':'none',
-    });
-    cLabel.textContent = (shortCore[em.name] || em.name).toUpperCase();
-    svg.appendChild(cLabel);
-
-    // ── Mid ring + Outer ring ──
-    em.mids.forEach((m, j) => {
-      const msa = sa + j*midStep;
-      const mea = msa + midStep;
-      const mmid = (msa+mea)/2;
-      const nSubs = m.subs.length;
-      const subStep = midStep / nSubs;
-
-      // Mid segment
-      const midSeg = svgEl('path',{
-        d: arcPath(cx,cy,rM0,rM1,msa,mea),
-        fill:em.midColor, stroke:'#f2ede6', 'stroke-width':'1', cursor:'pointer',
-        'data-emotion':m.name,
-      });
-      const t2 = svgEl('title',{}); t2.textContent = m.name + ' (' + em.name + ')';
-      midSeg.appendChild(t2);
-      midSeg.addEventListener('click', e => { e.stopPropagation(); toggleWheelEmotion(m.name); });
-      svg.appendChild(midSeg);
-
-      // Mid label
-      const mtr = (rM0+rM1)/2;
-      const mtx = cx + mtr*Math.cos(mmid), mty = cy + mtr*Math.sin(mmid);
-      let mrot = mmid*180/Math.PI;
-      if (Math.cos(mmid) < 0) mrot += 180;
-      const mLabel = svgEl('text',{
-        x:mtx, y:mty, 'text-anchor':'middle', 'dominant-baseline':'middle',
-        'font-size':'7.5', 'font-family':'Jost, sans-serif',
-        fill:'#fff', 'font-weight':'500',
-        transform:`rotate(${mrot},${mtx},${mty})`, 'pointer-events':'none',
-      });
-      mLabel.textContent = m.name;
-      svg.appendChild(mLabel);
-
-      // Outer segments
-      m.subs.forEach((sub, k) => {
-        const ssa = msa + k*subStep;
-        const sea = ssa + subStep;
-        const smid = (ssa+sea)/2;
-
-        const outerSeg = svgEl('path',{
-          d: arcPath(cx,cy,rO0,rO1,ssa,sea),
-          fill:em.outerColor, stroke:'#f2ede6', 'stroke-width':'1', cursor:'pointer',
-          'data-emotion':sub,
-        });
-        const t3 = svgEl('title',{}); t3.textContent = sub + ' (' + m.name + ')';
-        outerSeg.appendChild(t3);
-        outerSeg.addEventListener('click', e => { e.stopPropagation(); toggleWheelEmotion(sub); });
-        svg.appendChild(outerSeg);
-
-        // Outer label
-        const otr = (rO0+rO1)/2;
-        const otx = cx + otr*Math.cos(smid), oty = cy + otr*Math.sin(smid);
-        let orot = smid*180/Math.PI;
-        if (Math.cos(smid) < 0) orot += 180;
-        const oLabel = svgEl('text',{
-          x:otx, y:oty, 'text-anchor':'middle', 'dominant-baseline':'middle',
-          'font-size':'6.5', 'font-family':'Jost, sans-serif',
-          fill:'#242733', 'font-weight':'400',
-          transform:`rotate(${orot},${otx},${oty})`, 'pointer-events':'none',
-        });
-        oLabel.textContent = sub;
-        svg.appendChild(oLabel);
-      });
-    });
-  });
-
-  // Center circle
-  svg.appendChild(svgEl('circle',{ cx, cy, r:rC0-3, fill:'#f2ede6', stroke:'#d6d0c8', 'stroke-width':'1' }));
-  const centerLabel = svgEl('text',{
-    x:cx, y:cy, 'text-anchor':'middle', 'dominant-baseline':'middle',
-    'font-size':'8', 'font-family':'Jost, sans-serif',
-    fill:'#8a8490', 'font-weight':'500', 'letter-spacing':'0.12em',
-  });
-  centerLabel.textContent = 'EMOTION';
-  svg.appendChild(centerLabel);
-
-  updateEmotionWheelDisplay();
-}
-
-function toggleWheelEmotion(emotion) {
-  if (selectedEmotions.has(emotion)) {
-    selectedEmotions.delete(emotion);
-  } else {
-    selectedEmotions.add(emotion);
-  }
-  sessionVars.emotion = Array.from(selectedEmotions).join(', ');
-  updateVarsCount();
-  // Re-substitute in any unedited intervention textareas
-  selectedInts.forEach(s => {
-    const taI = document.getElementById('int-ta-i-' + s.id);
-    const taR = document.getElementById('int-ta-r-' + s.id);
-    if (taI && taI.value === s.lastGenI) {
-      const newText = substituteVars(s.origI);
-      taI.value = newText; s.lastGenI = newText;
-    }
-    if (taR && taR.value === s.lastGenR) {
-      const newText = substituteVars(s.origR);
-      taR.value = newText; s.lastGenR = newText;
-    }
-  });
-  updateEmotionWheelDisplay();
-  build();
-}
-
-function updateEmotionWheelDisplay() {
-  // Visual state of segments
-  const svg = document.getElementById('emotion-wheel-svg');
-  if (svg) {
-    svg.querySelectorAll('[data-emotion]').forEach(el => {
-      const em = el.getAttribute('data-emotion');
-      if (selectedEmotions.has(em)) {
-        el.setAttribute('stroke', '#242733');
-        el.setAttribute('stroke-width', '2.5');
-        el.setAttribute('opacity', '1');
-      } else {
-        el.setAttribute('stroke', '#f2ede6');
-        el.setAttribute('stroke-width', '1');
-        el.setAttribute('opacity', '0.9');
-      }
-    });
-  }
-  // Chips
-  const chips = document.getElementById('emotion-chips');
-  if (!chips) return;
-  chips.innerHTML = '';
-  if (selectedEmotions.size === 0) {
-    chips.innerHTML = '<span style="font-size:11px;color:#bbb5b0;font-style:italic;">Click wheel to select</span>';
-    return;
-  }
-  selectedEmotions.forEach(em => {
-    const chip = document.createElement('span');
-    chip.className = 'emotion-chip';
-    chip.innerHTML = `${em} <span class="chip-x" onclick="toggleWheelEmotion('${em}')">&#x2715;</span>`;
-    chips.appendChild(chip);
-  });
+// ── COMPLETENESS TRACKING ──
+const sectionStatus = { safety: false, i: false, r: false, mn: false };
+function updateCompletenessBar() {
+  const bar = document.getElementById('completeness-bar');
+  if (!bar) return;
+  const items = [
+    ['safety', 'Safety / Risk'], ['i', 'I — Intervention'], ['r', 'R — Response'],
+    ['mn', 'Medical Necessity'],
+  ];
+  bar.innerHTML = items.map(([key, label]) => {
+    const done = !!sectionStatus[key];
+    return `<span class="cb-item ${done ? '' : 'pending'}">` +
+      `<span class="cb-dot ${done ? 'done' : 'pending'}"></span>${label}</span>`;
+  }).join('');
 }
 
 // ── WALK-AND-TALK ──
@@ -1243,159 +801,6 @@ function toggleWalkAndTalk() {
   const enabled = document.getElementById('ww-enabled')?.checked;
   const bar = document.getElementById('ww-bar');
   if (bar) bar.style.display = enabled ? 'flex' : 'none';
-  build();
-}
-
-let varsPanelOpen = true;
-
-function toggleVarsPanel() {
-  varsPanelOpen = !varsPanelOpen;
-  document.getElementById('vars-body').classList.toggle('collapsed', !varsPanelOpen);
-  document.getElementById('vars-arrow').classList.toggle('open', varsPanelOpen);
-}
-
-function updateVarsCount() {
-  const count = Object.values(sessionVars).filter(Boolean).length;
-  const el = document.getElementById('vars-count');
-  if (count) { el.textContent = count + ' set'; el.style.display = ''; }
-  else { el.style.display = 'none'; }
-}
-
-// Replace bracketed placeholders with session variable values.
-// Compound patterns are handled first (more specific), then simple ones.
-function substituteVars(text) {
-  const v = sessionVars;
-
-  // Compound replacements (order matters — longest/most specific first)
-  if (v.emotion || v.sensation) {
-    const c = [v.emotion, v.sensation].filter(Boolean).join('/');
-    text = text.replaceAll('[emotion/sensation]', c);
-  }
-  if (v.symptom || v.behavior) {
-    const c = [v.symptom, v.behavior].filter(Boolean).join('/');
-    text = text.replaceAll('[symptom/behavior/avoidance pattern]', c);
-  }
-  if (v.symptom || v.emotion) {
-    const c = [v.symptom, v.emotion].filter(Boolean).join('/');
-    text = text.replaceAll('[symptom/emotion]', c);
-  }
-  if (v.emotion || v.pattern) {
-    const c = [v.emotion, v.pattern].filter(Boolean).join('/');
-    text = text.replaceAll('[internal state/pattern]', c);
-  }
-  if (v.thought) {
-    text = text.replaceAll('[thought/belief/pattern]', v.thought);
-    text = text.replaceAll('[thought/belief/rule]', v.thought);
-    text = text.replaceAll('[thought/belief]', v.thought);
-    text = text.replaceAll('[thought/urge]', v.thought);
-    text = text.replaceAll('[belief/rule/self-concept]', v.thought);
-  }
-  if (v.barrier) {
-    text = text.replaceAll('[barrier type: cognitive fusion / experiential avoidance / practical obstacle]', v.barrier);
-  }
-  if (v.domain) {
-    text = text.replaceAll('[domain: occupational / social / relational]', v.domain);
-    text = text.replaceAll('[functioning domain]', v.domain);
-  }
-  if (v.topic) {
-    text = text.replaceAll('[experience/theme]', v.topic);
-    text = text.replaceAll('[concern/situation]', v.topic);
-    text = text.replaceAll('[topic: ACT model / experiential avoidance / symptom maintenance]', v.topic);
-  }
-  if (v.emotion) {
-    text = text.replaceAll('[internal state/situation]', v.emotion);
-  }
-  // [experience] → v.experience if set, falls back to v.emotion for older templates
-  const expVal = v.experience || v.emotion;
-  if (expVal) text = text.replaceAll('[experience]', expVal);
-  if (v.behavior) {
-    text = text.replaceAll('[control strategy]', v.behavior);
-    text = text.replaceAll('[avoidance pattern]', v.behavior);
-  }
-  if (v.behavior || v.emotion) {
-    text = text.replaceAll('[urge type]', v.behavior || v.emotion);
-  }
-  if (v.symptom) {
-    text = text.replaceAll('[symptom/distress]', v.symptom);
-    text = text.replaceAll('[symptom / diagnosis / role]', v.symptom);
-  }
-  if (v.topic) {
-    text = text.replaceAll('[presenting concern]', v.topic);
-    text = text.replaceAll('[topic/affect]', v.topic);
-    text = text.replaceAll('[topic/content]', v.topic);
-  }
-  if (v.emotion) {
-    text = text.replaceAll('[emotion/diagnosis/role]', v.emotion);
-  }
-  if (v.emotion || v.sensation || v.thought) {
-    const c = [v.emotion, v.sensation, v.thought].filter(Boolean).join('/');
-    text = text.replaceAll('[emotion/sensation/thought]', c);
-  }
-
-  if (v.goal) {
-    text = text.replaceAll('[goal: making a request / setting a limit / declining a request]', v.goal);
-    text = text.replaceAll('[values-consistent direction]', v.goal);
-  }
-  if (v.distortion) {
-    text = text.replaceAll('[distortion type \u2014 e.g., catastrophizing / all-or-nothing thinking / mind reading \u2014 specify]', v.distortion);
-    text = text.replaceAll('[distortion type \u2014 specify]', v.distortion);
-    text = text.replaceAll('[distortion type]', v.distortion);
-  }
-  if (v.skill) {
-    text = text.replaceAll('[specific TIPP skill]', v.skill);
-    text = text.replaceAll('[GIVE / FAST \u2014 specify]', v.skill);
-    text = text.replaceAll('[specify: brief breath anchor / body scan / mindful daily activity]', v.skill);
-    text = text.replaceAll('[specify: VLQ / Bulls-Eye / domain mapping]', v.skill);
-  }
-  // Simple single-key replacements
-  const simple = [
-    ['[emotion]',          v.emotion],
-    ['[feeling]',          v.emotion],
-    ['[sensation]',        v.sensation],
-    ['[value]',            v.value],
-    ['[chosen value]',     v.value],
-    ['[specific value]',   v.value],
-    ['[behavior]',         v.behavior],
-    ['[pattern]',          v.pattern],
-    ['[thought]',          v.thought],
-    ['[specific thought]', v.thought],
-    ['[cognitive content]',v.thought],
-    ['[topic]',            v.topic],
-    ['[symptom]',          v.symptom],
-    ['[domain]',           v.domain],
-    ['[barrier]',          v.barrier],
-    ['[part]',             v.part],
-    ['[part(s)]',          v.part],
-    ['[story name]',       v.story],
-    ['[goal]',             v.goal],
-    ['[distortion type]',  v.distortion],
-    ['[skill]',            v.skill],
-  ];
-  for (const [ph, val] of simple) {
-    if (val) text = text.replaceAll(ph, val);
-  }
-  return text;
-}
-
-// Called whenever a variable input changes.
-// Re-applies substitution to any intervention textarea that hasn't been manually edited.
-function onVarChange(key, value) {
-  sessionVars[key] = value.trim();
-  updateVarsCount();
-  selectedInts.forEach(s => {
-    const taI = document.getElementById('int-ta-i-' + s.id);
-    const taR = document.getElementById('int-ta-r-' + s.id);
-    if (taI && taI.value === s.lastGenI) {
-      const newText = substituteVars(s.origI);
-      taI.value = newText;
-      s.lastGenI = newText;
-    }
-    if (taR && taR.value === s.lastGenR) {
-      const newText = substituteVars(s.origR);
-      taR.value = newText;
-      s.lastGenR = newText;
-    }
-  });
   build();
 }
 
@@ -1557,7 +962,8 @@ const INTS = [
 ];
 
 // Track selected interventions
-// Each entry: {idx, id, origI, origR, lastGenI, lastGenR}
+// Each entry: {idx, id, origI, origR} — origI/origR are the raw (unsubstituted)
+// templates; the live, editable text lives in the DOM (#narr-lines-i / #narr-lines-r).
 let selectedInts = [];
 let intCounter = 0;
 
@@ -1598,7 +1004,7 @@ const DX_SUGGEST_INTS = {
   'F40.0': ['Behavioral Experiment','Cost of Avoidance','Expanding Around the Feeling','Urge Surfing'],
   'F33':   ['Behavioral Activation','Activity Monitoring / Mood Log','Opposite Action (Emotion Regulation)',
             'Values-Based Action Planning','Behavioral Experiment','Connecting Suffering to Values'],
-  'F34.1': ['Behavioral Activation','Values\u2013Behavior Gap','Developing Discrepancy',
+  'F34.1': ['Behavioral Activation','Values–Behavior Gap','Developing Discrepancy',
             'Activity Monitoring / Mood Log','Committed Action'],
   'F43.1': ['Narrative Retelling / Grief Processing','Expanding Around the Feeling',
             'Grounding / Orienting to Present','Physicalizing Sensation','Meaning-Making in Grief',
@@ -1655,14 +1061,14 @@ function updateIntSuggestions() {
   const countEl = document.getElementById('suggested-int-count');
   if (!countEl) return;
   if (suggested.length && dx) {
-    const dxCode = dx.split('\u2014')[0].trim().split(' ')[0];
+    const dxCode = dx.split('—')[0].trim().split(' ')[0];
     if (visibleSuggested) {
       countEl.textContent =
         visibleSuggested + ' intervention' + (visibleSuggested !== 1 ? 's' : '') +
         ' highlighted for ' + dxCode;
     } else {
       countEl.textContent =
-        'No highlighted interventions visible \u2014 select the relevant modality above, or choose \u201cShow All\u201d';
+        'No highlighted interventions visible — select the relevant modality above, or choose “Show All”';
     }
     countEl.style.display = '';
   } else {
@@ -1771,11 +1177,12 @@ function toggleInt(idx, itemEl) {
     selectedInts.splice(existing, 1);
     const el = document.getElementById('sel-' + id);
     if (el) el.remove();
+    document.querySelectorAll(`.narr-line[data-id="${id}"]`).forEach(el => el.remove());
     itemEl.classList.remove('selected');
   } else {
     // Add — create entry first so addSelectedIntBlock can populate orig/lastGen
     const id = ++intCounter;
-    const entry = {idx, id, origI:'', origR:'', lastGenI:'', lastGenR:''};
+    const entry = {idx, id, origI:'', origR:''};
     selectedInts.push(entry);
     itemEl.classList.add('selected');
     addSelectedIntBlock(INTS[idx], id, entry);
@@ -1799,31 +1206,108 @@ function addSelectedIntBlock(int, id, entry) {
   if (noMsg) noMsg.style.display = 'none';
 
   const { therapist, client } = splitDoc(int.d);
-  // Apply current session variable substitution
-  const genI = substituteVars(therapist);
-  const genR = substituteVars(client);
-
-  // Store originals and last-generated for dirty detection
   entry.origI = therapist;
   entry.origR = client;
-  entry.lastGenI = genI;
-  entry.lastGenR = genR;
 
+  // Simple left-panel row: identity + review badge + remove control.
+  // The actual editable narrative text now lives in the right-panel
+  // preview boxes (see renderNarrLine / #narr-lines-i / #narr-lines-r),
+  // so this row is intentionally lightweight.
   const list = document.getElementById('selected-int-list');
   const block = document.createElement('div');
-  block.className = 'sel-int';
+  block.className = 'sel-int unreviewed';
   block.id = 'sel-' + id;
   block.innerHTML = `
     <div class="sel-int-header">
       <span class="sel-int-dot" style="background:${int.c}"></span>
       <span class="sel-int-name">${int.n}</span>
+      <span class="sel-int-badge auto" id="sel-badge-${id}">Auto</span>
       <button class="sel-int-remove" onclick="removeIntById(${id})">Remove</button>
-    </div>
-    <div class="sel-int-sub">Therapist → I</div>
-    <textarea id="int-ta-i-${id}" oninput="build()">${genI}</textarea>
-    <div class="sel-int-sub r-sub">Client Response → R</div>
-    <textarea id="int-ta-r-${id}" oninput="build()">${genR}</textarea>`;
+    </div>`;
   list.appendChild(block);
+
+  // Add the actual narrative lines to the I and R narrative boxes.
+  renderNarrLine(document.getElementById('narr-lines-i'), id, therapist, int.c);
+  renderNarrLine(document.getElementById('narr-lines-r'), id, client, int.c);
+
+  updateReviewSummary();
+}
+
+// ── NARRATIVE LINE RENDERING ──
+// Turns a raw template string (with [bracket] placeholders) into a DOM line
+// where each placeholder becomes an inline, individually fillable <span>.
+// Filled-by-session-variable placeholders still get a span (data-key kept)
+// so Tab can revisit them; genuinely unfilled ones get the gold "unfilled" style.
+// No Session Variables in this variant, so every bracket placeholder is
+// always an "unfilled" tab-through field — Bethany fills each one by hand.
+function populateNarrLine(div, rawText) {
+  div.innerHTML = '';
+  const re = /\[[^\]]+\]/g;
+  let lastIndex = 0, m;
+  while ((m = re.exec(rawText))) {
+    if (m.index > lastIndex) div.appendChild(document.createTextNode(rawText.slice(lastIndex, m.index)));
+    const token = m[0];
+    const span = document.createElement('span');
+    span.className = 'fillspan unfilled';
+    span.dataset.key = token;
+    span.textContent = token;
+    div.appendChild(span);
+    lastIndex = re.lastIndex;
+  }
+  if (lastIndex < rawText.length) div.appendChild(document.createTextNode(rawText.slice(lastIndex)));
+}
+
+function renderNarrLine(container, id, rawText, color) {
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'narr-line';
+  div.dataset.id = id;
+  div.style.borderLeftColor = color;
+  populateNarrLine(div, rawText);
+  container.appendChild(div);
+}
+
+// ── REVIEW STATUS TRACKING ──
+// An intervention is "unreviewed" as long as its I-line and R-line in the
+// narrative boxes still exactly match a fresh auto-substitution of the raw
+// template. Any manual edit — even one character, in a fillspan or anywhere
+// else in the line — marks it reviewed. Recomputed on every build() so badges
+// stay live as Bethany types, without needing per-keystroke bookkeeping.
+function refreshReviewBadges() {
+  selectedInts.forEach(entry => {
+    const lineI = document.querySelector(`#narr-lines-i .narr-line[data-id="${entry.id}"]`);
+    const lineR = document.querySelector(`#narr-lines-r .narr-line[data-id="${entry.id}"]`);
+    const autoI = entry.origI.trim();
+    const autoR = entry.origR.trim();
+    const curI = (lineI?.textContent || '').trim();
+    const curR = (lineR?.textContent || '').trim();
+    const unedited = curI === autoI && curR === autoR;
+    const block = document.getElementById('sel-' + entry.id);
+    const badge = document.getElementById('sel-badge-' + entry.id);
+    if (block) block.classList.toggle('unreviewed', unedited);
+    if (badge) {
+      badge.textContent = unedited ? 'Auto' : 'Reviewed';
+      badge.classList.toggle('auto', unedited);
+      badge.classList.toggle('reviewed', !unedited);
+    }
+  });
+  updateReviewSummary();
+}
+
+function updateReviewSummary() {
+  const el = document.getElementById('review-summary');
+  if (!el) return;
+  const total = selectedInts.length;
+  if (!total) { el.style.display = 'none'; return; }
+  const unreviewedCount = document.querySelectorAll('#selected-int-list .sel-int.unreviewed').length;
+  el.style.display = '';
+  if (unreviewedCount === 0) {
+    el.textContent = `All ${total} intervention block${total !== 1 ? 's' : ''} reviewed.`;
+    el.className = 'review-summary all-reviewed';
+  } else {
+    el.textContent = `${unreviewedCount} of ${total} intervention block${total !== 1 ? 's' : ''} still auto-filled — review before copying.`;
+    el.className = 'review-summary needs-review';
+  }
 }
 
 function removeIntById(id) {
@@ -1835,7 +1319,9 @@ function removeIntById(id) {
   }
   const el = document.getElementById('sel-' + id);
   if (el) el.remove();
+  document.querySelectorAll(`.narr-line[data-id="${id}"]`).forEach(el => el.remove());
   updateNoIntMsg();
+  updateReviewSummary();
   build();
 }
 
@@ -1873,12 +1359,96 @@ function listify(arr) {
 
 // ── BUILD PREVIEW ──
 function build() {
-  buildP();
   buildI();
   buildR();
-  buildPlan();
   buildMN();
   updateDxSuggestions();
+  updateCompletenessBar();
+}
+
+// ── SESSION TYPE MACROS ──
+// Structural/administrative only — treatment phase (MN's tx-stage) and the
+// walk-and-talk toggle. This variant has no Plan section (frequency) or
+// Presentation section (appearance), so those preset fields were dropped.
+// Never touches MN clinical checkboxes or intervention selection — those
+// must always reflect the actual session and stay in Bethany's hands.
+const SESSION_TYPE_PRESETS = {
+  standard:    { stage: 'active' },
+  walktalk:    { walkTalk: true },
+  intake:      { stage: 'initial' },
+  termination: { stage: 'termination' },
+  maintenance: { stage: 'maintenance' },
+};
+
+function applySessionType(name) {
+  const p = SESSION_TYPE_PRESETS[name];
+  if (!p) return;
+
+  if (p.stage) {
+    document.querySelectorAll('input[name="tx-stage"]').forEach(r => { r.checked = (r.value === p.stage); });
+  }
+  if (p.walkTalk) {
+    const cb = document.getElementById('ww-enabled');
+    if (cb && !cb.checked) { cb.checked = true; toggleWalkAndTalk(); }
+  }
+  build();
+}
+
+// ── MN QUICK PRESETS ──
+const MN_PRESETS = {
+  anxiety: {
+    impairment: ['occupational / vocational functioning', 'relational / interpersonal functioning'],
+    acuity: ['significant psychological distress'],
+    stage: 'active',
+  },
+  depression: {
+    impairment: ['occupational / vocational functioning', 'self-care / ADLs'],
+    acuity: ['significant psychological distress', 'functional deterioration from baseline'],
+    stage: 'active',
+  },
+  trauma: {
+    impairment: ['relational / interpersonal functioning', 'safety and risk management'],
+    acuity: ['trauma history complicating standard treatment trajectory', 'significant psychological distress'],
+    stage: 'active',
+  },
+  maintenance: {
+    impairment: [],
+    acuity: [],
+    stage: 'maintenance',
+    progress: 'stable',
+  },
+  safety: {
+    impairment: ['safety and risk management'],
+    acuity: ['active safety concerns requiring clinical monitoring'],
+    stage: 'active',
+  },
+};
+
+function applyMNPreset(name) {
+  const preset = MN_PRESETS[name];
+  if (!preset) return;
+
+  // Clear + set functional impairment checkboxes
+  document.querySelectorAll('#cg-impairment input[type="checkbox"]').forEach(c => {
+    c.checked = preset.impairment.includes(c.value);
+  });
+  // Clear + set acuity checkboxes
+  document.querySelectorAll('#cg-acuity input[type="checkbox"]').forEach(c => {
+    c.checked = preset.acuity.includes(c.value);
+  });
+  // Set treatment phase
+  if (preset.stage) {
+    document.querySelectorAll('input[name="tx-stage"]').forEach(r => {
+      r.checked = (r.value === preset.stage);
+    });
+  }
+  // Set clinical progress, if the preset specifies one
+  if (preset.progress) {
+    document.querySelectorAll('input[name="mn-progress"]').forEach(r => {
+      r.checked = (r.value === preset.progress);
+    });
+  }
+  build();
 }
 
 // ── BUILD MEDICAL NECESSITY ──
@@ -1891,12 +1461,9 @@ function buildMN() {
   const end      = document.getElementById('sb-end')?.value.trim() || '';
   const pos      = document.getElementById('sb-pos')?.value || '';
 
-  // MSE
-  const mood      = radio('mood');
-  const affects   = checks('cg-affect');
-  const insight   = radio('insight');
-  const safety    = radio('safety');
-  const cognition = radio('cognition');
+  // Safety / Risk — standalone required field (this variant has no Presentation section)
+  const safety     = radio('safety');
+  const safetyNote = note('notes-safety');
 
   // MN-specific inputs
   const impairment  = checks('cg-impairment');
@@ -1910,9 +1477,6 @@ function buildMN() {
   // Client response pulled from R section
   const engagement    = radio('engagement');
   const responseToInt = radio('response');
-
-  // Session variables
-  const v = sessionVars;
 
   // Specific intervention references: "Intervention Name (Modality)" format
   // ACT gets its process label (e.g. ACT — Defusion); all others use their modality label
@@ -1931,23 +1495,17 @@ function buildMN() {
 
   const parts = [];
 
-  // ── 1. Diagnosis + clinical presentation ──
+  // ── 1. Diagnosis + safety/risk ──
+  // No Presentation section in this variant, so there are no auto-detected
+  // mood/affect/insight/cognition indicators to pull in here. If you want a
+  // symptom description in MN, use "Additional MN Context" below.
   const clinicalLines = [];
   if (dx) clinicalLines.push(`Client carries a diagnosis of ${dx}.`);
-
-  const symptoms = [];
-  if (mood && !['good / positive', 'neutral / stable'].includes(mood)) symptoms.push(`${mood} mood`);
-  const abnormalAffects = affects.filter(a => a !== 'euthymic / full range');
-  if (abnormalAffects.length) symptoms.push(`${listify(abnormalAffects)} affect`);
-  if (v.symptom) symptoms.push(v.symptom);
-  if (v.emotion && !v.symptom) symptoms.push(v.emotion);
-  if (v.pattern) symptoms.push(v.pattern);
-  if (v.thought) symptoms.push(`cognitive content: ${v.thought}`);
-
-  if (symptoms.length) clinicalLines.push(`Presenting clinical indicators this session include ${symptoms.join(', ')}.`);
-  if (safety && safety !== 'No SI or HI reported') clinicalLines.push(`Safety / risk: ${safety}.`);
-  if (insight && ['limited', 'poor'].includes(insight)) clinicalLines.push(`Insight and judgment are ${insight}, indicating ongoing clinical need.`);
-  if (cognition && cognition !== 'Alert and oriented x4') clinicalLines.push(`${cognition}.`);
+  if (safety && safety !== 'No SI or HI reported') {
+    let sLine = `Safety / risk: ${safety}.`;
+    if (safetyNote) sLine += ` ${safetyNote}.`;
+    clinicalLines.push(sLine);
+  }
 
   if (clinicalLines.length) parts.push(clinicalLines.join(' '));
 
@@ -1976,10 +1534,7 @@ function buildMN() {
   sessionLine += ` via ${pos}.`;
 
   if (interventionRefs.length) {
-    const topic = v.topic || v.symptom || '';
-    sessionLine += ` The following evidence-based interventions were employed`;
-    if (topic) sessionLine += ` targeting ${topic}`;
-    sessionLine += `: ${interventionRefs.join('; ')}, consistent with the client's individualized treatment plan.`;
+    sessionLine += ` The following evidence-based interventions were employed: ${interventionRefs.join('; ')}, consistent with the client's individualized treatment plan.`;
   } else {
     sessionLine += ` Session was consistent with the client's individualized treatment plan.`;
   }
@@ -2038,7 +1593,7 @@ function buildMN() {
   }
 
   // ── 8. Conclusion — individualized by progress level ──
-  if (dx || symptoms.length || impairment.length) {
+  if (dx || impairment.length || (safety && safety !== 'No SI or HI reported')) {
     const conclusionMap = {
       'significant':
         `Continued individual psychotherapy is medically necessary to consolidate therapeutic gains, prevent relapse${dx ? ' related to ' + dx : ''}, and support ${mnGoals || 'ongoing functional recovery'} in preparation for eventual termination.`,
@@ -2060,7 +1615,10 @@ function buildMN() {
   // ── 9. Additional MN notes ──
   if (mnNotes) parts.push(mnNotes);
 
-  const hasContent = dx || symptoms.length || impairment.length || acuity.length || stage || mnProgress || engagement;
+  const hasContent = dx || impairment.length || acuity.length || stage || mnProgress || engagement
+    || (safety && safety !== 'No SI or HI reported');
+  sectionStatus.mn = !!(hasContent && parts.length);
+  sectionStatus.safety = !!safety;
   setPreview(
     'prev-mn',
     hasContent && parts.length ? parts.join('\n\n') : '',
@@ -2068,72 +1626,16 @@ function buildMN() {
   );
 }
 
-function buildP() {
-  const appearance = radio('appearance');
-  const affects = checks('cg-affect');
-  const affectNote = note('notes-affect');
-  const mood = radio('mood');
-  const moodNote = note('notes-mood');
-  const cognition = radio('cognition');
-  const cogNote = note('notes-cog');
-  const speech = radio('speech');
-  const speechNote = note('notes-speech');
-  const insight = radio('insight');
-  const insightNote = note('notes-insight');
-  const safety = radio('safety');
-  const safetyNote = note('notes-safety');
-  const content = ta('presenting-content');
-
-  let parts = [];
-
-  if (appearance) parts.push(`Client presented as ${appearance}.`);
-
-  if (affects.length) {
-    let aff = `Affect was ${listify(affects)}.`;
-    if (affectNote) aff += ` ${affectNote}.`;
-    parts.push(aff);
-  }
-
-  if (mood) {
-    let m = `Client reported ${mood} mood.`;
-    if (moodNote) m += ` ${moodNote}.`;
-    parts.push(m);
-  }
-
-  if (cognition) {
-    let c = cognition + '.';
-    if (cogNote) c += ` ${cogNote}.`;
-    parts.push(c);
-  }
-
-  if (speech) {
-    let s = `Speech was ${speech}.`;
-    if (speechNote) s += ` ${speechNote}.`;
-    parts.push(s);
-  }
-
-  if (insight) {
-    let i = `Insight and judgment were ${insight}.`;
-    if (insightNote) i += ` ${insightNote}.`;
-    parts.push(i);
-  }
-
-  if (safety) {
-    let r = `${safety}.`;
-    if (safetyNote) r += ` ${safetyNote}.`;
-    parts.push(r);
-  }
-
-  let pText = parts.join(' ');
-  if (content) pText += (pText ? '\n\n' : '') + content;
-
-  setPreview('prev-p', pText, '[Complete MSE fields above]');
-}
-
+// NOTE: buildI/buildR deliberately never touch the innerHTML of
+// #narr-lines-i / #narr-lines-r. Those boxes are the live, directly-editable
+// narrative surface (see renderNarrLine / wireNarrContainer) — they're only
+// ever modified incrementally (add/remove an intervention line). Rebuilding
+// them wholesale here would wipe out anything Bethany has typed, since
+// build() fires on nearly every keystroke across the whole form.
 function buildI() {
-  const parts = [];
-
-  // Walk-and-talk sentence — prepended when checkbox is active
+  // Walk-and-talk sentence — its own line, regenerated freely since it's
+  // derived entirely from the walk-and-talk bar fields, not hand-edited here.
+  const wwtEl = document.getElementById('wwt-line-i');
   if (document.getElementById('ww-enabled')?.checked) {
     const wwStart = document.getElementById('ww-start')?.value.trim() || '[start time]';
     const wwEnd   = document.getElementById('ww-end')?.value.trim()   || '[end time]';
@@ -2141,21 +1643,27 @@ function buildI() {
                     || 'a trail near office (along NE 145th St in Woodinville, WA)';
     const wwSLoc  = document.getElementById('ww-start-loc')?.value  || 'in office';
     const wwELoc  = document.getElementById('ww-end-loc')?.value    || 'in office';
-    const wwSentence =
+    wwtEl.textContent =
       `Walk-and-talk intervention utilized in this session to promote grounding and facilitate emotional processing. ` +
       `The location was ${wwLoc} after initial check-in ${wwSLoc}. ` +
       `Outdoor session began at ${wwStart} and concluded at ${wwEnd}. ` +
       `No confidentiality breaches occurred. Session was completed ${wwELoc}.`;
-    parts.push(wwSentence);
+  } else {
+    wwtEl.textContent = '';
   }
 
-  selectedInts.forEach(s => {
-    const taEl = document.getElementById('int-ta-i-' + s.id);
-    if (taEl && taEl.value.trim()) parts.push(taEl.value.trim());
-  });
-  const extra = ta('int-extra');
-  if (extra) parts.push(extra);
-  setPreview('prev-i', parts.length ? parts.join('\n\n') : '', '[Select interventions above]');
+  // Additional Intervention Notes — its own trailing line, from the textarea.
+  const extraEl = document.getElementById('extra-line-i');
+  extraEl.textContent = ta('int-extra');
+
+  const linesEl = document.getElementById('narr-lines-i');
+  const hasContent = !!wwtEl.textContent || linesEl.children.length > 0 || !!extraEl.textContent;
+  sectionStatus.i = hasContent;
+  const emptyEl = document.getElementById('prev-i-empty');
+  emptyEl.textContent = '[Select interventions above]';
+  emptyEl.style.display = hasContent ? 'none' : '';
+
+  refreshReviewBadges();
 }
 
 function buildR() {
@@ -2165,42 +1673,29 @@ function buildR() {
   const resNote    = note('notes-response');
   const narrative  = ta('response-narrative');
 
-  let parts = [];
+  let engParts = [];
   if (engagement) {
     let e = `${engagement}.`;
     if (engNote) e += ` ${engNote}.`;
-    parts.push(e);
+    engParts.push(e);
   }
   if (response) {
     let r = `${response}.`;
     if (resNote) r += ` ${resNote}.`;
-    parts.push(r);
+    engParts.push(r);
   }
+  const engEl = document.getElementById('eng-line-r');
+  engEl.textContent = engParts.join(' ');
 
-  // Pull client response sentences from each intervention
-  selectedInts.forEach(s => {
-    const taEl = document.getElementById('int-ta-r-' + s.id);
-    if (taEl && taEl.value.trim()) parts.push(taEl.value.trim());
-  });
+  const narrEl = document.getElementById('narrative-line-r');
+  narrEl.textContent = narrative;
 
-  if (narrative) parts.push(narrative);
-
-  setPreview('prev-r', parts.length ? parts.join(' ') : '', '[Complete response fields above]');
-}
-
-function buildPlan() {
-  const freq  = radio('frequency');
-  const hw    = ta('plan-homework');
-  const focus = ta('plan-focus');
-  const coord = ta('plan-coordination');
-
-  let parts = [];
-  if (freq) parts.push(`Client will continue ${freq}.`);
-  if (hw)   parts.push(`Between-session: ${hw}`);
-  if (focus) parts.push(`Clinical focus for next session: ${focus}`);
-  if (coord) parts.push(coord);
-
-  setPreview('prev-plan', parts.length ? parts.join('\n') : '', '[Complete plan fields above]');
+  const linesEl = document.getElementById('narr-lines-r');
+  const hasContent = !!engEl.textContent || linesEl.children.length > 0 || !!narrEl.textContent;
+  sectionStatus.r = hasContent;
+  const emptyEl = document.getElementById('prev-r-empty');
+  emptyEl.textContent = '[Complete response fields above]';
+  emptyEl.style.display = hasContent ? 'none' : '';
 }
 
 // ── COPY ──
@@ -2215,8 +1710,8 @@ function copySection(id, btn) {
 }
 
 function copyAll() {
-  const sections = ['prev-p','prev-i','prev-r','prev-plan','prev-mn'];
-  const labels   = ['P:', 'I:', 'R:', 'P:', 'Medical Necessity:'];
+  const sections = ['prev-i','prev-r','prev-mn'];
+  const labels   = ['I:', 'R:', 'Medical Necessity:'];
   const parts = sections
     .map((id, i) => {
       const text = document.getElementById(id)?.innerText?.trim();
@@ -2249,7 +1744,7 @@ function clearAll() {
   document.querySelectorAll('.notes-row input').forEach(i => i.value = '');
 
   // Reset textareas
-  ['presenting-content','int-extra','response-narrative','plan-homework','plan-focus','plan-coordination','mn-notes','mn-goals']
+  ['int-extra','response-narrative','mn-notes','mn-goals']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 
   // Reset diagnosis field
@@ -2259,16 +1754,10 @@ function clearAll() {
   // Reset interventions — remove generated blocks, reveal the persistent no-int-msg
   selectedInts = [];
   document.querySelectorAll('#selected-int-list .sel-int').forEach(el => el.remove());
+  document.querySelectorAll('#narr-lines-i .narr-line, #narr-lines-r .narr-line').forEach(el => el.remove());
   document.querySelectorAll('.int-item').forEach(i => i.classList.remove('selected'));
   updateNoIntMsg();
-
-  // Reset session variables
-  Object.keys(sessionVars).forEach(k => sessionVars[k] = '');
-  document.querySelectorAll('.var-input').forEach(i => { i.value = ''; i.classList.remove('has-value'); });
-
-  // Reset emotion wheel
-  selectedEmotions.clear();
-  updateEmotionWheelDisplay();
+  updateReviewSummary();
 
   // Reset walk-and-talk
   const wwCb = document.getElementById('ww-enabled');
@@ -2279,7 +1768,6 @@ function clearAll() {
   const wwSL = document.getElementById('ww-start-loc'); if (wwSL) wwSL.selectedIndex = 0;
   const wwEL = document.getElementById('ww-end-loc');   if (wwEL) wwEL.selectedIndex = 0;
 
-  updateVarsCount();
   build();
 }
 
@@ -2315,10 +1803,93 @@ function clearAll() {
   });
 })();
 
+// ── NARRATIVE BOX SCAFFOLDING & TAB-THROUGH BEHAVIOR ──
+// prev-i / prev-r each hold, in order: a derived (non-editable) lead line,
+// the persistent contenteditable narrative-lines box, a derived trailing
+// line, and an empty-state placeholder. Only the narrative-lines box is
+// contenteditable — the derived lines are freely regenerated from their
+// source fields elsewhere in the form (see buildI/buildR).
+function initNarrativeScaffold() {
+  function scaffold(containerId, parts) {
+    const container = document.getElementById(containerId);
+    parts.forEach(p => {
+      const el = document.createElement('div');
+      el.id = p.id;
+      el.className = p.cls || '';
+      if (p.editable) el.setAttribute('contenteditable', 'true');
+      container.appendChild(el);
+    });
+  }
+  scaffold('prev-i', [
+    { id: 'wwt-line-i',    cls: 'narr-derived' },
+    { id: 'narr-lines-i',  cls: 'narr-lines', editable: true },
+    { id: 'extra-line-i',  cls: 'narr-derived' },
+    { id: 'prev-i-empty',  cls: 'narr-empty' },
+  ]);
+  scaffold('prev-r', [
+    { id: 'eng-line-r',      cls: 'narr-derived' },
+    { id: 'narr-lines-r',    cls: 'narr-lines', editable: true },
+    { id: 'narrative-line-r',cls: 'narr-derived' },
+    { id: 'prev-r-empty',    cls: 'narr-empty' },
+  ]);
+}
+
+function selectAllInNode(node) {
+  const range = document.createRange();
+  range.selectNodeContents(node);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+// Click a fillable field → select its whole contents so typing overwrites it.
+// Tab / Shift+Tab → jump to the next / previous fillable field in this box,
+// wrapping around, and select its contents the same way. If the box has no
+// fillable fields at all, Tab is left alone (browser default focus movement).
+function wireNarrContainer(id) {
+  const container = document.getElementById(id);
+  if (!container) return;
+
+  container.addEventListener('click', e => {
+    const span = e.target.closest('.fillspan');
+    if (span) setTimeout(() => selectAllInNode(span), 0);
+  });
+
+  container.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const spans = Array.from(container.querySelectorAll('.fillspan'));
+    if (!spans.length) return;
+    e.preventDefault();
+
+    const sel = window.getSelection();
+    let curSpan = null;
+    if (sel.anchorNode) {
+      const node = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
+      curSpan = node ? node.closest('.fillspan') : null;
+    }
+    let idx = curSpan ? spans.indexOf(curSpan) : -1;
+    idx = e.shiftKey ? idx - 1 : idx + 1;
+    if (idx < 0) idx = spans.length - 1;
+    if (idx >= spans.length) idx = 0;
+    selectAllInNode(spans[idx]);
+  });
+
+  container.addEventListener('input', () => {
+    // No Session Variables in this variant to drive auto-fill, so the only
+    // signal for "has this field been filled in" is: does it still read as
+    // the raw [bracket token] it started as?
+    container.querySelectorAll('.fillspan').forEach(span => {
+      span.classList.toggle('unfilled', span.textContent === span.dataset.key);
+    });
+    build();
+  });
+}
+
 // ── INIT ──
+initNarrativeScaffold();
+wireNarrContainer('narr-lines-i');
+wireNarrContainer('narr-lines-r');
 buildIntGrid();
-buildEmotionWheel();
-updateVarsCount();
 
 // Auto-fill date
 document.getElementById('sb-date').value = new Date().toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
