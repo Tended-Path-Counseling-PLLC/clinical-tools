@@ -209,6 +209,9 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   font-size:11px;color:var(--gold);font-style:italic;
   padding:4px 2px 0;display:none;
 }
+/* Necessity-theme checkboxes suggested for the current diagnosis — same
+   treatment as suggested interventions, just on a label instead of a row. */
+.check-group label.suggested-theme{color:#9a6c1e;font-weight:500;}
 
 /* ── SELECTED INTERVENTIONS ── */
 .selected-int-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
@@ -337,10 +340,22 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 .narr-derived:empty{display:none;}
 .narr-empty{color:var(--muted);font-style:italic;}
 .fillspan{
-  background:rgba(215,159,85,.10);border-bottom:1px dashed rgba(215,159,85,.55);
+  background:rgba(215,159,85,.16);border-bottom:1px dashed rgba(215,159,85,.55);
   border-radius:2px;padding:0 2px;cursor:text;
 }
+/* Unfilled = placeholder look (italic gold text on the light highlight). */
 .fillspan.unfilled{color:var(--gold);font-style:italic;}
+/* Filled = the bracket text is gone, but the orange highlight stays and
+   strengthens, so it's still visually flagged as a fillable/edited field. */
+.fillspan:not(.unfilled){
+  background:rgba(215,159,85,.22);border-bottom:1px solid rgba(215,159,85,.5);
+  font-weight:500;
+}
+/* Linked field (same key reused elsewhere in this intervention block) —
+   subtle inset ring, on hover/focus only, as a quiet "this syncs" cue. */
+.fillspan.linked-field:hover,.fillspan.linked-field:focus{
+  box-shadow:inset 0 0 0 1px rgba(215,159,85,.6);
+}
 
 .copy-all-bar{
   display:flex;align-items:center;justify-content:space-between;
@@ -413,7 +428,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       <div class="practice-tag">Tended Path Counseling, PLLC</div>
       <div class="doc-title">PIRP Note Builder</div>
     </div>
-    <div class="header-hint">Click interventions → click or Tab into gold fields to fill → copy by section</div>
+    <div class="header-hint">Click interventions → click or Tab into gold fields to fill (linked fields sync into Response automatically) → copy by section</div>
   </div>
 </div>
 
@@ -457,9 +472,13 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
     <input class="sb-input" id="sb-dx" type="text" placeholder="e.g. F41.1 — GAD" style="width:240px" list="dx-datalist" oninput="build()">
     <datalist id="dx-datalist">
       <option value="F41.1 — Generalized Anxiety Disorder">
-      <option value="F33.0 — Major Depressive Disorder, Single Episode, Mild">
+      <option value="F32.0 — Major Depressive Disorder, Single Episode, Mild">
+      <option value="F32.1 — Major Depressive Disorder, Single Episode, Moderate">
+      <option value="F32.2 — Major Depressive Disorder, Single Episode, Severe">
+      <option value="F33.0 — Major Depressive Disorder, Recurrent, Mild">
       <option value="F33.1 — Major Depressive Disorder, Recurrent, Moderate">
       <option value="F33.2 — Major Depressive Disorder, Recurrent, Severe">
+      <option value="F33.3 — Major Depressive Disorder, Recurrent, Severe with Psychotic Features">
       <option value="F41.0 — Panic Disorder">
       <option value="F43.10 — PTSD, Unspecified">
       <option value="F43.12 — PTSD, Chronic">
@@ -474,6 +493,10 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
       <option value="F90.0 — ADHD, Predominantly Inattentive">
       <option value="F90.2 — ADHD, Combined Presentation">
     </datalist>
+  </div>
+  <div class="sb-field">
+    <span class="sb-label">+ Dx <span style="font-weight:300;font-style:italic;text-transform:none;letter-spacing:0;">(comorbid)</span></span>
+    <input class="sb-input" id="sb-dx2" type="text" placeholder="optional — e.g. F33.1 — MDD" style="width:240px" list="dx-datalist" oninput="build()">
   </div>
   <div class="sb-field" style="margin-left:auto;padding-left:18px;border-left:1px solid rgba(215,159,85,.18);">
     <label style="display:flex;align-items:center;gap:7px;cursor:pointer;">
@@ -535,6 +558,51 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
   <!-- LEFT PANEL -->
   <div class="left-panel">
     <div class="panel-resizer" id="panel-resizer" title="Drag to resize panel"></div>
+
+    <!-- P: PRESENTING CONTENT -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-letter">P</span>
+        <span class="section-title">Presenting Content</span>
+        <span class="section-subtitle">what client brought to session</span>
+      </div>
+      <div class="section-body">
+
+        <div class="mse-row">
+          <div class="fl">Presenting Mood <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">client-reported</span></div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="presenting-mood" value="Euthymic"> Euthymic</label>
+            <label><input type="radio" name="presenting-mood" value="Anxious"> Anxious</label>
+            <label><input type="radio" name="presenting-mood" value="Depressed"> Depressed</label>
+            <label><input type="radio" name="presenting-mood" value="Irritable"> Irritable</label>
+            <label><input type="radio" name="presenting-mood" value="Sad"> Sad</label>
+            <label><input type="radio" name="presenting-mood" value="Angry"> Angry</label>
+            <label><input type="radio" name="presenting-mood" value="Numb / flat"> Numb / flat</label>
+            <label><input type="radio" name="presenting-mood" value="Mixed / fluctuating"> Mixed / fluctuating</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-presenting-mood" placeholder="Mood notes…" oninput="build()"></div>
+        </div>
+
+        <div class="mse-row">
+          <div class="fl">Affect <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">observed</span></div>
+          <div class="radio-group" onchange="build()">
+            <label><input type="radio" name="presenting-affect" value="Congruent with mood"> Congruent with mood</label>
+            <label><input type="radio" name="presenting-affect" value="Constricted"> Constricted</label>
+            <label><input type="radio" name="presenting-affect" value="Blunted"> Blunted</label>
+            <label><input type="radio" name="presenting-affect" value="Flat"> Flat</label>
+            <label><input type="radio" name="presenting-affect" value="Labile"> Labile</label>
+            <label><input type="radio" name="presenting-affect" value="Full range, appropriate"> Full / appropriate</label>
+          </div>
+          <div class="notes-row"><input type="text" id="notes-presenting-affect" placeholder="Affect notes…" oninput="build()"></div>
+        </div>
+
+        <div class="sub-divider">Content Presented / Topics Discussed</div>
+        <div class="fb">
+          <textarea class="fi" id="presenting-narrative" rows="3" placeholder="Client's stated reason for session, presenting concerns, and content/topics discussed…" oninput="build()"></textarea>
+        </div>
+
+      </div>
+    </div>
 
     <!-- SAFETY / RISK — required every session, always manual, never touched by presets -->
     <div class="section-block">
@@ -695,6 +763,21 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
         </div>
 
         <div class="mse-row">
+          <div class="fl">Continued Treatment Rationale <span style="font-weight:300;text-transform:none;letter-spacing:0;font-style:italic;font-size:10px;">select what applies this session — nothing pre-checked; ✦ = commonly relevant for current diagnosis</span></div>
+          <div class="check-group" id="cg-necessity-themes" onchange="build()">
+            <label><input type="checkbox" value="relapse"> Relapse / recurrence prevention</label>
+            <label><input type="checkbox" value="chronic"> Chronic / persistent course</label>
+            <label><input type="checkbox" value="avoidance"> Avoidance-driven impairment (exposure rationale)</label>
+            <label><input type="checkbox" value="noremit"> Won't remit without active treatment</label>
+            <label><input type="checkbox" value="stressor"> Active stressor / adjustment-related</label>
+            <label><input type="checkbox" value="safety"> Safety / crisis risk — ongoing skills work</label>
+            <label><input type="checkbox" value="beyondmeds"> Impairment beyond symptom/med management</label>
+            <label><input type="checkbox" value="consolidate"> Consolidating measurable progress</label>
+            <label><input type="checkbox" value="monitor"> Ongoing monitoring alongside psychiatric care</label>
+          </div>
+        </div>
+
+        <div class="mse-row">
           <div class="fl">Treatment Phase</div>
           <div class="radio-group" onchange="build()">
             <label><input type="radio" name="tx-stage" value="initial"> Initial / Assessment</label>
@@ -744,6 +827,14 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
     <div class="preview-section">
       <div class="preview-section-header">
+        <span class="ps-label">P — Presenting Content</span>
+        <button class="ps-copy" onclick="copySection('prev-p', this)">Copy</button>
+      </div>
+      <div class="preview-text" id="prev-p"></div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section-header">
         <span class="ps-label">I — Intervention</span>
         <button class="ps-copy" onclick="copySection('prev-i', this)">Copy</button>
       </div>
@@ -760,7 +851,10 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
     <div class="preview-section">
       <div class="preview-section-header">
-        <span class="ps-label">Medical Necessity</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="ps-label">Medical Necessity</span>
+          <span class="sel-int-badge auto" id="mn-conclusion-badge" style="display:none;" title="Conclusion sentence status — see disclaimer above">Auto</span>
+        </div>
         <button class="ps-copy" onclick="copySection('prev-mn', this)">Copy</button>
       </div>
       <div class="preview-text" id="prev-mn"></div>
@@ -781,12 +875,12 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
 
 <script>
 // ── COMPLETENESS TRACKING ──
-const sectionStatus = { safety: false, i: false, r: false, mn: false };
+const sectionStatus = { p: false, safety: false, i: false, r: false, mn: false };
 function updateCompletenessBar() {
   const bar = document.getElementById('completeness-bar');
   if (!bar) return;
   const items = [
-    ['safety', 'Safety / Risk'], ['i', 'I — Intervention'], ['r', 'R — Response'],
+    ['p', 'P — Presenting Content'], ['safety', 'Safety / Risk'], ['i', 'I — Intervention'], ['r', 'R — Response'],
     ['mn', 'Medical Necessity'],
   ];
   bar.innerHTML = items.map(([key, label]) => {
@@ -808,13 +902,13 @@ function toggleWalkAndTalk() {
 const INTS = [
   // ── FOUNDATIONAL ──
   {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Reflective Listening & Validation',
-   d:'Therapist provided reflective listening and validation, supporting client\'s exploration of [experience/theme]. Client demonstrated increased articulation of [internal state/pattern] and reported feeling understood within the therapeutic relationship.'},
+   d:'Therapist provided reflective listening and validation, supporting client\'s exploration of [experience/theme]. Client demonstrated increased articulation of [experience/theme] and reported feeling understood within the therapeutic relationship.'},
   {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Functional Assessment',
-   d:'Therapist conducted functional exploration of [symptom/behavior/avoidance pattern], identifying antecedents, consequences, and the workability of client\'s current response. Client demonstrated emerging awareness of the function [behavior] serves in maintaining [symptom/distress].'},
+   d:'Therapist conducted functional exploration of [behavior], identifying antecedents, consequences, and the workability of client\'s current response. Client demonstrated emerging awareness of the function [behavior] serves in maintaining [symptom/distress].'},
   {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Collaborative Inquiry (Socratic)',
    d:'Therapist used collaborative inquiry to facilitate client\'s exploration of [thought/belief/pattern], supporting self-directed insight. Client identified a connection and articulated its relationship to [presenting concern].'},
   {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Psychoeducation',
-   d:'Therapist provided psychoeducation regarding [topic]. Client verbalized understanding and connected information to their own experience of [presenting concern].'},
+   d:'Therapist provided psychoeducation regarding [topic]. Client verbalized understanding and connected information to their own experience of [topic].'},
   {m:'foundational',p:'foundational',c:'var(--c-found)',l:'Foundational',n:'Between-Session Practice Review',
    d:'Therapist reviewed between-session [practice/committed action/self-monitoring]. Session explored what interfered and identified [adjustment/alternative strategy] for the coming week. Client reported [completed/partially completed/did not attempt] and identified [barrier] as the primary obstacle.'},
 
@@ -830,13 +924,13 @@ const INTS = [
   {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Passengers on the Bus',
    d:'Therapist introduced the Passengers on the Bus metaphor to illustrate cognitive defusion and values-based action. Client connected the metaphor to their experience of [specific thought/urge] and identified [values-consistent direction] as the driving destination.'},
   {m:'act',p:'defusion',c:'var(--c-defuse)',l:'Defusion',n:'Workability Question',
-   d:'Therapist used workability questioning to evaluate the function of [thought/belief/rule], shifting from accuracy-evaluation to values-based assessment. Client identified that holding [thought] rigidly has limited [functioning domain] and explored an alternative relationship to the thought.'},
+   d:'Therapist used workability questioning to evaluate the function of [thought], shifting from accuracy-evaluation to values-based assessment. Client identified that holding [thought] rigidly has limited [functioning domain] and explored an alternative relationship to the thought.'},
 
   // ── ACT: ACCEPTANCE ──
   {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Expanding Around the Feeling',
-   d:'Therapist facilitated acceptance-based intervention, guiding client to expand awareness around [emotion/sensation] rather than suppress or escape it. Client practiced making room for [feeling] and reported [reduced urgency / increased tolerance / difficulty staying present — specify].'},
+   d:'Therapist facilitated acceptance-based intervention, guiding client to expand awareness around [emotion/sensation] rather than suppress or escape it. Client practiced making room for [emotion/sensation] and reported [reduced urgency / increased tolerance / difficulty staying present — specify].'},
   {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Cost of Avoidance',
-   d:'Therapist explored functional costs of client\'s avoidance of [internal state/situation], identifying behavioral restriction in [domain]. Client articulated awareness that avoidance of [experience] has contributed to [functional limitation], increasing motivation for willingness-based alternatives.'},
+   d:'Therapist explored functional costs of client\'s avoidance of [internal state/situation], identifying behavioral restriction in [domain]. Client articulated awareness that avoidance of [internal state/situation] has contributed to [functional limitation], increasing motivation for willingness-based alternatives.'},
   {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Urge Surfing',
    d:'Therapist introduced urge surfing as an acceptance-based strategy for managing [urge type]. Client practiced observing the urge as a transient wave rather than a directive, developing capacity to tolerate it without behavioral response.'},
   {m:'act',p:'acceptance',c:'var(--c-accept)',l:'Acceptance',n:'Willingness / Creative Hopelessness',
@@ -850,7 +944,7 @@ const INTS = [
   {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Grounding / Orienting to Present',
    d:'Therapist used grounding and sensory orienting techniques to facilitate return to present-moment awareness following activation around [topic/content]. Client demonstrated return to window of tolerance and was able to [re-engage with session content / identify current sensory experience].'},
   {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Noticing What\'s Happening Now',
-   d:'Therapist facilitated present-moment awareness by directing client\'s attention to live in-session experience as [topic/affect] arose. Client identified [emotion/sensation/thought] in real time and practiced staying with it rather than narrating away from it.'},
+   d:'Therapist facilitated present-moment awareness by directing client\'s attention to live in-session experience as [topic/affect] arose. Client identified [topic/affect] in real time and practiced staying with it rather than narrating away from it.'},
   {m:'act',p:'present',c:'var(--c-present)',l:'Present Moment',n:'Assigned Mindfulness Practice',
    d:'Therapist assigned between-session mindfulness practice [specify: brief breath anchor / body scan / mindful daily activity] to build present-moment awareness and generalize in-session skills. Client verbalized understanding and identified [when/how they will use it].'},
 
@@ -860,7 +954,7 @@ const INTS = [
   {m:'act',p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Chessboard / Sky Metaphors',
    d:'Therapist introduced [Chessboard / Sky and Weather] metaphor to illustrate the distinction between self-as-context and self-as-content. Client connected the metaphor to their experience of over-identification with [emotion/diagnosis/role] and practiced describing their experience from the observer perspective.'},
   {m:'act',p:'self',c:'var(--c-self)',l:'Self-as-Context',n:'Identity-Level Exploration',
-   d:'Therapist facilitated identity-level exploration, supporting client in differentiating self-concept from [symptom / diagnosis / role] with which they have been fused. Client identified an aspect of self as existing independently of [fused content], demonstrating early access to a more flexible self-concept.'},
+   d:'Therapist facilitated identity-level exploration, supporting client in differentiating self-concept from [symptom / diagnosis / role] with which they have been fused. Client identified an aspect of self as existing independently of [symptom / diagnosis / role], demonstrating early access to a more flexible self-concept.'},
 
   // ── ACT: VALUES ──
   {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Formal Values Clarification',
@@ -870,11 +964,13 @@ const INTS = [
   {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Connecting Suffering to Values',
    d:'Therapist facilitated values identification through exploration of client\'s pain around [presenting concern], connecting the intensity of distress to the underlying value of [value]. Client demonstrated emerging awareness of [value] as a guiding direction and expressed motivation to act in its service despite discomfort.'},
   {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Chosen vs. Inherited Values',
-   d:'Therapist and client explored the origins of stated value [value], distinguishing between inherited expectations and genuinely chosen direction. Client identified [chosen value] as self-authored, distinct from [inherited expectation from family/cultural context], supporting an autonomous values foundation for committed action.'},
+   d:'Therapist and client explored the origins of stated value [value], distinguishing between inherited expectations and genuinely chosen direction. Client identified [value] as self-authored, distinct from [inherited expectation from family/cultural context], supporting an autonomous values foundation for committed action.'},
   {m:'act',p:'values',c:'var(--c-values)',l:'Values',n:'Values–Behavior Gap',
    d:'Therapist facilitated exploration of the discrepancy between client\'s identified value of [value] and current behavioral pattern of [pattern], identifying [barrier] as the primary obstacle. Client demonstrated self-awareness of the gap without excessive self-criticism and expressed motivation to close it through committed action.'},
 
   // ── ACT: COMMITTED ACTION ──
+  {m:'act',p:'action',c:'var(--c-action)',l:'Committed Action',n:'Choice Point',
+   d:'Therapist introduced the Choice Point framework (Harris & Ciarrochi), guiding client to map the hooking situation, internal hooks (difficult thoughts, feelings, and urges), and resulting away-moves in relation to [situation/trigger]. Client distinguished an away-move of [avoidance/control behavior] from a values-consistent toward-move in relation to [situation/trigger], anchored to the value of [value].'},
   {m:'act',p:'action',c:'var(--c-action)',l:'Committed Action',n:'Values-Based Action Planning',
    d:'Therapist and client collaboratively developed a values-based action plan in the domain of [domain], identifying anticipated barriers including [barrier]. Client committed to [specific action] and identified ACT-based response strategies of [defusion / acceptance / present-moment grounding] for managing barriers without abandoning the committed action.'},
   {m:'act',p:'action',c:'var(--c-action)',l:'Committed Action',n:'Barrier Exploration & Response Planning',
@@ -888,7 +984,7 @@ const INTS = [
   {m:'ifs',p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Legacy Burden / Inherited Beliefs',
    d:'Using an IFS-informed approach, therapist explored inherited messages or legacy burdens contributing to client\'s [belief/rule/self-concept], tracing their origin to [family/cultural context]. Client identified the burden as external in origin rather than self-authored, supporting differentiation and movement toward chosen values.'},
   {m:'ifs',p:'ifs',c:'var(--c-ifs)',l:'IFS-Integrated',n:'Parts Mapping',
-   d:'Therapist and client identified and mapped [part(s)] active in relation to [concern/situation], exploring each part\'s protective role, feared outcome, and relationship to Self. Client demonstrated increased curiosity toward [part] and reduced blending, supporting conditions for deeper internal dialogue.'},
+   d:'Therapist and client identified and mapped [part] active in relation to [concern/situation], exploring each part\'s protective role, feared outcome, and relationship to Self. Client demonstrated increased curiosity toward [part] and reduced blending, supporting conditions for deeper internal dialogue.'},
 
   // ── ASSERTIVENESS ──
   {m:'assertiveness',p:'assertiveness',c:'var(--c-assert)',l:'Assertiveness',n:'NVC — Observation, Feeling, Need, Request',
@@ -916,7 +1012,7 @@ const INTS = [
   {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Rolling with Resistance / Discord',
    d:'Therapist applied MI discord-management strategies, reflecting and reframing client resistance around [topic] without argumentation or persuasion. Simple and amplified reflections were used to reduce defensiveness and explore underlying ambivalence regarding [behavior]. Client demonstrated [increased openness / continued ambivalence / shift in resistant stance — specify] by session end.'},
   {m:'mi',p:'mi',c:'var(--c-mi)',l:'Motivational Interviewing',n:'Importance & Confidence Rulers',
-   d:'Therapist used importance and confidence scaling to assess client\'s readiness to change [behavior]. Session explored the gap between ratings and identified [barrier] as the primary confidence inhibitor and [value] as a potential resource for building self-efficacy. Client rated importance of change at [X/10] and confidence in ability to change at [X/10], and identified [strategy] for increasing confidence.'},
+   d:'Therapist used importance and confidence scaling to assess client\'s readiness to change [behavior]. Session explored the gap between ratings and identified [barrier] as the primary confidence inhibitor and [value] as a potential resource for building self-efficacy. Client rated importance of change at [importance X/10] and confidence in ability to change at [confidence X/10], and identified [strategy] for increasing confidence.'},
 
   // ── CBT ──
   {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Thought Record / Cognitive Restructuring',
@@ -944,21 +1040,21 @@ const INTS = [
   {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'Validation Strategies',
    d:'Therapist applied DBT validation strategies throughout session, including finding the kernel of wisdom in [behavior] and communicating that client\'s [emotion] made sense given their history and current context. Validation was balanced with change-orientation to reduce shame and support willingness to engage with [topic]. Client demonstrated [increased openness to change-oriented work / reduced shame affect / greater willingness to discuss difficult content — specify].'},
   {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'GIVE / FAST Skills (Interpersonal)',
-   d:'Therapist introduced GIVE (Gentle, Interested, Validate, Easy manner) and FAST (Fair, no Apologies, Stick to values, Truthful) skills to support interpersonal effectiveness in the context of [topic]. Application to client\'s identified interpersonal scenario was reviewed, with attention to balancing relationship goals with self-respect. Client identified [specific scenario] for practicing [GIVE / FAST — specify] skills and articulated how they would apply the skill sequence.'},
+   d:'Therapist introduced GIVE (Gentle, Interested, Validate, Easy manner) and FAST (Fair, no Apologies, Stick to values, Truthful) skills to support interpersonal effectiveness in the context of [topic]. Application to client\'s identified interpersonal scenario was reviewed, with attention to balancing relationship goals with self-respect. Client identified [topic] for practicing [GIVE / FAST — specify] skills and articulated how they would apply the skill sequence.'},
 
   // ── GRIEF PROCESSING ──
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Grief Psychoeducation (Dual Process Model)',
    d:'Therapist provided psychoeducation on the Dual Process Model of grief (Stroebe & Schut), explaining the oscillation between loss-orientation and restoration-orientation coping. The normalizing function of oscillation was emphasized, including its non-linear trajectory and individual variability. Client connected the model to their experience of [experience], identifying [symptom] as loss-oriented and [behavior] as restoration-oriented coping.'},
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Narrative Retelling / Grief Processing',
-   d:'Therapist facilitated grief narrative work, inviting client to give voice to [experience] as part of meaning-making and loss integration. Session focused on bearing witness to the loss without premature closure, reassurance, or redirection toward resolution. Client described [topic] with [emotion], demonstrating [increased coherence in narrative / ongoing fragmentation / capacity to tolerate affect while narrating — specify].'},
+   d:'Therapist facilitated grief narrative work, inviting client to give voice to [experience] as part of meaning-making and loss integration. Session focused on bearing witness to the loss without premature closure, reassurance, or redirection toward resolution. Client described [experience] with [emotion], demonstrating [increased coherence in narrative / ongoing fragmentation / capacity to tolerate affect while narrating — specify].'},
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Continuing Bonds',
    d:'Therapist introduced continuing bonds theory (Klass et al.), framing an ongoing internal relationship with [experience] as a resource for adaptation rather than an obstacle to it. Ways in which connection can be integrated into present-day life and [value] were explored. Client identified [specific way of maintaining connection] and explored how this relationship can be sustained alongside engagement in ongoing life.'},
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Meaning-Making in Grief',
    d:'Therapist facilitated meaning-making work (Park & Folkman framework), exploring how client is constructing meaning from [experience]. The distinction between making sense of the loss and finding benefit was reviewed without implying meaning must be reached on a prescribed timeline. Client identified [emerging sense of meaning / struggle to find meaning / conflict between global and situational meaning — specify] and articulated what would support greater integration.'},
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Secondary Loss Mapping',
-   d:'Therapist and client collaboratively mapped secondary losses associated with [experience], identifying losses in the domains of [identity / routine / relationship / role / aspiration — specify]. Recognition of secondary losses was used to validate the complexity of client\'s grief and identify which losses are most active in maintaining [symptom]. Client identified [primary secondary loss domain] as the current area of greatest impact and articulated [grief response] in relation to it.'},
+   d:'Therapist and client collaboratively mapped secondary losses associated with [experience], identifying losses in the domains of [identity / routine / relationship / role / aspiration — specify]. Recognition of secondary losses was used to validate the complexity of client\'s grief and identify which losses are most active in maintaining [symptom]. Client identified [identity / routine / relationship / role / aspiration — specify] as the current area of greatest impact and articulated [grief response] in relation to it.'},
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Complicated / Prolonged Grief Intervention',
-   d:'Therapist addressed features of prolonged grief in relation to client\'s loss of [experience], including [difficulty accepting the loss / identity disruption / avoidance of reminders / intense yearning — specify]. Targeted intervention [situational revisiting / imaginal conversation / restoration work — specify] was employed, consistent with evidence-based treatment for prolonged grief disorder (Shear et al.). Client engaged with [intervention component] and demonstrated [increased tolerance of loss-related affect / shift in avoidant stance — specify].'},
+   d:'Therapist addressed features of prolonged grief in relation to client\'s loss of [experience], including [difficulty accepting the loss / identity disruption / avoidance of reminders / intense yearning — specify]. Targeted intervention [situational revisiting / imaginal conversation / restoration work — specify] was employed, consistent with evidence-based treatment for prolonged grief disorder (Shear et al.). Client engaged with [situational revisiting / imaginal conversation / restoration work — specify] and demonstrated [increased tolerance of loss-related affect / shift in avoidant stance — specify].'},
 ];
 
 // Track selected interventions
@@ -966,6 +1062,12 @@ const INTS = [
 // templates; the live, editable text lives in the DOM (#narr-lines-i / #narr-lines-r).
 let selectedInts = [];
 let intCounter = 0;
+
+// Last auto-generated text for the Medical Necessity conclusion (progress-level
+// sentence + diagnosis-specific rationale). Used to tell "still exactly what
+// we generated" apart from "Bethany has edited this" — see buildMN() /
+// refreshMNConclusionBadge().
+let mnConclusionAutoText = '';
 
 // ── MODALITY FILTER STATE ──
 let selectedModalities = new Set(); // empty = show all
@@ -982,7 +1084,8 @@ const DX_SUGGEST = {
   'F41.0':['act','cbt'],        // Panic Disorder
   'F40.1':['cbt','act'],        // Social Anxiety
   'F40.0':['cbt','act'],        // Agoraphobia
-  'F33':  ['cbt','act','mi'],   // MDD (all subtypes)
+  'F32':  ['cbt','act','mi'],   // MDD, single episode (all severities)
+  'F33':  ['cbt','act','mi'],   // MDD, recurrent (all severities)
   'F34.1':['cbt','act','dbt'],  // Dysthymia / PDD
   'F43.1':['act','grief'],      // PTSD
   'F43.2':['mi','cbt','act'],   // Adjustment Disorder
@@ -995,13 +1098,15 @@ const DX_SUGGEST = {
 
 // Diagnosis → evidence-based specific interventions (by intervention name)
 const DX_SUGGEST_INTS = {
-  'F41.1': ['Workability Question','Cost of Avoidance','Thought Record / Cognitive Restructuring',
+  'F41.1': ['Workability Question','Cost of Avoidance','Choice Point','Thought Record / Cognitive Restructuring',
             'Brief In-Session Mindfulness','Importance & Confidence Rulers','Behavioral Experiment'],
   'F41.0': ['TIPP — Distress Tolerance','Physicalizing Sensation','Expanding Around the Feeling',
             'Thought Record / Cognitive Restructuring','Grounding / Orienting to Present','Urge Surfing'],
   'F40.1': ['Thought Record / Cognitive Restructuring','Behavioral Experiment','Cost of Avoidance',
-            'Developing Discrepancy','Values-Based Action Planning'],
-  'F40.0': ['Behavioral Experiment','Cost of Avoidance','Expanding Around the Feeling','Urge Surfing'],
+            'Choice Point','Developing Discrepancy','Values-Based Action Planning'],
+  'F40.0': ['Behavioral Experiment','Cost of Avoidance','Choice Point','Expanding Around the Feeling','Urge Surfing'],
+  'F32':   ['Behavioral Activation','Activity Monitoring / Mood Log','Opposite Action (Emotion Regulation)',
+            'Values-Based Action Planning','Behavioral Experiment','Connecting Suffering to Values'],
   'F33':   ['Behavioral Activation','Activity Monitoring / Mood Log','Opposite Action (Emotion Regulation)',
             'Values-Based Action Planning','Behavioral Experiment','Connecting Suffering to Values'],
   'F34.1': ['Behavioral Activation','Values–Behavior Gap','Developing Discrepancy',
@@ -1010,11 +1115,11 @@ const DX_SUGGEST_INTS = {
             'Grounding / Orienting to Present','Physicalizing Sensation','Meaning-Making in Grief',
             'Secondary Loss Mapping'],
   'F43.2': ['Decisional Balance','Developing Discrepancy','Change Talk Elicitation',
-            'Cost of Avoidance','Reflective Listening & Validation','Structured Problem-Solving'],
+            'Cost of Avoidance','Choice Point','Reflective Listening & Validation','Structured Problem-Solving'],
   'F60.3': ['Chain Analysis','TIPP — Distress Tolerance','Opposite Action (Emotion Regulation)',
             'Validation Strategies','GIVE / FAST Skills (Interpersonal)','Check the Facts (Emotion Regulation)',
             'DEAR MAN — Interpersonal Effectiveness'],
-  'F42.2': ['Cost of Avoidance','Urge Surfing','Workability Question','Values-Based Action Planning',
+  'F42.2': ['Cost of Avoidance','Urge Surfing','Workability Question','Choice Point','Values-Based Action Planning',
             'Thought Record / Cognitive Restructuring'],
   'F31':   ['Chain Analysis','Check the Facts (Emotion Regulation)','TIPP — Distress Tolerance',
             'Activity Monitoring / Mood Log','Validation Strategies'],
@@ -1030,9 +1135,104 @@ function getSuggestedInts(dx) {
   return [];
 }
 
+// ── CONTINUED-TREATMENT NECESSITY THEMES ──
+// These 9 themes are Bethany's own distillation of the general, recurring
+// clinical rationales for continued outpatient psychotherapy — grounded in
+// well-established DSM-5-TR criteria and standard first-line treatment
+// literature, but written diagnosis-agnostic on purpose. Rather than one
+// sentence auto-locked to whatever diagnosis is entered (which would read
+// identically across every session for the same client — exactly the kind
+// of templated pattern that draws audit scrutiny regardless of how well it's
+// written), Bethany actively picks which theme(s) actually apply THIS
+// session in the checkbox group below (#cg-necessity-themes). Nothing here
+// is pre-checked automatically; diagnosis only drives which options get a
+// ✦ suggestion star (see DX_SUGGEST_THEMES / updateThemeSuggestions), same
+// as the intervention-suggestion pattern above. Not verified against any
+// specific payer's medical-necessity checklist — see the MN disclaimer.
+const MN_NECESSITY_THEMES = [
+  { id: 'relapse', label: 'Relapse / recurrence prevention',
+    text: (dx, goals) => `Continued individual psychotherapy is necessary to consolidate therapeutic gains and reduce the risk of relapse or recurrence${dx ? ' of symptoms associated with ' + dx : ''}${goals ? ', particularly with respect to ' + goals : ''}.` },
+  { id: 'chronic', label: 'Chronic / persistent course',
+    text: (dx) => `The clinical presentation${dx ? ' (' + dx + ')' : ''} reflects a chronic and/or persistent course that requires sustained treatment to address an entrenched symptom pattern, rather than a time-limited presentation expected to remit without ongoing intervention.` },
+  { id: 'avoidance', label: 'Avoidance-driven impairment (exposure-based rationale)',
+    text: () => `Symptoms are substantially maintained by avoidance and associated functional restriction; continued treatment employing exposure-based and/or behavioral intervention is necessary to reduce avoidance and restore functioning.` },
+  { id: 'noremit', label: "Won't remit without active treatment",
+    text: (dx) => `The clinical presentation${dx ? ' associated with ' + dx : ''} is not expected to remit without active, ongoing treatment; discontinuation at this time would leave core symptoms unaddressed and increase risk of symptom escalation.` },
+  { id: 'stressor', label: 'Active stressor / adjustment-related',
+    text: () => `An identifiable stressor and its psychosocial sequelae remain active; continued treatment is necessary to support coping and prevent progression to a more persistent or severe clinical presentation.` },
+  { id: 'safety', label: 'Safety / crisis risk — ongoing skills work',
+    text: () => `The clinical presentation carries an elevated risk of crisis, self-harm, or safety concerns that is actively mitigated by ongoing, skills-based intervention; discontinuation at this time would remove a key safety-relevant support.` },
+  { id: 'beyondmeds', label: 'Impairment beyond symptom/med management',
+    text: () => `Functional impairment persists despite symptom or medication management and requires continued psychotherapy targeting skills and functioning not addressed by other treatment modalities alone.` },
+  { id: 'consolidate', label: 'Consolidating measurable progress',
+    text: (dx, goals) => `The client has made measurable clinical progress${goals ? ' toward ' + goals : ''}; continued treatment is necessary to consolidate and sustain these gains, as premature discontinuation at this stage risks losing progress achieved.` },
+  { id: 'monitor', label: 'Ongoing monitoring alongside psychiatric care',
+    text: () => `Continued individual psychotherapy provides necessary ongoing monitoring and stabilization support alongside psychiatric/medical management, particularly relevant given the episodic or recurring nature of the presentation.` },
+];
+
+// Diagnosis → themes that are typically (not automatically) relevant —
+// drives the ✦ suggestion star only, never auto-checks a box.
+const DX_SUGGEST_THEMES = {
+  'F41.1': ['chronic', 'noremit', 'avoidance', 'relapse'],
+  'F41.0': ['avoidance', 'noremit', 'relapse'],
+  'F40.1': ['avoidance', 'chronic', 'noremit'],
+  'F40.0': ['avoidance', 'noremit', 'chronic'],
+  'F32':   ['relapse', 'consolidate', 'noremit'],
+  'F33':   ['relapse', 'consolidate', 'noremit'],
+  'F34.1': ['chronic', 'noremit'],
+  'F43.1': ['noremit', 'avoidance', 'chronic'],
+  'F43.2': ['stressor', 'consolidate'],
+  'F60.3': ['safety', 'chronic', 'beyondmeds'],
+  'F42.2': ['avoidance', 'noremit', 'beyondmeds'],
+  'F31':   ['monitor', 'relapse', 'safety'],
+  'F90':   ['beyondmeds', 'chronic'],
+};
+
+function getSuggestedThemes(dx) {
+  if (!dx) return [];
+  for (const [code, ids] of Object.entries(DX_SUGGEST_THEMES)) {
+    if (dx.includes(code)) return ids;
+  }
+  return [];
+}
+
+// Value of the optional comorbid/secondary diagnosis field.
+function getDx2() {
+  return document.getElementById('sb-dx2')?.value || '';
+}
+
+// Union of suggestions from the primary + comorbid diagnosis, deduped —
+// used so a client with two diagnoses gets suggestion stars for whichever
+// modalities/interventions/themes are evidence-based for either one.
+function mergeSuggested(dx, dx2, getter) {
+  return [...new Set([...getter(dx), ...getter(dx2)])];
+}
+
+function updateThemeSuggestions() {
+  const dx  = document.getElementById('sb-dx')?.value || '';
+  const dx2 = getDx2();
+  const suggested = mergeSuggested(dx, dx2, getSuggestedThemes);
+  document.querySelectorAll('#cg-necessity-themes label').forEach(label => {
+    const input = label.querySelector('input[type="checkbox"]');
+    if (!input) return;
+    const isSugg = suggested.includes(input.value);
+    label.classList.toggle('suggested-theme', isSugg);
+    let star = label.querySelector('.int-suggest-star');
+    if (isSugg && !star) {
+      star = document.createElement('span');
+      star.className = 'int-suggest-star';
+      star.textContent = '✦';
+      label.appendChild(star);
+    } else if (!isSugg && star) {
+      star.remove();
+    }
+  });
+}
+
 function updateIntSuggestions() {
-  const dx = document.getElementById('sb-dx')?.value || '';
-  const suggested = getSuggestedInts(dx);
+  const dx  = document.getElementById('sb-dx')?.value || '';
+  const dx2 = getDx2();
+  const suggested = mergeSuggested(dx, dx2, getSuggestedInts);
   let visibleSuggested = 0;
 
   document.querySelectorAll('.int-item').forEach(item => {
@@ -1061,11 +1261,13 @@ function updateIntSuggestions() {
   const countEl = document.getElementById('suggested-int-count');
   if (!countEl) return;
   if (suggested.length && dx) {
-    const dxCode = dx.split('—')[0].trim().split(' ')[0];
+    const dxCode  = dx.split('—')[0].trim().split(' ')[0];
+    const dxCode2 = dx2 ? dx2.split('—')[0].trim().split(' ')[0] : '';
+    const dxLabel = dxCode2 ? `${dxCode} + ${dxCode2}` : dxCode;
     if (visibleSuggested) {
       countEl.textContent =
         visibleSuggested + ' intervention' + (visibleSuggested !== 1 ? 's' : '') +
-        ' highlighted for ' + dxCode;
+        ' highlighted for ' + dxLabel;
     } else {
       countEl.textContent =
         'No highlighted interventions visible — select the relevant modality above, or choose “Show All”';
@@ -1085,8 +1287,9 @@ function getSuggestedModalities(dx) {
 }
 
 function updateDxSuggestions() {
-  const dx = document.getElementById('sb-dx')?.value || '';
-  const suggested = getSuggestedModalities(dx);
+  const dx  = document.getElementById('sb-dx')?.value || '';
+  const dx2 = getDx2();
+  const suggested = mergeSuggested(dx, dx2, getSuggestedModalities);
   document.querySelectorAll('.mod-btn').forEach(btn => {
     const m = btn.dataset.mod;
     btn.classList.toggle('suggested', suggested.includes(m));
@@ -1094,14 +1297,17 @@ function updateDxSuggestions() {
   const note = document.getElementById('dx-suggest-note');
   if (!note) return;
   if (suggested.length && dx) {
-    const dxCode = dx.split('—')[0].trim().split(' ')[0];
+    const dxCode  = dx.split('—')[0].trim().split(' ')[0];
+    const dxCode2 = dx2 ? dx2.split('—')[0].trim().split(' ')[0] : '';
+    const dxLabel = dxCode2 ? `${dxCode} + ${dxCode2}` : dxCode;
     const labels = suggested.map(m => MODALITY_LABELS[m] || m).join(', ');
-    note.textContent = `Evidence-based for ${dxCode}: ${labels}`;
+    note.textContent = `Evidence-based for ${dxLabel}: ${labels}`;
     note.style.display = '';
   } else {
     note.style.display = 'none';
   }
   updateIntSuggestions();
+  updateThemeSuggestions();
 }
 
 function toggleModality(mod, btn) {
@@ -1229,6 +1435,7 @@ function addSelectedIntBlock(int, id, entry) {
   // Add the actual narrative lines to the I and R narrative boxes.
   renderNarrLine(document.getElementById('narr-lines-i'), id, therapist, int.c);
   renderNarrLine(document.getElementById('narr-lines-r'), id, client, int.c);
+  markLinkedFields(id);
 
   updateReviewSummary();
 }
@@ -1236,10 +1443,18 @@ function addSelectedIntBlock(int, id, entry) {
 // ── NARRATIVE LINE RENDERING ──
 // Turns a raw template string (with [bracket] placeholders) into a DOM line
 // where each placeholder becomes an inline, individually fillable <span>.
-// Filled-by-session-variable placeholders still get a span (data-key kept)
-// so Tab can revisit them; genuinely unfilled ones get the gold "unfilled" style.
-// No Session Variables in this variant, so every bracket placeholder is
-// always an "unfilled" tab-through field — Bethany fills each one by hand.
+// Every bracket placeholder gets a span (data-key = the bracket text) so Tab
+// can revisit it; genuinely unfilled ones get the gold "unfilled" style.
+// Bethany fills each one by hand — there are no Session Variables driving
+// auto-fill here. BUT: within a single intervention block, whenever the same
+// bracket text (e.g. "[value]", "[thought]", "[part]") appears more than
+// once — whether twice in the Intervention line, twice in the Response line,
+// or once in each — those spans are treated as the same field. Typing into
+// any one of them live-copies the text into all the others (see
+// syncLinkedFields / markLinkedFields below). Bracket text was hand-aligned
+// in the INTS data so this "same text = same field" rule captures the real
+// shared fields (e.g. Reflective Listening & Validation's "[experience/theme]"
+// used in both halves) without needing a separate mapping table.
 function populateNarrLine(div, rawText) {
   div.innerHTML = '';
   const re = /\[[^\]]+\]/g;
@@ -1265,6 +1480,44 @@ function renderNarrLine(container, id, rawText, color) {
   div.style.borderLeftColor = color;
   populateNarrLine(div, rawText);
   container.appendChild(div);
+}
+
+// ── LINKED FIELD SYNC ──
+// Any fillspan sharing the same intervention id + bracket key as another
+// fillspan is considered "the same field," wherever it lives (Intervention
+// box, Response box, or a repeat within the same box). markLinkedFields
+// tags those spans (after both halves of an intervention have been
+// rendered) so they're discoverable on hover; syncLinkedFields is the live
+// propagation, called from wireNarrContainer's input handler below.
+function markLinkedFields(id) {
+  const spans = Array.from(document.querySelectorAll(`.narr-line[data-id="${id}"] .fillspan`));
+  const counts = {};
+  spans.forEach(s => { counts[s.dataset.key] = (counts[s.dataset.key] || 0) + 1; });
+  spans.forEach(s => {
+    if (counts[s.dataset.key] > 1) {
+      s.classList.add('linked-field');
+      s.title = 'Linked field — updates automatically wherever else it appears';
+    } else {
+      s.classList.remove('linked-field');
+      s.removeAttribute('title');
+    }
+  });
+}
+
+function syncLinkedFields(originSpan) {
+  const line = originSpan.closest('.narr-line');
+  if (!line) return;
+  const id = line.dataset.id;
+  const key = originSpan.dataset.key;
+  const value = originSpan.textContent;
+  document.querySelectorAll(`.narr-line[data-id="${id}"]`).forEach(otherLine => {
+    otherLine.querySelectorAll('.fillspan').forEach(span => {
+      if (span === originSpan) return;
+      if (span.dataset.key !== key) return;
+      if (span.textContent !== value) span.textContent = value;
+      span.classList.toggle('unfilled', value === key);
+    });
+  });
 }
 
 // ── REVIEW STATUS TRACKING ──
@@ -1359,6 +1612,7 @@ function listify(arr) {
 
 // ── BUILD PREVIEW ──
 function build() {
+  buildP();
   buildI();
   buildR();
   buildMN();
@@ -1368,10 +1622,10 @@ function build() {
 
 // ── SESSION TYPE MACROS ──
 // Structural/administrative only — treatment phase (MN's tx-stage) and the
-// walk-and-talk toggle. This variant has no Plan section (frequency) or
-// Presentation section (appearance), so those preset fields were dropped.
-// Never touches MN clinical checkboxes or intervention selection — those
-// must always reflect the actual session and stay in Bethany's hands.
+// walk-and-talk toggle. This variant has no Plan section (frequency), and
+// session-type presets deliberately never touch Presenting Content — mood,
+// affect, and session content must always reflect the actual session and
+// stay in Bethany's hands.
 const SESSION_TYPE_PRESETS = {
   standard:    { stage: 'active' },
   walktalk:    { walkTalk: true },
@@ -1400,27 +1654,32 @@ const MN_PRESETS = {
     impairment: ['occupational / vocational functioning', 'relational / interpersonal functioning'],
     acuity: ['significant psychological distress'],
     stage: 'active',
+    themes: ['chronic', 'noremit', 'avoidance'],
   },
   depression: {
     impairment: ['occupational / vocational functioning', 'self-care / ADLs'],
     acuity: ['significant psychological distress', 'functional deterioration from baseline'],
     stage: 'active',
+    themes: ['relapse', 'consolidate'],
   },
   trauma: {
     impairment: ['relational / interpersonal functioning', 'safety and risk management'],
     acuity: ['trauma history complicating standard treatment trajectory', 'significant psychological distress'],
     stage: 'active',
+    themes: ['noremit', 'avoidance'],
   },
   maintenance: {
     impairment: [],
     acuity: [],
     stage: 'maintenance',
     progress: 'stable',
+    themes: ['consolidate'],
   },
   safety: {
     impairment: ['safety and risk management'],
     acuity: ['active safety concerns requiring clinical monitoring'],
     stage: 'active',
+    themes: ['safety'],
   },
 };
 
@@ -1435,6 +1694,10 @@ function applyMNPreset(name) {
   // Clear + set acuity checkboxes
   document.querySelectorAll('#cg-acuity input[type="checkbox"]').forEach(c => {
     c.checked = preset.acuity.includes(c.value);
+  });
+  // Clear + set continued-treatment necessity themes
+  document.querySelectorAll('#cg-necessity-themes input[type="checkbox"]').forEach(c => {
+    c.checked = (preset.themes || []).includes(c.value);
   });
   // Set treatment phase
   if (preset.stage) {
@@ -1455,13 +1718,14 @@ function applyMNPreset(name) {
 function buildMN() {
   const cpt      = document.getElementById('sb-cpt')?.value || '90837';
   const dx       = document.getElementById('sb-dx')?.value.trim() || '';
+  const dx2      = document.getElementById('sb-dx2')?.value.trim() || '';
   const date     = document.getElementById('sb-date')?.value || '';
   const duration = document.getElementById('sb-duration')?.value.trim() || '';
   const start    = document.getElementById('sb-start')?.value.trim() || '';
   const end      = document.getElementById('sb-end')?.value.trim() || '';
   const pos      = document.getElementById('sb-pos')?.value || '';
 
-  // Safety / Risk — standalone required field (this variant has no Presentation section)
+  // Safety / Risk — standalone required field
   const safety     = radio('safety');
   const safetyNote = note('notes-safety');
 
@@ -1473,6 +1737,7 @@ function buildMN() {
   const mnProgress  = radio('mn-progress');
   const mnGoals     = note('mn-goals');
   const mnWithout   = document.getElementById('mn-without')?.checked;
+  const necessityThemeIds = checks('cg-necessity-themes');
 
   // Client response pulled from R section
   const engagement    = radio('engagement');
@@ -1493,25 +1758,26 @@ function buildMN() {
     '90832': '16–37 minute'
   }[cpt] || '';
 
-  const parts = [];
+  const bodyParts = [];
 
   // ── 1. Diagnosis + safety/risk ──
-  // No Presentation section in this variant, so there are no auto-detected
-  // mood/affect/insight/cognition indicators to pull in here. If you want a
-  // symptom description in MN, use "Additional MN Context" below.
+  // Presenting Content (mood/affect/topics) is intentionally left out of the
+  // auto-generated MN language below — it's session-specific narrative, not
+  // a medical-necessity indicator on its own. If you want it reflected here,
+  // use "Additional MN Context" below.
   const clinicalLines = [];
-  if (dx) clinicalLines.push(`Client carries a diagnosis of ${dx}.`);
+  if (dx) clinicalLines.push(`Client carries a diagnosis of ${dx}${dx2 ? `, with comorbid ${dx2}` : ''}.`);
   if (safety && safety !== 'No SI or HI reported') {
     let sLine = `Safety / risk: ${safety}.`;
     if (safetyNote) sLine += ` ${safetyNote}.`;
     clinicalLines.push(sLine);
   }
 
-  if (clinicalLines.length) parts.push(clinicalLines.join(' '));
+  if (clinicalLines.length) bodyParts.push(clinicalLines.join(' '));
 
   // ── 2. Functional impairment ──
   if (impairment.length) {
-    parts.push(
+    bodyParts.push(
       `Functional impairment is documented in the following domain(s): ${listify(impairment)}, ` +
       `consistent with diagnostic criteria and individualized treatment plan objectives.`
     );
@@ -1519,7 +1785,7 @@ function buildMN() {
 
   // ── 3. Acuity indicators ──
   if (acuity.length) {
-    parts.push(`Additional clinical indicators supporting medical necessity: ${acuity.join('; ')}.`);
+    bodyParts.push(`Additional clinical indicators supporting medical necessity: ${acuity.join('; ')}.`);
   }
 
   // ── 4. Session / CPT description ──
@@ -1538,7 +1804,7 @@ function buildMN() {
   } else {
     sessionLine += ` Session was consistent with the client's individualized treatment plan.`;
   }
-  parts.push(sessionLine);
+  bodyParts.push(sessionLine);
 
   // ── 5. Treatment phase + goals ──
   const stageMap = {
@@ -1551,8 +1817,8 @@ function buildMN() {
     'termination':
       `Treatment is in the termination/transition phase; session addressed consolidation of progress, review of treatment goals${mnGoals ? ' (' + mnGoals + ')' : ''}, and discharge planning.`
   };
-  if (stage && stageMap[stage]) parts.push(stageMap[stage]);
-  else if (mnGoals && !stage) parts.push(`Current treatment focus: ${mnGoals}.`);
+  if (stage && stageMap[stage]) bodyParts.push(stageMap[stage]);
+  else if (mnGoals && !stage) bodyParts.push(`Current treatment focus: ${mnGoals}.`);
 
   // ── 6. Client response (from R section) + clinical progress ──
   const progressLines = [];
@@ -1580,7 +1846,7 @@ function buildMN() {
   };
   if (mnProgress && progressMap[mnProgress]) progressLines.push(progressMap[mnProgress]);
 
-  if (progressLines.length) parts.push(progressLines.join(' '));
+  if (progressLines.length) bodyParts.push(progressLines.join(' '));
 
   // ── 7. Without continued treatment (conditional) ──
   if (mnWithout) {
@@ -1589,41 +1855,134 @@ function buildMN() {
     if (acuity.some(a => a.includes('safety'))) riskParts.push('inadequate monitoring of active safety concerns');
     if (impairment.length) riskParts.push(`further deterioration in ${listify(impairment)}`);
     if (!riskParts.length) riskParts.push('symptom recurrence and functional deterioration');
-    parts.push(`Without continued psychotherapy at this level of care, the client is at risk for ${listify(riskParts)}.`);
+    bodyParts.push(`Without continued psychotherapy at this level of care, the client is at risk for ${listify(riskParts)}.`);
   }
 
-  // ── 8. Conclusion — individualized by progress level ──
-  if (dx || impairment.length || (safety && safety !== 'No SI or HI reported')) {
+  const bodyEl = document.getElementById('mn-body-derived');
+  if (bodyEl) bodyEl.textContent = bodyParts.join('\n\n');
+
+  // ── 8. Conclusion — progress-level sentence + diagnosis-specific rationale ──
+  // Unlike items 1-7/9 above (freely regenerated on every keystroke), this
+  // lives in a persistent, reviewable field — the same pattern as the
+  // Intervention/Response narrative boxes. It's the sentence a payer
+  // reviewer or auditor reads most closely, so it should never leave this
+  // tool without a human look. It auto-refills with fresh auto-text as long
+  // as Bethany hasn't edited it; once she edits it, her wording is left
+  // alone even if diagnosis/progress selections change afterward (see
+  // refreshMNConclusionBadge / wireMNConclusion).
+  let autoConclusion = '';
+  if (dx || impairment.length || (safety && safety !== 'No SI or HI reported') || necessityThemeIds.length) {
+    // For comorbid cases, every ${dx}-embedding spot below uses this combined
+    // display string rather than the primary code alone, so the conclusion
+    // reads as "...related to F41.1 — GAD (comorbid: F33.1 — MDD...)" instead
+    // of silently dropping the second diagnosis wherever dx gets interpolated.
+    const dxCombined = dx2 ? `${dx || 'the primary diagnosis'} (comorbid: ${dx2})` : dx;
     const conclusionMap = {
       'significant':
-        `Continued individual psychotherapy is medically necessary to consolidate therapeutic gains, prevent relapse${dx ? ' related to ' + dx : ''}, and support ${mnGoals || 'ongoing functional recovery'} in preparation for eventual termination.`,
+        `Continued individual psychotherapy is medically necessary to consolidate therapeutic gains, prevent relapse${dxCombined ? ' related to ' + dxCombined : ''}, and support ${mnGoals || 'ongoing functional recovery'} in preparation for eventual termination.`,
       'moderate':
-        `Continued individual psychotherapy is medically necessary to build upon progress, reduce residual symptom severity${dx ? ' associated with ' + dx : ''}, and advance ${mnGoals || 'treatment plan goals'}.`,
+        `Continued individual psychotherapy is medically necessary to build upon progress, reduce residual symptom severity${dxCombined ? ' associated with ' + dxCombined : ''}, and advance ${mnGoals || 'treatment plan goals'}.`,
       'stable':
-        `Continued individual psychotherapy is medically necessary to maintain stability, prevent recurrence${dx ? ' of symptoms related to ' + dx : ''}, and preserve functional gains in ${impairment.length ? listify(impairment) : 'identified domains'}.`,
+        `Continued individual psychotherapy is medically necessary to maintain stability, prevent recurrence${dxCombined ? ' of symptoms related to ' + dxCombined : ''}, and preserve functional gains in ${impairment.length ? listify(impairment) : 'identified domains'}.`,
       'minimal':
-        `Continued individual psychotherapy is medically necessary given the complexity of the presentation${dx ? ' (' + dx + ')' : ''}, the client's active participation, and the clinical risk of premature termination.`,
+        `Continued individual psychotherapy is medically necessary given the complexity of the presentation${dxCombined ? ' (' + dxCombined + ')' : ''}, the client's active participation, and the clinical risk of premature termination.`,
       'regression':
-        `Continued individual psychotherapy at this level of care is medically necessary to address clinical regression, restabilize functioning, and prevent a higher level of care${dx ? ' in the context of ' + dx : ''}.`,
+        `Continued individual psychotherapy at this level of care is medically necessary to address clinical regression, restabilize functioning, and prevent a higher level of care${dxCombined ? ' in the context of ' + dxCombined : ''}.`,
     };
-    const conclusion = (mnProgress && conclusionMap[mnProgress])
+    const baseConclusion = (mnProgress && conclusionMap[mnProgress])
       ? conclusionMap[mnProgress]
-      : `Continued individual psychotherapy at this level of care is medically necessary${dx ? ' for the treatment of ' + dx : ''}${impairment.length ? ' to restore and maintain functioning in ' + listify(impairment) + ',' : ''} to reduce symptom severity and clinical distress, and to prevent deterioration or need for a higher level of care.`;
-    parts.push(conclusion);
+      : `Continued individual psychotherapy at this level of care is medically necessary${dxCombined ? ' for the treatment of ' + dxCombined : ''}${impairment.length ? ' to restore and maintain functioning in ' + listify(impairment) + ',' : ''} to reduce symptom severity and clinical distress, and to prevent deterioration or need for a higher level of care.`;
+
+    const themeSentences = necessityThemeIds
+      .map(id => MN_NECESSITY_THEMES.find(t => t.id === id))
+      .filter(Boolean)
+      .map(t => t.text(dxCombined, mnGoals));
+    autoConclusion = themeSentences.length ? `${baseConclusion} ${themeSentences.join(' ')}` : baseConclusion;
+  }
+
+  const conclEl = document.getElementById('mn-conclusion');
+  if (conclEl) {
+    const current = conclEl.textContent;
+    const untouched = current.trim() === '' || current.trim() === mnConclusionAutoText.trim();
+    if (untouched) conclEl.textContent = autoConclusion;
+    mnConclusionAutoText = autoConclusion;
+    refreshMNConclusionBadge();
   }
 
   // ── 9. Additional MN notes ──
-  if (mnNotes) parts.push(mnNotes);
+  const notesEl = document.getElementById('mn-notes-derived');
+  if (notesEl) notesEl.textContent = mnNotes;
 
-  const hasContent = dx || impairment.length || acuity.length || stage || mnProgress || engagement
-    || (safety && safety !== 'No SI or HI reported');
-  sectionStatus.mn = !!(hasContent && parts.length);
+  const hasContent = !!(bodyEl?.textContent || conclEl?.textContent.trim() || notesEl?.textContent);
+  sectionStatus.mn = hasContent;
   sectionStatus.safety = !!safety;
-  setPreview(
-    'prev-mn',
-    hasContent && parts.length ? parts.join('\n\n') : '',
-    '[Enter diagnosis and select clinical indicators above to generate]'
-  );
+  const emptyEl = document.getElementById('prev-mn-empty');
+  if (emptyEl) {
+    emptyEl.textContent = '[Enter diagnosis and select clinical indicators above to generate]';
+    emptyEl.style.display = hasContent ? 'none' : '';
+  }
+}
+
+// ── MN CONCLUSION REVIEW BADGE ──
+function refreshMNConclusionBadge() {
+  const el = document.getElementById('mn-conclusion');
+  const badge = document.getElementById('mn-conclusion-badge');
+  if (!el || !badge) return;
+  const text = el.textContent.trim();
+  if (!text) { badge.style.display = 'none'; return; }
+  const isAuto = text === mnConclusionAutoText.trim();
+  badge.style.display = '';
+  badge.textContent = isAuto ? 'Auto' : 'Reviewed';
+  badge.classList.toggle('auto', isAuto);
+  badge.classList.toggle('reviewed', !isAuto);
+}
+
+// Wires the persistent MN conclusion field. No fillspans/Tab-through here
+// (it's one continuous auto-drafted paragraph, not a template with blanks)
+// — just badge tracking on edit, same build() re-trigger as the other
+// editable narrative boxes.
+function wireMNConclusion() {
+  const el = document.getElementById('mn-conclusion');
+  if (!el) return;
+  el.addEventListener('input', () => {
+    refreshMNConclusionBadge();
+    build();
+  });
+}
+
+// ── BUILD PRESENTING CONTENT ──
+function buildP() {
+  const mood        = radio('presenting-mood');
+  const affect      = radio('presenting-affect');
+  const moodNote    = note('notes-presenting-mood');
+  const affectNote  = note('notes-presenting-affect');
+  const narrative   = ta('presenting-narrative');
+
+  const parts = [];
+  if (mood) {
+    let m = `Presenting mood: ${mood}.`;
+    if (moodNote) m += ` ${moodNote}.`;
+    parts.push(m);
+  }
+  if (affect) {
+    let a = `Affect: ${affect}.`;
+    if (affectNote) a += ` ${affectNote}.`;
+    parts.push(a);
+  }
+
+  const moodEl = document.getElementById('mood-line-p');
+  if (moodEl) moodEl.textContent = parts.join(' ');
+
+  const narrEl = document.getElementById('narrative-line-p');
+  if (narrEl) narrEl.textContent = narrative;
+
+  const hasContent = !!(moodEl?.textContent || narrEl?.textContent);
+  sectionStatus.p = hasContent;
+  const emptyEl = document.getElementById('prev-p-empty');
+  if (emptyEl) {
+    emptyEl.textContent = '[Complete presenting content fields above]';
+    emptyEl.style.display = hasContent ? 'none' : '';
+  }
 }
 
 // NOTE: buildI/buildR deliberately never touch the innerHTML of
@@ -1710,8 +2069,8 @@ function copySection(id, btn) {
 }
 
 function copyAll() {
-  const sections = ['prev-i','prev-r','prev-mn'];
-  const labels   = ['I:', 'R:', 'Medical Necessity:'];
+  const sections = ['prev-p','prev-i','prev-r','prev-mn'];
+  const labels   = ['P:', 'I:', 'R:', 'Medical Necessity:'];
   const parts = sections
     .map((id, i) => {
       const text = document.getElementById(id)?.innerText?.trim();
@@ -1744,12 +2103,21 @@ function clearAll() {
   document.querySelectorAll('.notes-row input').forEach(i => i.value = '');
 
   // Reset textareas
-  ['int-extra','response-narrative','mn-notes','mn-goals']
+  ['presenting-narrative','int-extra','response-narrative','mn-notes','mn-goals']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 
   // Reset diagnosis field
   const dxEl = document.getElementById('sb-dx');
   if (dxEl) dxEl.value = '';
+  const dx2El = document.getElementById('sb-dx2');
+  if (dx2El) dx2El.value = '';
+
+  // Reset the persistent MN conclusion field (progress + dx rationale) and
+  // its auto-text tracker, same as any other persistent editable field here.
+  mnConclusionAutoText = '';
+  const conclEl = document.getElementById('mn-conclusion');
+  if (conclEl) conclEl.textContent = '';
+  refreshMNConclusionBadge();
 
   // Reset interventions — remove generated blocks, reveal the persistent no-int-msg
   selectedInts = [];
@@ -1820,6 +2188,11 @@ function initNarrativeScaffold() {
       container.appendChild(el);
     });
   }
+  scaffold('prev-p', [
+    { id: 'mood-line-p',      cls: 'narr-derived' },
+    { id: 'narrative-line-p', cls: 'narr-derived' },
+    { id: 'prev-p-empty',     cls: 'narr-empty' },
+  ]);
   scaffold('prev-i', [
     { id: 'wwt-line-i',    cls: 'narr-derived' },
     { id: 'narr-lines-i',  cls: 'narr-lines', editable: true },
@@ -1831,6 +2204,12 @@ function initNarrativeScaffold() {
     { id: 'narr-lines-r',    cls: 'narr-lines', editable: true },
     { id: 'narrative-line-r',cls: 'narr-derived' },
     { id: 'prev-r-empty',    cls: 'narr-empty' },
+  ]);
+  scaffold('prev-mn', [
+    { id: 'mn-body-derived',  cls: 'narr-derived' },
+    { id: 'mn-conclusion',    cls: 'narr-lines', editable: true },
+    { id: 'mn-notes-derived', cls: 'narr-derived' },
+    { id: 'prev-mn-empty',    cls: 'narr-empty' },
   ]);
 }
 
@@ -1881,6 +2260,19 @@ function wireNarrContainer(id) {
     container.querySelectorAll('.fillspan').forEach(span => {
       span.classList.toggle('unfilled', span.textContent === span.dataset.key);
     });
+
+    // Figure out which fillspan the caret is currently in (same technique
+    // used for Tab-through below) and, if it's a linked field, live-copy
+    // its text into every other fillspan sharing that key — including
+    // across into the other narrative box.
+    const sel = window.getSelection();
+    let curSpan = null;
+    if (sel && sel.anchorNode) {
+      const node = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
+      curSpan = node ? node.closest('.fillspan') : null;
+    }
+    if (curSpan) syncLinkedFields(curSpan);
+
     build();
   });
 }
@@ -1889,6 +2281,7 @@ function wireNarrContainer(id) {
 initNarrativeScaffold();
 wireNarrContainer('narr-lines-i');
 wireNarrContainer('narr-lines-r');
+wireMNConclusion();
 buildIntGrid();
 
 // Auto-fill date
