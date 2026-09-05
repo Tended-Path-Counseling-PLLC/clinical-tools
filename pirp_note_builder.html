@@ -28,6 +28,7 @@
   --c-cbt: #527a48;
   --c-dbt: #6d40a0;
   --c-grief: #8a6850;
+  --c-exposure: #a8456f;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -640,6 +641,7 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
             <button class="filt mod-btn" data-mod="act" onclick="toggleModality('act',this)" style="border-color:var(--c-defuse);">ACT</button>
             <button class="filt mod-btn" data-mod="mi" onclick="toggleModality('mi',this)" style="border-color:var(--c-mi);">MI</button>
             <button class="filt mod-btn" data-mod="cbt" onclick="toggleModality('cbt',this)" style="border-color:var(--c-cbt);">CBT</button>
+            <button class="filt mod-btn" data-mod="exposure" onclick="toggleModality('exposure',this)" style="border-color:var(--c-exposure);">Exposure</button>
             <button class="filt mod-btn" data-mod="dbt" onclick="toggleModality('dbt',this)" style="border-color:var(--c-dbt);">DBT</button>
             <button class="filt mod-btn" data-mod="grief" onclick="toggleModality('grief',this)" style="border-color:var(--c-grief);">Grief</button>
             <button class="filt mod-btn" data-mod="ifs" onclick="toggleModality('ifs',this)" style="border-color:var(--c-ifs);">IFS</button>
@@ -1055,6 +1057,22 @@ const INTS = [
    d:'Therapist and client collaboratively mapped secondary losses associated with [experience], identifying losses in the domains of [identity / routine / relationship / role / aspiration — specify]. Recognition of secondary losses was used to validate the complexity of client\'s grief and identify which losses are most active in maintaining [symptom]. Client identified [identity / routine / relationship / role / aspiration — specify] as the current area of greatest impact and articulated [grief response] in relation to it.'},
   {m:'grief',p:'grief',c:'var(--c-grief)',l:'Grief Processing',n:'Complicated / Prolonged Grief Intervention',
    d:'Therapist addressed features of prolonged grief in relation to client\'s loss of [experience], including [difficulty accepting the loss / identity disruption / avoidance of reminders / intense yearning — specify]. Targeted intervention [situational revisiting / imaginal conversation / restoration work — specify] was employed, consistent with evidence-based treatment for prolonged grief disorder (Shear et al.). Client engaged with [situational revisiting / imaginal conversation / restoration work — specify] and demonstrated [increased tolerance of loss-related affect / shift in avoidant stance — specify].'},
+
+  // ── EXPOSURE THERAPY ──
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Psychoeducation on Avoidance & Exposure Rationale',
+   d:'Therapist provided psychoeducation on the role of avoidance in maintaining [fear/anxiety/OCD symptoms] and the extinction-based rationale for exposure treatment, addressing common misconceptions about exposure work. Client verbalized understanding of the fear-avoidance cycle and expressed [willingness to engage in exposure work / continued ambivalence about the approach — specify].'},
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Exposure Hierarchy Construction',
+   d:'Therapist and client collaboratively constructed a graded exposure hierarchy for [feared stimulus/situation], ranking items by anticipated distress using a 0–100 SUDS (Subjective Units of Distress) scale. Client identified [number] hierarchy items and selected [specific item] as the starting point for exposure work.'},
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'In Vivo Exposure',
+   d:'Therapist guided client through in vivo exposure to [feared stimulus/situation], remaining present to support habituation and reduce escape/avoidance and safety behaviors. Client\'s SUDS rating moved from [starting X] to [ending Y] over the course of the exposure, demonstrating [habituation within the trial / continued high distress tolerated without avoidance — specify].'},
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Imaginal Exposure',
+   d:'Therapist facilitated imaginal exposure, guiding client to vividly and repeatedly engage with [feared memory/scenario/thought] in session without engaging avoidance or safety behaviors. Client\'s subjective distress [decreased over the course of the exposure / remained elevated but was tolerated — specify], demonstrating [increased capacity to stay with the imagined content / continued avoidance strategies — specify].'},
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Interoceptive Exposure',
+   d:'Therapist introduced interoceptive exposure, guiding client to deliberately induce [physical sensation, e.g. rapid heartbeat / dizziness / breathlessness] via [technique: hyperventilation / spinning / straw breathing — specify] to reduce fear of the bodily sensation itself. Client rated peak distress at [SUDS X/100] and demonstrated [habituation within the exercise / continued catastrophic interpretation of the sensation — specify].'},
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Exposure and Response Prevention (ERP)',
+   d:'Therapist facilitated exposure and response prevention, guiding client to confront [obsession/trigger] while refraining from the compulsive or avoidant response of [compulsion/ritual/safety behavior]. Client tolerated the urge to engage in [compulsion/safety behavior] for [duration/interval], demonstrating [reduction in urge intensity over time / significant distress requiring extended support — specify].'},
+  {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Between-Session Exposure Assignment',
+   d:'Therapist assigned between-session exposure practice targeting [stimulus/situation] at the current hierarchy level, with instructions to remain in the situation without avoidance, escape, or safety behaviors until distress naturally decreases. Client identified [specific time/context] for completing the assignment and articulated [anticipated barrier] with a planned response of [strategy].'},
 ];
 
 // Track selected interventions
@@ -1075,36 +1093,41 @@ let actSubFilter = 'all';
 
 const MODALITY_LABELS = {
   foundational:'Foundational', act:'ACT', mi:'Motivational Interviewing',
-  cbt:'CBT', dbt:'DBT', grief:'Grief Processing', ifs:'IFS', assertiveness:'Assertiveness'
+  cbt:'CBT', dbt:'DBT', grief:'Grief Processing', ifs:'IFS', assertiveness:'Assertiveness',
+  exposure:'Exposure Therapy'
 };
 
 // Diagnosis → suggested modalities map (ICD-10 prefix matching)
 const DX_SUGGEST = {
-  'F41.1':['act','cbt'],        // GAD
-  'F41.0':['act','cbt'],        // Panic Disorder
-  'F40.1':['cbt','act'],        // Social Anxiety
-  'F40.0':['cbt','act'],        // Agoraphobia
-  'F32':  ['cbt','act','mi'],   // MDD, single episode (all severities)
-  'F33':  ['cbt','act','mi'],   // MDD, recurrent (all severities)
-  'F34.1':['cbt','act','dbt'],  // Dysthymia / PDD
-  'F43.1':['act','grief'],      // PTSD
-  'F43.2':['mi','cbt','act'],   // Adjustment Disorder
-  'F60.3':['dbt','mi'],         // BPD
-  'F42.2':['cbt','act'],        // OCD
-  'F31':  ['dbt','mi','cbt'],   // Bipolar
-  'F90':  ['cbt','act'],        // ADHD
+  'F41.1':['act','cbt','exposure'],        // GAD
+  'F41.0':['act','cbt','exposure'],        // Panic Disorder
+  'F40.1':['cbt','act','exposure'],        // Social Anxiety
+  'F40.0':['cbt','act','exposure'],        // Agoraphobia
+  'F32':  ['cbt','act','mi'],              // MDD, single episode (all severities)
+  'F33':  ['cbt','act','mi'],              // MDD, recurrent (all severities)
+  'F34.1':['cbt','act','dbt'],             // Dysthymia / PDD
+  'F43.1':['act','grief','exposure'],      // PTSD
+  'F43.2':['mi','cbt','act'],              // Adjustment Disorder
+  'F60.3':['dbt','mi'],                    // BPD
+  'F42.2':['cbt','act','exposure'],        // OCD
+  'F31':  ['dbt','mi','cbt'],              // Bipolar
+  'F90':  ['cbt','act'],                   // ADHD
 };
 
 
 // Diagnosis → evidence-based specific interventions (by intervention name)
 const DX_SUGGEST_INTS = {
   'F41.1': ['Workability Question','Cost of Avoidance','Choice Point','Thought Record / Cognitive Restructuring',
-            'Brief In-Session Mindfulness','Importance & Confidence Rulers','Behavioral Experiment'],
+            'Brief In-Session Mindfulness','Importance & Confidence Rulers','Behavioral Experiment',
+            'Exposure Hierarchy Construction','In Vivo Exposure'],
   'F41.0': ['TIPP — Distress Tolerance','Physicalizing Sensation','Expanding Around the Feeling',
-            'Thought Record / Cognitive Restructuring','Grounding / Orienting to Present','Urge Surfing'],
+            'Thought Record / Cognitive Restructuring','Grounding / Orienting to Present','Urge Surfing',
+            'Interoceptive Exposure','In Vivo Exposure'],
   'F40.1': ['Thought Record / Cognitive Restructuring','Behavioral Experiment','Cost of Avoidance',
-            'Choice Point','Developing Discrepancy','Values-Based Action Planning'],
-  'F40.0': ['Behavioral Experiment','Cost of Avoidance','Choice Point','Expanding Around the Feeling','Urge Surfing'],
+            'Choice Point','Developing Discrepancy','Values-Based Action Planning',
+            'In Vivo Exposure','Exposure Hierarchy Construction'],
+  'F40.0': ['Behavioral Experiment','Cost of Avoidance','Choice Point','Expanding Around the Feeling','Urge Surfing',
+            'In Vivo Exposure','Exposure Hierarchy Construction'],
   'F32':   ['Behavioral Activation','Activity Monitoring / Mood Log','Opposite Action (Emotion Regulation)',
             'Values-Based Action Planning','Behavioral Experiment','Connecting Suffering to Values'],
   'F33':   ['Behavioral Activation','Activity Monitoring / Mood Log','Opposite Action (Emotion Regulation)',
@@ -1113,14 +1136,15 @@ const DX_SUGGEST_INTS = {
             'Activity Monitoring / Mood Log','Committed Action'],
   'F43.1': ['Narrative Retelling / Grief Processing','Expanding Around the Feeling',
             'Grounding / Orienting to Present','Physicalizing Sensation','Meaning-Making in Grief',
-            'Secondary Loss Mapping'],
+            'Secondary Loss Mapping','Imaginal Exposure','In Vivo Exposure'],
   'F43.2': ['Decisional Balance','Developing Discrepancy','Change Talk Elicitation',
             'Cost of Avoidance','Choice Point','Reflective Listening & Validation','Structured Problem-Solving'],
   'F60.3': ['Chain Analysis','TIPP — Distress Tolerance','Opposite Action (Emotion Regulation)',
             'Validation Strategies','GIVE / FAST Skills (Interpersonal)','Check the Facts (Emotion Regulation)',
             'DEAR MAN — Interpersonal Effectiveness'],
   'F42.2': ['Cost of Avoidance','Urge Surfing','Workability Question','Choice Point','Values-Based Action Planning',
-            'Thought Record / Cognitive Restructuring'],
+            'Thought Record / Cognitive Restructuring','Exposure and Response Prevention (ERP)',
+            'Exposure Hierarchy Construction'],
   'F31':   ['Chain Analysis','Check the Facts (Emotion Regulation)','TIPP — Distress Tolerance',
             'Activity Monitoring / Mood Log','Validation Strategies'],
   'F90':   ['Behavioral Activation','Structured Problem-Solving','Values-Based Action Planning',
