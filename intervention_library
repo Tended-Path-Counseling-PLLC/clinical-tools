@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intervention Library — Tended Path Counseling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4f0; --surface:#ffffff; --surface-2:#faf8f5;
+    --text:#242733; --muted:#6f6a75; --border:#e1dbd0;
+    --accent:#d79f55; --accent-ink:#242733;
+    --shadow: 0 1px 2px rgba(36,39,51,.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#191b24; --surface:#22242f; --surface-2:#262836;
+      --text:#efe9e0; --muted:#a29db0; --border:#383a49;
+      --accent:#e0ae6c; --accent-ink:#191b24;
+      --shadow: 0 1px 3px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#191b24; --surface:#22242f; --surface-2:#262836;
+    --text:#efe9e0; --muted:#a29db0; --border:#383a49;
+    --accent:#e0ae6c; --accent-ink:#191b24;
+    --shadow: 0 1px 3px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{background:var(--bg);}
+  body{
+    color:var(--text);
+    font-family:'Jost',system-ui,sans-serif; font-weight:300;
+    margin:0; padding-inline:20px; padding-block:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; margin:0;}
+
+  /* ── HEADER ── */
+  .top{
+    max-width:900px; margin:0 auto; padding-block:28px 18px;
+    border-bottom:1px solid var(--border);
+  }
+  .eyebrow{
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--accent); font-weight:500; margin-bottom:6px;
+  }
+  h1{font-size:clamp(28px,5vw,38px); letter-spacing:.01em; text-wrap:balance;}
+  .sub{color:var(--muted); font-size:14.5px; margin-top:8px; max-width:60ch; line-height:1.6;}
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:16px;
+    font-size:12px; color:var(--muted);
+  }
+  .meta-row b{color:var(--text); font-weight:500;}
+
+  /* ── SEARCH / NAV BAR ── */
+  .toolbar{
+    position:sticky; top:0; z-index:20;
+    background:var(--bg);
+    padding-block:12px; border-bottom:1px solid var(--border);
+    max-width:900px; margin:0 auto;
+  }
+  .search-wrap{position:relative; margin-bottom:10px;}
+  #search{
+    width:100%; font-family:'Jost',sans-serif; font-size:15px; font-weight:300;
+    color:var(--text); background:var(--surface); border:1px solid var(--border);
+    border-radius:6px; padding:10px 14px 10px 38px; outline:none;
+    transition:border-color .15s;
+  }
+  #search:focus{border-color:var(--accent);}
+  .search-icon{
+    position:absolute; left:13px; top:50%; transform:translateY(-50%);
+    width:15px; height:15px; opacity:.55; pointer-events:none;
+  }
+  #count{font-size:12px; color:var(--muted); margin-top:6px;}
+  .chips{display:flex; flex-wrap:wrap; gap:6px; overflow-x:auto; padding-bottom:2px;}
+  .chip{
+    flex-shrink:0; font-family:'Jost',sans-serif; font-size:11.5px; font-weight:500;
+    padding:5px 11px; border-radius:20px; border:1px solid var(--chip,var(--border));
+    color:var(--chip,var(--muted)); text-decoration:none; background:var(--surface);
+    white-space:nowrap; transition:background .12s;
+  }
+  .chip:hover{background:var(--surface-2);}
+
+  /* ── SECTIONS ── */
+  main{max-width:900px; margin:0 auto; padding-block:26px 60px;}
+  section.cat{margin-bottom:34px; scroll-margin-top:118px;}
+  .cat-head{
+    display:flex; align-items:baseline; gap:10px;
+    border-left:4px solid var(--catcolor,var(--accent));
+    padding-left:12px; margin-bottom:12px;
+  }
+  .cat-head h2{font-size:21px; color:var(--catcolor,var(--text));}
+  .cat-count{font-size:11.5px; color:var(--muted); font-family:'Jost',sans-serif;}
+
+  .entry{
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:13px 16px; margin-bottom:8px; box-shadow:var(--shadow);
+  }
+  .entry h3{
+    font-family:'Jost',sans-serif; font-weight:500; font-size:14.5px;
+    color:var(--text); margin-bottom:4px; letter-spacing:.01em;
+  }
+  .entry p{
+    font-size:13.5px; line-height:1.65; color:var(--muted); margin:0;
+  }
+  .entry.hidden, section.cat.hidden{display:none;}
+
+  .empty-state{
+    text-align:center; color:var(--muted); font-size:14px; padding:40px 0;
+    display:none;
+  }
+
+  footer{
+    max-width:900px; margin:0 auto; padding:20px 0 50px;
+    font-size:11.5px; color:var(--muted); border-top:1px solid var(--border);
+  }
+
+  @media (max-width:560px){
+    .cat-head h2{font-size:18px;}
+    .entry{padding:11px 13px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="eyebrow">Tended Path Counseling, PLLC &nbsp;·&nbsp; Clinical Reference</div>
+  <h1>Intervention Library</h1>
+  <p class="sub">All named interventions in the PIRP Note Builder's documentation library, with a brief defining feature for each — for identifying which technique a session actually used when drafting notes.</p>
+  <div class="meta-row" id="meta-row"></div>
+</div>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="search" type="text" placeholder="Search by name or keyword…" autocomplete="off">
+  </div>
+  <div id="count"></div>
+  <div class="chips" id="chips"></div>
+</div>
+
+<main id="main">
+  <div class="empty-state" id="empty-state">No interventions match your search.</div>
+</main>
+
+<footer>
+  Reference only — verify technique selection against what was clinically implemented before finalizing documentation. Companion to the PIRP Note Builder and PIRP Note Drafter skill.
+</footer>
+
+<script>
+const CATEGORIES = [
+  { id:'foundational', label:'Foundational', color:'#888888', items:[
+    ['Reflective Listening & Validation','Actively listening/reflecting to support the client\'s exploration of an experience or theme.'],
+    ['Functional Assessment','Exploring the antecedents, consequences, and function a behavior serves.'],
+    ['Collaborative Inquiry (Socratic)','Socratic questioning that facilitates the client\'s own self-directed insight.'],
+    ['Psychoeducation','Providing information/education on a topic; client connects it to their own experience.'],
+    ['Between-Session Practice Review','Reviewing a prior between-session assignment, exploring what interfered.'],
+  ]},
+  { id:'act-defusion', label:'ACT — Defusion', color:'#6a9fcc', items:[
+    ['Naming the Story','Labeling a recurring cognitive narrative as "a story" rather than fact.'],
+    ['Thanking the Mind','Acknowledging the mind\'s commentary without engaging it.'],
+    ['Physicalization of Thought','Externalizing a thought as a tangible object to explore.'],
+    ['Leaves on a Stream','Mindfulness exercise observing thoughts as passing events.'],
+    ['Passengers on the Bus','Metaphor linking defusion to values-based action.'],
+    ['Workability Question','Evaluating a thought by its workability rather than its accuracy.'],
+  ]},
+  { id:'act-acceptance', label:'ACT — Acceptance', color:'#c07868', items:[
+    ['Expanding Around the Feeling','Making room for/expanding awareness around an emotion or sensation instead of suppressing or escaping it (e.g. "what does it feel like to make room for X").'],
+    ['Cost of Avoidance','Exploring the functional costs of avoiding an internal state or situation.'],
+    ['Urge Surfing','Observing an urge as a transient wave rather than a directive.'],
+    ['Willingness / Creative Hopelessness','Examining the workability of past control strategies.'],
+    ['Physicalizing Sensation','Somatic exploration of a sensation\'s physical qualities.'],
+  ]},
+  { id:'act-present', label:'ACT — Present Moment', color:'#5aaa98', items:[
+    ['Brief In-Session Mindfulness','A guided mindfulness practice done in session.'],
+    ['Grounding / Orienting to Present','Grounding/sensory techniques used after activation to return to the here-and-now.'],
+    ['Noticing What\'s Happening Now','Directing attention to live in-session experience as it arises (e.g. "notice what is happening in the here and now").'],
+    ['Assigned Mindfulness Practice','Between-session mindfulness homework.'],
+  ]},
+  { id:'act-self', label:'ACT — Self-as-Context', color:'#9a7cc0', items:[
+    ['Observer Exercise','Accessing the observing self distinct from changing thoughts/emotions.'],
+    ['Chessboard / Sky Metaphors','Metaphor illustrating self-as-context vs. self-as-content.'],
+    ['Identity-Level Exploration','Differentiating self-concept from a symptom, diagnosis, or role.'],
+  ]},
+  { id:'act-values', label:'ACT — Values', color:'#c08850', items:[
+    ['Formal Values Clarification','A structured exercise (VLQ, Bulls-Eye, domain mapping).'],
+    ['Obituary / Funeral Exercise','Legacy exercise exploring who the client wants to be.'],
+    ['Connecting Suffering to Values','Linking the intensity of pain to an underlying value.'],
+    ['Chosen vs. Inherited Values','Distinguishing self-authored values from inherited expectations.'],
+    ['Values–Behavior Gap','Exploring the discrepancy between a stated value and current behavior.'],
+  ]},
+  { id:'act-action', label:'ACT — Committed Action', color:'#6aaa6a', items:[
+    ['Choice Point','Mapping hooks, away-moves, and toward-moves (Harris & Ciarrochi).'],
+    ['Values-Based Action Planning','Collaboratively building an action plan tied to a value.'],
+    ['Barrier Exploration & Response Planning','Exploring barriers to a previously committed action.'],
+    ['Relapse Response Planning','Normalizing setback and planning a response to future barriers.'],
+  ]},
+  { id:'ifs', label:'IFS', color:'#a07898', items:[
+    ['Accessing Self-Energy / Unblending','Supporting the client in unblending from a "part" and accessing Self-energy.'],
+    ['Legacy Burden / Inherited Beliefs','Tracing an inherited message/rule to its family or cultural origin.'],
+    ['Parts Mapping','Identifying and mapping a part\'s protective role and feared outcome.'],
+  ]},
+  { id:'assertiveness', label:'Assertiveness', color:'#c87840', items:[
+    ['NVC — Observation, Feeling, Need, Request','The OFNR framework (Rosenberg) for needs-based expression.'],
+    ['DESC Script','Describe, Express, Specify, Consequences.'],
+    ['DEAR MAN','Interpersonal effectiveness sequence: Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate.'],
+    ['"I" Statements & Direct Expression','Reformulating a pattern using "I feel X when Y because I need Z."'],
+    ['Values-Based Boundary Setting','Connecting limit-setting to an underlying value.'],
+    ['Communication Styles Psychoeducation','Psychoeducation on passive/aggressive/assertive styles.'],
+  ]},
+  { id:'mi', label:'Motivational Interviewing', color:'#3a8fa8', items:[
+    ['OARS — Open Questions','Open-ended questioning without closed questions or unsolicited advice.'],
+    ['Decisional Balance','Exploring perceived costs/benefits of a behavior vs. of change.'],
+    ['Developing Discrepancy','Reflecting the gap between current behavior and a stated value.'],
+    ['Change Talk Elicitation','Evocative questions eliciting Desire/Ability/Reasons/Need for change.'],
+    ['Rolling with Resistance / Discord','Reflecting/reframing resistance without argumentation.'],
+    ['Importance & Confidence Rulers','0–10 scaling of importance and confidence to change.'],
+  ]},
+  { id:'cbt', label:'CBT', color:'#527a48', items:[
+    ['Thought Record / Cognitive Restructuring','Identifying a thought, weighing evidence, building a balanced alternative.'],
+    ['Cognitive Distortion Identification','Psychoeducation on distortions, identifying one in a specific thought.'],
+    ['Behavioral Activation','Building a graduated re-engagement plan against behavioral withdrawal.'],
+    ['Behavioral Experiment','Designing a test of a specific prediction/thought.'],
+    ['Structured Problem-Solving','Define → generate alternatives → evaluate → select → implement → review.'],
+    ['Activity Monitoring / Mood Log','Introducing between-session tracking of activity/mood/thought.'],
+    ['Cognitive Model of Panic (Clark)','Psychoeducation on the catastrophic misinterpretation of benign bodily sensations as dangerous, and how that drives the panic cycle.'],
+  ]},
+  { id:'dbt', label:'DBT', color:'#6d40a0', items:[
+    ['Chain Analysis','Tracing vulnerability factors, prompting event, links, and consequences before a target behavior.'],
+    ['TIPP — Distress Tolerance','Temperature, Intense exercise, Paced breathing, Progressive muscle relaxation.'],
+    ['Opposite Action','Identifying an emotion\'s action urge and whether the emotion fits the facts.'],
+    ['Check the Facts','Evaluating whether an emotion fits the facts of the situation.'],
+    ['Validation Strategies','Finding the "kernel of wisdom" in a behavior; validating that an emotion made sense.'],
+    ['GIVE / FAST Skills','Interpersonal effectiveness — Gentle/Interested/Validate/Easy manner; Fair/no Apologies/Stick to values/Truthful.'],
+    ['Wise Mind','The synthesis of emotion mind and reasonable mind as a balanced state guiding decision-making.'],
+    ['ACCEPTS (Distress Tolerance)','Distraction-based skill: Activities, Contributing, Comparisons, Emotions, Pushing away, Thoughts, Sensations.'],
+    ['IMPROVE (Distress Tolerance)','Skill for improving the moment: Imagery, Meaning, Prayer, Relaxation, One thing at a time, Vacation, Encouragement.'],
+  ]},
+  { id:'grief', label:'Grief Processing', color:'#8a6850', items:[
+    ['Grief Psychoeducation (Dual Process Model)','Psychoeducation on oscillating loss-orientation/restoration-orientation coping.'],
+    ['Narrative Retelling / Grief Processing','Inviting the client to narrate the loss without premature resolution.'],
+    ['Continuing Bonds','Framing an ongoing internal relationship with the loss as a resource.'],
+    ['Meaning-Making in Grief','Exploring how the client is constructing meaning from the loss.'],
+    ['Secondary Loss Mapping','Mapping losses in identity/routine/relationship/role/aspiration tied to the primary loss.'],
+    ['Complicated / Prolonged Grief Intervention','Targeted work on accepting the loss, identity disruption, avoidance, or yearning.'],
+  ]},
+  { id:'exposure', label:'Exposure Therapy', color:'#a8456f', items:[
+    ['Psychoeducation on Avoidance & Exposure Rationale','Explaining the fear-avoidance cycle and extinction-based rationale.'],
+    ['Exposure Hierarchy Construction','Building a graded SUDS-ranked hierarchy for a feared stimulus.'],
+    ['In Vivo Exposure','Guided real-world exposure to a feared stimulus/situation.'],
+    ['Imaginal Exposure','Vivid, repeated engagement with a feared memory/scenario in session.'],
+    ['Interoceptive Exposure','Deliberately inducing a physical sensation to reduce fear of the sensation itself.'],
+    ['Exposure and Response Prevention (ERP)','Confronting a trigger while refraining from the compulsive/avoidant response.'],
+    ['Between-Session Exposure Assignment','Assigning exposure practice at the current hierarchy level.'],
+  ]},
+  { id:'sleep', label:'Sleep (CBT-I)', color:'#4a5a8a', items:[
+    ['Sleep Hygiene Psychoeducation','Education on behavioral practices supporting consistent, restful sleep (caffeine/screen timing, consistent wake time, bedroom environment).'],
+    ['Stimulus Control (Sleep)','Restricting time in bed to sleep only, leaving bed if unable to sleep within about 20 minutes, to rebuild the bed–sleep association.'],
+    ['Sleep Restriction','Temporarily limiting time in bed to match actual sleep time, to consolidate and strengthen sleep drive.'],
+    ['Worry Time / Cognitive Unloading','Scheduling a dedicated pre-bed window to externalize intrusive thoughts (e.g. writing them down) rather than engaging them at bedtime.'],
+  ]},
+  { id:'somatic', label:'Somatic / Body-Based', color:'#7c9473', items:[
+    ['Window of Tolerance Psychoeducation (Siegel)','Educating the client on the zone of arousal in which they can function effectively, and identifying when they\'re outside it.'],
+    ['Pendulation / Titration (Somatic Experiencing)','Guiding the client in small increments between activation and calm to build capacity to tolerate bodily sensation.'],
+    ['Sensory Grounding (5-4-3-2-1)','A structured five-senses grounding technique to anchor attention in the present and downregulate arousal.'],
+    ['Diaphragmatic / Paced Breathing','Slow, belly-based breathing at a set pace, taught as a standalone physiological down-regulation skill.'],
+  ]},
+  { id:'safety', label:'Safety / Crisis Planning', color:'#b23a3a', items:[
+    ['Safety Planning (Stanley-Brown Model)','Collaboratively building a structured plan — warning signs, coping strategies, contacts, means restriction, crisis resources — for a safety or risk period.'],
+    ['Panic-Specific Coping/Crisis Plan','Collaboratively building a plan for managing an acute panic episode outside session — grounding steps, PRN medication use, when to seek a higher level of care.'],
+  ]},
+  { id:'selfcompassion', label:'Self-Compassion', color:'#cd8fa8', items:[
+    ['Self-Compassion Break (Neff)','Guided three-part practice — mindfulness of suffering, common humanity, self-kindness — in response to a moment of distress or self-criticism.'],
+    ['Compassionate Letter Writing','Writing to oneself from the perspective of an unconditionally compassionate other, to build an alternative voice to self-criticism.'],
+  ]},
+  { id:'relational', label:'Relational', color:'#7d8fc4', items:[
+    ['Rupture and Repair Processing','Explicitly naming and processing a strain or disconnect in the therapeutic (or other significant) relationship, modeling repair.'],
+  ]},
+  { id:'sfbt', label:'Solution-Focused', color:'#5c8a99', items:[
+    ['Scaling Question','Rating current state/progress numerically to concretize change and identify what would move the number.'],
+    ['Exception-Finding','Exploring times the problem was absent or less severe to surface existing strengths and resources.'],
+  ]},
+];
+
+const TOTAL = CATEGORIES.reduce((n,c)=>n+c.items.length,0);
+
+function el(tag, cls, html){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+}
+
+function build(){
+  const main = document.getElementById('main');
+  const chips = document.getElementById('chips');
+  const metaRow = document.getElementById('meta-row');
+
+  metaRow.innerHTML = `<span><b>${TOTAL}</b> named interventions</span><span><b>${CATEGORIES.length}</b> categories</span>`;
+
+  CATEGORIES.forEach(cat => {
+    const chip = el('a','chip', cat.label);
+    chip.href = '#' + cat.id;
+    chip.style.setProperty('--chip', cat.color);
+    chips.appendChild(chip);
+
+    const section = el('section','cat');
+    section.id = cat.id;
+    section.style.setProperty('--catcolor', cat.color);
+
+    const head = el('div','cat-head');
+    head.appendChild(el('h2', null, cat.label));
+    head.appendChild(el('span','cat-count', cat.items.length + (cat.items.length === 1 ? ' technique' : ' techniques')));
+    section.appendChild(head);
+
+    cat.items.forEach(([name, def]) => {
+      const entry = el('div','entry');
+      entry.dataset.search = (name + ' ' + def + ' ' + cat.label).toLowerCase();
+      entry.appendChild(el('h3', null, name));
+      entry.appendChild(el('p', null, def));
+      section.appendChild(entry);
+    });
+
+    main.insertBefore(section, document.getElementById('empty-state'));
+  });
+
+  filter('');
+}
+
+function filter(q){
+  q = q.trim().toLowerCase();
+  let shown = 0;
+  document.querySelectorAll('section.cat').forEach(section => {
+    let sectionShown = 0;
+    section.querySelectorAll('.entry').forEach(entry => {
+      const match = !q || entry.dataset.search.includes(q);
+      entry.classList.toggle('hidden', !match);
+      if (match) sectionShown++;
+    });
+    section.classList.toggle('hidden', sectionShown === 0);
+    shown += sectionShown;
+  });
+  document.getElementById('empty-state').style.display = shown === 0 ? 'block' : 'none';
+  document.getElementById('count').textContent = q
+    ? `Showing ${shown} of ${TOTAL}`
+    : `${TOTAL} interventions`;
+}
+
+document.getElementById('search').addEventListener('input', e => filter(e.target.value));
+
+build();
+</script>
+</body>
+</html>
