@@ -29,6 +29,12 @@
   --c-dbt: #6d40a0;
   --c-grief: #8a6850;
   --c-exposure: #a8456f;
+  --c-sleep: #4a5a8a;
+  --c-somatic: #7c9473;
+  --c-safety: #b23a3a;
+  --c-selfcompassion: #cd8fa8;
+  --c-relational: #7d8fc4;
+  --c-sfbt: #5c8a99;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -646,6 +652,12 @@ textarea.fi::placeholder,.fi::placeholder{color:#bbb5b0;font-style:italic;font-s
             <button class="filt mod-btn" data-mod="grief" onclick="toggleModality('grief',this)" style="border-color:var(--c-grief);">Grief</button>
             <button class="filt mod-btn" data-mod="ifs" onclick="toggleModality('ifs',this)" style="border-color:var(--c-ifs);">IFS</button>
             <button class="filt mod-btn" data-mod="assertiveness" onclick="toggleModality('assertiveness',this)" style="border-color:var(--c-assert);">Assertiveness</button>
+            <button class="filt mod-btn" data-mod="sleep" onclick="toggleModality('sleep',this)" style="border-color:var(--c-sleep);">Sleep (CBT-I)</button>
+            <button class="filt mod-btn" data-mod="somatic" onclick="toggleModality('somatic',this)" style="border-color:var(--c-somatic);">Somatic</button>
+            <button class="filt mod-btn" data-mod="safety" onclick="toggleModality('safety',this)" style="border-color:var(--c-safety);">Safety / Crisis</button>
+            <button class="filt mod-btn" data-mod="selfcompassion" onclick="toggleModality('selfcompassion',this)" style="border-color:var(--c-selfcompassion);">Self-Compassion</button>
+            <button class="filt mod-btn" data-mod="relational" onclick="toggleModality('relational',this)" style="border-color:var(--c-relational);">Relational</button>
+            <button class="filt mod-btn" data-mod="sfbt" onclick="toggleModality('sfbt',this)" style="border-color:var(--c-sfbt);">Solution-Focused</button>
           </div>
           <div class="act-sub-row" id="act-sub-filter">
             <span class="act-sub-label">ACT Process ›</span>
@@ -1073,6 +1085,60 @@ const INTS = [
    d:'Therapist facilitated exposure and response prevention, guiding client to confront [obsession/trigger] while refraining from the compulsive or avoidant response of [compulsion/ritual/safety behavior]. Client tolerated the urge to engage in [compulsion/safety behavior] for [duration/interval], demonstrating [reduction in urge intensity over time / significant distress requiring extended support — specify].'},
   {m:'exposure',p:'exposure',c:'var(--c-exposure)',l:'Exposure Therapy',n:'Between-Session Exposure Assignment',
    d:'Therapist assigned between-session exposure practice targeting [stimulus/situation] at the current hierarchy level, with instructions to remain in the situation without avoidance, escape, or safety behaviors until distress naturally decreases. Client identified [specific time/context] for completing the assignment and articulated [anticipated barrier] with a planned response of [strategy].'},
+
+  // ── SLEEP (CBT-I) ──
+  {m:'sleep',p:'sleep',c:'var(--c-sleep)',l:'Sleep (CBT-I)',n:'Sleep Hygiene Psychoeducation',
+   d:'Therapist provided psychoeducation on sleep hygiene practices supporting consistent, restful sleep, including [caffeine/screen timing, consistent wake time, bedroom environment — specify]. Client verbalized understanding and identified [specific change] to implement before the next session.'},
+  {m:'sleep',p:'sleep',c:'var(--c-sleep)',l:'Sleep (CBT-I)',n:'Stimulus Control (Sleep)',
+   d:'Therapist introduced stimulus control instructions for sleep, guiding client to reserve the bed for sleep only and to leave the bed if unable to sleep within approximately 20 minutes. Client identified [current bed-use pattern] as inconsistent with the instructions and committed to [specific change] going forward.'},
+  {m:'sleep',p:'sleep',c:'var(--c-sleep)',l:'Sleep (CBT-I)',n:'Sleep Restriction',
+   d:'Therapist introduced sleep restriction, temporarily limiting client\'s time in bed to [target window] to match current average sleep time and consolidate sleep drive. Client reviewed the rationale and reported current sleep pattern of approximately [current sleep duration], with a target time-in-bed window of [target window].'},
+  {m:'sleep',p:'sleep',c:'var(--c-sleep)',l:'Sleep (CBT-I)',n:'Worry Time / Cognitive Unloading',
+   d:'Therapist introduced a scheduled worry time / cognitive unloading practice, guiding client to designate [specific time] to externalize intrusive or worry-related thoughts in writing rather than engaging them at bedtime. Client identified [specific time] as their designated worry-time window and articulated the rationale for deferring bedtime rumination to it.'},
+
+  // ── SOMATIC / BODY-BASED ──
+  {m:'somatic',p:'somatic',c:'var(--c-somatic)',l:'Somatic / Body-Based',n:'Window of Tolerance Psychoeducation',
+   d:'Therapist provided psychoeducation on the window of tolerance (Siegel), describing the zone of arousal in which client can function effectively and the hyper- and hypo-aroused states outside it. Client identified [hyperarousal/hypoarousal] symptoms of [specific symptom] as evidence of being outside their window of tolerance in relation to [trigger/context].'},
+  {m:'somatic',p:'somatic',c:'var(--c-somatic)',l:'Somatic / Body-Based',n:'Pendulation / Titration',
+   d:'Therapist guided client through pendulation (Somatic Experiencing), moving in small increments between [activation/sensation] and a resourced or neutral state, to build capacity to tolerate bodily sensation without overwhelm. Client demonstrated [increased tolerance / difficulty returning to baseline — specify] across the pendulation sequence.'},
+  {m:'somatic',p:'somatic',c:'var(--c-somatic)',l:'Somatic / Body-Based',n:'Sensory Grounding (5-4-3-2-1)',
+   d:'Therapist introduced sensory grounding (5-4-3-2-1), guiding client through naming sensory input across each of the five senses to anchor attention in the present and reduce [anxiety/activation]. Client completed the sequence and reported [reduced activation / increased present-moment awareness — specify].'},
+  {m:'somatic',p:'somatic',c:'var(--c-somatic)',l:'Somatic / Body-Based',n:'Diaphragmatic / Paced Breathing',
+   d:'Therapist introduced diaphragmatic / paced breathing as a standalone physiological down-regulation skill, guiding client through slow, belly-based breathing at a set pace in relation to [symptom/context]. Client practiced the technique in session and reported [reduced physiological arousal / difficulty sustaining the pace — specify].'},
+
+  // ── CBT: PANIC-SPECIFIC ──
+  {m:'cbt',p:'cbt',c:'var(--c-cbt)',l:'CBT',n:'Cognitive Model of Panic (Clark)',
+   d:'Therapist provided psychoeducation on the cognitive model of panic (Clark), explaining how catastrophic misinterpretation of benign bodily sensations as dangerous drives the panic cycle. Client connected the model to their own experience of misinterpreting [specific sensation] as a sign of [feared catastrophe] and identified [alternative, non-catastrophic interpretation] as an alternative explanation.'},
+
+  // ── SAFETY / CRISIS PLANNING ──
+  {m:'safety',p:'safety',c:'var(--c-safety)',l:'Safety / Crisis Planning',n:'Safety Planning (Stanley-Brown Model)',
+   d:'Therapist collaboratively developed a structured safety plan (Stanley-Brown model) with client, identifying warning signs, internal coping strategies, social supports, professional contacts, and means-restriction steps. Client identified [specific warning sign] as an early indicator and [specific coping strategy/contact] as their first response step, and verbalized understanding of the plan.'},
+  {m:'safety',p:'safety',c:'var(--c-safety)',l:'Safety / Crisis Planning',n:'Panic-Specific Coping/Crisis Plan',
+   d:'Therapist and client collaboratively developed a panic-specific coping and crisis plan for use outside session, identifying grounding steps, PRN medication guidance, and criteria for seeking a higher level of care. Client identified [specific grounding step] as their first response to an acute panic episode and articulated the criteria discussed for when to seek [urgent/emergency] care.'},
+
+  // ── SELF-COMPASSION ──
+  {m:'selfcompassion',p:'selfcompassion',c:'var(--c-selfcompassion)',l:'Self-Compassion',n:'Self-Compassion Break (Neff)',
+   d:'Therapist guided client through a self-compassion break (Neff), practicing mindful acknowledgment of the present difficulty, recognition of common humanity, and an offering of self-kindness in relation to [situation/self-criticism]. Client practiced the three-part sequence and reported [increased self-kindness / difficulty softening self-critical stance — specify].'},
+  {m:'selfcompassion',p:'selfcompassion',c:'var(--c-selfcompassion)',l:'Self-Compassion',n:'Compassionate Letter Writing',
+   d:'Therapist introduced compassionate letter writing, guiding client to draft a letter to themselves from the perspective of an unconditionally compassionate other in relation to [self-critical belief/situation]. Client identified [specific compassionate reframe] as a counter to their habitual self-critical voice of [self-critical belief].'},
+
+  // ── RELATIONAL ──
+  {m:'relational',p:'relational',c:'var(--c-relational)',l:'Relational',n:'Rupture and Repair Processing',
+   d:'Therapist explicitly named and processed a rupture in the therapeutic or other significant relationship related to [specific rupture], modeling direct repair to build relational trust and security. Client engaged in the repair process and reported [increased sense of safety / continued guardedness — specify] in the relationship following the exchange.'},
+
+  // ── SOLUTION-FOCUSED ──
+  {m:'sfbt',p:'sfbt',c:'var(--c-sfbt)',l:'Solution-Focused',n:'Scaling Question',
+   d:'Therapist used a scaling question, asking client to rate [current state/progress] on a 0–10 scale in relation to [goal/domain], to concretize change and identify what would move the number. Client rated [current state/progress] at [X/10] and identified [specific factor] as what would move the rating up by one point.'},
+  {m:'sfbt',p:'sfbt',c:'var(--c-sfbt)',l:'Solution-Focused',n:'Exception-Finding',
+   d:'Therapist used exception-finding questions to explore times when [problem] was absent or less severe, surfacing existing strengths and resources. Client identified [specific exception/time] as a period when [problem] was less present and connected it to [strength/resource] that contributed to the difference.'},
+
+  // ── DBT: ADDITIONAL SKILLS ──
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'Wise Mind',
+   d:'Therapist introduced Wise Mind, guiding client to identify the synthesis of emotion mind and reasonable mind as a balanced state for approaching [decision/situation]. Client practiced accessing Wise Mind in relation to [decision/situation] and identified [specific insight] as arising from that balanced state.'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'ACCEPTS (Distress Tolerance)',
+   d:'Therapist introduced the ACCEPTS distress tolerance skill (Activities, Contributing, Comparisons, Emotions, Pushing away, Thoughts, Sensations), reviewing distraction-based strategies for tolerating [distress/urge] without acting on it. Client identified [specific ACCEPTS strategy] as most accessible and articulated a plan to use it in response to [trigger].'},
+  {m:'dbt',p:'dbt',c:'var(--c-dbt)',l:'DBT',n:'IMPROVE (Distress Tolerance)',
+   d:'Therapist introduced the IMPROVE distress tolerance skill (Imagery, Meaning, Prayer, Relaxation, One thing at a time, Vacation, Encouragement), reviewing strategies for improving the moment during [distress/crisis]. Client identified [specific IMPROVE strategy] as most accessible and articulated a plan to use it in response to [trigger].'},
 ];
 
 // Track selected interventions
@@ -1094,13 +1160,15 @@ let actSubFilter = 'all';
 const MODALITY_LABELS = {
   foundational:'Foundational', act:'ACT', mi:'Motivational Interviewing',
   cbt:'CBT', dbt:'DBT', grief:'Grief Processing', ifs:'IFS', assertiveness:'Assertiveness',
-  exposure:'Exposure Therapy'
+  exposure:'Exposure Therapy', sleep:'Sleep (CBT-I)', somatic:'Somatic / Body-Based',
+  safety:'Safety / Crisis Planning', selfcompassion:'Self-Compassion', relational:'Relational',
+  sfbt:'Solution-Focused'
 };
 
 // Diagnosis → suggested modalities map (ICD-10 prefix matching)
 const DX_SUGGEST = {
-  'F41.1':['act','cbt','exposure'],        // GAD
-  'F41.0':['act','cbt','exposure'],        // Panic Disorder
+  'F41.1':['act','cbt','exposure','sleep','somatic'],        // GAD
+  'F41.0':['act','cbt','exposure','somatic','safety'],       // Panic Disorder
   'F40.1':['cbt','act','exposure'],        // Social Anxiety
   'F40.0':['cbt','act','exposure'],        // Agoraphobia
   'F32':  ['cbt','act','mi'],              // MDD, single episode (all severities)
@@ -1119,10 +1187,13 @@ const DX_SUGGEST = {
 const DX_SUGGEST_INTS = {
   'F41.1': ['Workability Question','Cost of Avoidance','Choice Point','Thought Record / Cognitive Restructuring',
             'Brief In-Session Mindfulness','Importance & Confidence Rulers','Behavioral Experiment',
-            'Exposure Hierarchy Construction','In Vivo Exposure'],
+            'Exposure Hierarchy Construction','In Vivo Exposure','Sleep Hygiene Psychoeducation',
+            'Diaphragmatic / Paced Breathing','Window of Tolerance Psychoeducation'],
   'F41.0': ['TIPP — Distress Tolerance','Physicalizing Sensation','Expanding Around the Feeling',
             'Thought Record / Cognitive Restructuring','Grounding / Orienting to Present','Urge Surfing',
-            'Interoceptive Exposure','In Vivo Exposure'],
+            'Interoceptive Exposure','In Vivo Exposure','Cognitive Model of Panic (Clark)',
+            'Diaphragmatic / Paced Breathing','Sensory Grounding (5-4-3-2-1)',
+            'Panic-Specific Coping/Crisis Plan'],
   'F40.1': ['Thought Record / Cognitive Restructuring','Behavioral Experiment','Cost of Avoidance',
             'Choice Point','Developing Discrepancy','Values-Based Action Planning',
             'In Vivo Exposure','Exposure Hierarchy Construction'],
