@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intake Note Generator — Tended Path Counseling</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #171921;
+    --surface: #242733;
+    --surface-2: #2c303f;
+    --field: #1c1e28;
+    --field-focus: #20232f;
+    --text: #ede8e1;
+    --muted: #a9a3b1;
+    --border: #3e4357;
+    --border-soft: #313546;
+    --accent: #d79f55;
+    --accent-text: #e6b36c;
+    --on-accent: #242733;
+    --soft: rgba(215, 159, 85, 0.12);
+    --soft-border: rgba(215, 159, 85, 0.45);
+    --seg-on-bg: #ede8e1;
+    --seg-on-text: #242733;
+    --header-bg: #0f1016;
+    --header-text: #f7f4f0;
+    --eyebrow: #f0ddb8;
+    --placeholder: #8c8696;
+    --warn: #b2482a;
+    --warn-text: #f2a58a;
+    --ok-text: #8fd1a0;
+    --shadow: rgba(0, 0, 0, .5);
+    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --sans: 'Jost', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --hh: 64px;
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #ede8e1;
+    --surface: #ffffff;
+    --surface-2: #f7f4f0;
+    --field: #f7f4f0;
+    --field-focus: #fffdf9;
+    --text: #242733;
+    --muted: #6a646e;
+    --border: #d6d0c8;
+    --border-soft: #ede8e1;
+    --accent: #d79f55;
+    --accent-text: #7a5518;
+    --on-accent: #242733;
+    --soft: #fdf5ea;
+    --soft-border: #e8c88a;
+    --seg-on-bg: #242733;
+    --seg-on-text: #f7f4f0;
+    --header-bg: #242733;
+    --header-text: #f7f4f0;
+    --eyebrow: #f0ddb8;
+    --placeholder: #8f8993;
+    --warn: #8f3d22;
+    --warn-text: #8f3d22;
+    --ok-text: #3d6b4a;
+    --shadow: rgba(36, 39, 51, .18);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  body { margin: 0; font-family: var(--sans); font-size: 15px; line-height: 1.5; color: var(--text); background: var(--bg); }
+  .skip { position: absolute; left: -999px; top: 0; background: var(--surface); color: var(--text); padding: 8px 12px; z-index: 100; }
+  .skip:focus { left: 8px; top: 8px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Header */
+  header.top { position: sticky; top: 0; z-index: 30; height: var(--hh); background: var(--header-bg); color: var(--header-text); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 24px; }
+  header.top::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, var(--accent), transparent 60%); }
+  .eyebrow { font-family: var(--serif); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--eyebrow); }
+  header.top h1 { font-family: var(--serif); font-weight: 400; font-size: 25px; margin: 0; line-height: 1.1; }
+  .top-actions { display: flex; align-items: center; gap: 12px; }
+  .priv { font-size: 13px; color: #b9b3c0; }
+
+  /* Layout */
+  .app { display: grid; grid-template-columns: 210px minmax(0, 1fr) minmax(400px, 0.95fr); max-width: 1760px; margin: 0 auto; align-items: start; }
+  nav#nav { position: sticky; top: var(--hh); height: calc(100vh - var(--hh)); overflow: auto; padding: 18px 8px 24px 16px; }
+  .nav-label { font-family: var(--serif); font-style: italic; letter-spacing: .1em; text-transform: uppercase; font-size: 13px; color: var(--muted); margin: 0 0 8px 8px; }
+  .nav-link { display: flex; align-items: center; gap: 8px; padding: 7px 8px; color: var(--text); text-decoration: none; font-size: 14px; border-left: 3px solid transparent; border-radius: 1px; }
+  .nav-link:hover { background: var(--surface); }
+  .nav-link.active { background: var(--surface); border-left-color: var(--accent); font-weight: 500; }
+  .nav-link .nn { font-family: var(--serif); font-style: italic; color: var(--muted); min-width: 20px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--border); background: transparent; flex: none; margin-left: auto; }
+  .dot.on { background: var(--accent); border-color: var(--accent); }
+  main#form { padding: 22px 16px 60px; min-width: 0; }
+
+  /* Cards */
+  .card { --accent-card: var(--ac-dark, #6fa8c8); background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent-card); margin: 0 0 20px; scroll-margin-top: calc(var(--hh) + 14px); }
+  :root[data-theme="light"] .card { --accent-card: var(--ac-light, #3a6b8a); }
+  .card-head { display: flex; align-items: baseline; gap: 10px; padding: 11px 18px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+  .card-head .num { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--accent-card); }
+  .card-head h2 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin: 0; letter-spacing: .01em; }
+  .card-head .grow { flex: 1; }
+  .card-body { padding: 16px 18px 6px; }
+
+  .fld { margin: 0 0 15px; min-width: 0; }
+  .lab { display: block; font-size: 12px; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+  .lab .opt { text-transform: none; letter-spacing: 0; font-weight: 400; font-style: italic; }
+  .hint { font-size: 13px; color: var(--muted); font-style: italic; margin: 0 0 12px; }
+  h3.sub { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 8px 0 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .row > .fld { margin-bottom: 15px; }
+
+  input.inp, textarea.inp, select.inp { width: 100%; font: inherit; font-size: 15px; font-weight: 400; color: var(--text); background: var(--field); border: 1px solid var(--border); border-radius: 1px; padding: 8px 10px; }
+  textarea.inp { line-height: 1.55; resize: vertical; min-height: 48px; }
+  input.inp:focus, textarea.inp:focus, select.inp:focus { border-color: var(--accent); background: var(--field-focus); outline: 1px solid var(--accent); }
+  ::placeholder { color: var(--placeholder); font-style: italic; opacity: 1; }
+  .static { padding: 8px 10px; background: var(--surface-2); border: 1px solid var(--border); }
+  output.readout { display: block; padding: 8px 10px; font-weight: 500; background: var(--surface-2); border: 1px solid var(--border); }
+
+  /* Segmented single-select */
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg-btn { font: inherit; font-size: 14px; padding: 6px 13px; background: var(--field); border: 1px solid var(--border); color: var(--text); cursor: pointer; border-radius: 1px; }
+  .seg-btn:hover { border-color: var(--accent); }
+  .seg-btn[aria-checked="true"] { background: var(--seg-on-bg); border-color: var(--seg-on-bg); color: var(--seg-on-text); font-weight: 500; }
+
+  /* Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; padding: 5px 13px; border: 1px solid var(--border); border-radius: 20px; background: var(--field); font-size: 14px; cursor: pointer; user-select: none; }
+  .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .chip:hover { border-color: var(--accent); }
+  .chip.on { background: var(--soft); border-color: var(--accent); color: var(--accent-text); font-weight: 500; }
+  .chip:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Symptom + MSE group blocks */
+  .grp { border: 1px solid var(--border); background: var(--surface-2); padding: 12px 14px 4px; margin: 0 0 12px; }
+  .grp > .lab { color: var(--text); font-weight: 600; }
+  .grp .fld.notes { margin-top: 10px; }
+  .risk-box { background: var(--soft); border: 1px solid var(--soft-border); padding: 14px 16px 4px; margin: 0 0 14px; }
+  .risk-box > .lab { color: var(--accent-text); font-weight: 600; }
+  .sub-card { border: 1px dashed var(--accent); background: var(--soft); padding: 10px 12px 2px; margin: 0 0 12px; }
+  .sub-card h4 { margin: 0 0 8px; font-family: var(--serif); font-size: 17px; }
+
+  /* Diagnosis picker */
+  .dx { position: relative; }
+  .dx-bar { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+  .dx-search { position: relative; flex: 1 1 320px; }
+  ul.dx-list { position: absolute; z-index: 20; left: 0; right: 0; top: 100%; margin: 2px 0 0; padding: 0; list-style: none; background: var(--surface-2); border: 1px solid var(--accent); max-height: 280px; overflow: auto; box-shadow: 0 8px 24px var(--shadow); }
+  ul.dx-list li { padding: 7px 10px; cursor: pointer; display: flex; gap: 10px; border-bottom: 1px solid var(--border-soft); }
+  ul.dx-list li .c { font-weight: 600; min-width: 62px; color: var(--accent-text); }
+  ul.dx-list li[aria-selected="true"], ul.dx-list li:hover { background: var(--soft); }
+  .dx-empty { padding: 8px 10px; color: var(--muted); font-style: italic; }
+  .dx-rows { margin-top: 12px; }
+  .dx-row { display: grid; grid-template-columns: 26px 96px minmax(0, 1fr); gap: 8px; align-items: start; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border-soft); }
+  .dx-row .ord { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--muted); text-align: center; padding-top: 6px; }
+  .dx-row .r2 { grid-column: 2 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 130px auto; gap: 8px; align-items: center; }
+  .dx-row textarea.inp { min-height: 0; resize: none; }
+  .dx-row .ibtn { display: flex; gap: 4px; }
+
+  /* Buttons */
+  .btn { font: inherit; font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 9px 18px; border-radius: 1px; cursor: pointer; border: 1px solid transparent; }
+  .btn-primary { background: var(--accent); color: var(--on-accent); }
+  .btn-primary:hover { background: #e6b36c; }
+  .btn-outline { background: transparent; border-color: var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent-text); }
+  .btn-ghost { background: transparent; border-color: #5b5e6e; color: var(--header-text); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--eyebrow); }
+  .btn-ghost.arm, .btn-outline.arm { background: var(--warn); border-color: var(--warn); color: #fff; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .icon-btn { font: inherit; width: 30px; height: 32px; background: var(--field); color: var(--text); border: 1px solid var(--border); cursor: pointer; }
+  .icon-btn:hover:not(:disabled) { border-color: var(--accent); }
+  .icon-btn:disabled { opacity: .4; cursor: default; }
+
+  /* Output */
+  aside#out { position: sticky; top: var(--hh); height: calc(100vh - var(--hh)); overflow: auto; padding: 18px 16px 20px; border-left: 1px solid var(--border); background: var(--surface-2); display: flex; flex-direction: column; gap: 12px; }
+  aside#out > * { flex: none; }
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+  .tab { font: inherit; font-family: var(--serif); font-size: 19px; padding: 6px 18px 8px; background: transparent; border: none; border-bottom: 3px solid transparent; cursor: pointer; color: var(--muted); }
+  .tab:hover { color: var(--text); }
+  .tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+  .out-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  #copied { font-size: 14px; color: var(--ok-text); font-style: italic; min-height: 1.4em; }
+  #copied.bad { color: var(--warn-text); }
+  .preview { background: var(--surface); border: 1px solid var(--border); padding: 18px 20px; min-height: 360px; font-size: 15px; line-height: 1.6; }
+  .preview p { margin: 0 0 .75em; }
+  .preview .empty { color: var(--muted); font-style: italic; }
+  .ph { color: var(--accent-text); background: var(--soft); border-bottom: 1px dashed var(--accent); }
+  .flags { font-size: 14px; border: 1px solid var(--border); background: var(--surface); padding: 12px 16px; }
+  .flags h3 { font-family: var(--serif); font-size: 18px; margin: 0 0 6px; }
+  .flags ul { margin: 0 0 8px; padding-left: 18px; }
+  .flags li { margin-bottom: 4px; }
+  .flags li.warn { color: var(--warn-text); }
+  .flags .remind { color: var(--muted); font-style: italic; margin: 6px 0 0; }
+  .copy-stage { position: fixed; left: -9999px; top: 0; width: 700px; background: #fff; color: #000; font: 14px/1.5 Arial, sans-serif; }
+
+  footer.foot { background: var(--header-bg); color: #b9b3c0; font-size: 13px; padding: 12px 24px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .is-hidden { display: none !important; }
+
+  /* Narrow screens */
+  @media (max-width: 1240px) {
+    .app { grid-template-columns: 180px minmax(0, 1fr); }
+    aside#out { grid-column: 1 / -1; position: static; height: auto; border-left: none; border-top: 3px solid var(--accent); }
+  }
+  @media (max-width: 760px) {
+    .app { grid-template-columns: 1fr; }
+    nav#nav { position: sticky; top: var(--hh); height: auto; z-index: 15; display: flex; gap: 4px; overflow-x: auto; padding: 6px 10px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .nav-label { display: none; }
+    .nav-link { white-space: nowrap; }
+    .nav-link .dot { margin-left: 4px; }
+    .priv { display: none; }
+    .dx-row { grid-template-columns: 90px minmax(0, 1fr); }
+    .dx-row .ord { display: none; }
+    .dx-row .r2 { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 120px; }
+    .dx-row .ibtn { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#form">Skip to form</a>
+
+<header class="top">
+  <div>
+    <div class="eyebrow">Tended Path Counseling, PLLC</div>
+    <h1>Intake Note Generator</h1>
+  </div>
+  <div class="top-actions">
+    <span class="priv">Nothing is saved or sent. Closing this tab clears everything.</span>
+    <button type="button" id="themeBtn" class="btn btn-ghost" aria-pressed="true">Light mode</button>
+    <button type="button" id="clearAll" class="btn btn-ghost">Clear all</button>
+  </div>
+</header>
+
+<div class="app">
+  <nav id="nav" aria-label="Form sections"></nav>
+  <main id="form" aria-label="Intake form"></main>
+  <aside id="out" aria-label="Generated note">
+    <div class="tabs" role="tablist" aria-label="Output">
+      <button type="button" class="tab" role="tab" id="tab-intake" aria-selected="true" aria-controls="preview">Intake note</button>
+      <button type="button" class="tab" role="tab" id="tab-pirp" aria-selected="false" aria-controls="preview">PIRP note</button>
+    </div>
+    <div class="out-actions">
+      <button type="button" id="copyRich" class="btn btn-primary">Copy note</button>
+      <button type="button" id="copyPlain" class="btn btn-outline">Copy plain text</button>
+      <span id="copied" role="status" aria-live="polite"></span>
+    </div>
+    <div id="preview" class="preview" role="tabpanel" tabindex="0"></div>
+    <div id="flags" class="flags"></div>
+  </aside>
+</div>
+
+<footer class="foot">
+  <span>Tended Path Counseling, PLLC — Bethany Sherman, LMHC #LH70011579</span>
+  <span>No data is stored, saved, or transmitted. Fonts fall back to system fonts.</span>
+</footer>
+
+<script>
+(function () {
+'use strict';
+
+/* ───────────────────────── Small helpers ───────────────────────── */
+const $ = (sel, root) => (root || document).querySelector(sel);
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const escBr = s => esc(s).replace(/\n/g, '<br>');
+const capFirst = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const lcFirst = s => (s && !/^[A-Z]{2,}/.test(s) && !/^I\b/.test(s)) ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+const endP = s => { s = (s || '').trim(); return s && !/[.!?]["')\]]?$/.test(s) ? s + '.' : s; };
+const joinList = a => a.length <= 1 ? (a[0] || '') : a.length === 2 ? a[0] + ' and ' + a[1] : a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1];
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+function pad(n) { return String(n).padStart(2, '0'); }
+function todayISO() { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function fmtDate(iso) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[2] + '/' + m[3] + '/' + m[1] : ''; }
+function fmt12(v) { const m = /^(\d{1,2}):(\d{2})$/.exec(v || ''); if (!m) return ''; let h = +m[1]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m[2] + ' ' + ap; }
+function mins(v) { const m = /^(\d{1,2}):(\d{2})$/.exec(v || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+
+/* ───────────────────────── State reader (reads the DOM) ───────────────────────── */
+const S = {
+  el(id) { return document.querySelector('[data-fid="' + id + '"]'); },
+  hidden(e) { return !e || !!e.closest('.is-hidden'); },
+  t(id) { const e = this.el(id); if (this.hidden(e)) return ''; const i = e.querySelector('input,textarea,select'); return i ? i.value.trim() : ''; },
+  seg(id) { const e = this.el(id); if (this.hidden(e)) return ''; const b = e.querySelector('button[aria-checked="true"]'); return b ? b.dataset.val : ''; },
+  chips(id) { const e = this.el(id); if (this.hidden(e)) return []; return [...e.querySelectorAll('input:checked')].map(i => i.value); },
+  has(id, v) { return this.chips(id).includes(v); }
+};
+
+/* ───────────────────────── Data ───────────────────────── */
+const YN = ['Yes', 'No'];
+const POS_CODE = { 'In-Person, Office': '11', 'Telehealth, Video, Home': '10', 'Telehealth, Video, Not Home': '02' };
+const ACCENTS = ['#3a6b8a', '#5c7a52', '#7a5c7a', '#8a6040', '#3d6b6b', '#6b5a3a', '#4a5e7a', '#7a4a5a'];
+const ACCENTS_DARK = ['#6fa8c8', '#8fb383', '#b58fb5', '#c99468', '#6fb3b3', '#c4a86a', '#8aa3c8', '#c98a9f'];
+
+const SUBSTANCES = ['Alcohol', 'Amphetamines/stimulants', 'Cannabis', 'Cocaine/crack', 'Hallucinogens', 'Heroin', 'Inhalant', 'Methadone', 'Nicotine', 'Opiates', 'OTC', 'Phencyclidine (PCP)', 'Prescription', 'Gambling', 'Sexual', 'Sedative/hypnotic', 'Other'];
+const SUB_PHRASE = { 'Alcohol': 'alcohol', 'Amphetamines/stimulants': 'amphetamines/stimulants', 'Cannabis': 'cannabis', 'Cocaine/crack': 'cocaine/crack', 'Hallucinogens': 'hallucinogens', 'Heroin': 'heroin', 'Inhalant': 'inhalants', 'Methadone': 'methadone', 'Nicotine': 'nicotine', 'Opiates': 'opiates', 'OTC': 'over-the-counter medication', 'Phencyclidine (PCP)': 'phencyclidine (PCP)', 'Prescription': 'prescription medication', 'Gambling': 'gambling', 'Sexual': 'sexual behavior', 'Sedative/hypnotic': 'sedative/hypnotics' };
+
+const MSE = [
+  { id: 'mApp', label: 'Appearance', opts: ['Well-groomed', 'Appropriately dressed', 'Casually dressed', 'Disheveled', 'Poor hygiene', 'Notable (see narrative)'] },
+  { id: 'mBeh', label: 'Behavior / psychomotor', opts: ['Calm', 'Cooperative', 'Engaged', 'Good eye contact', 'Limited eye contact', 'Guarded', 'Restless', 'Agitated', 'Psychomotor slowing'] },
+  { id: 'mSpe', label: 'Speech', opts: ['Normal rate, rhythm, and volume', 'Pressured', 'Slowed', 'Soft', 'Loud'] },
+  { id: 'mMood', label: 'Mood (client-reported)', opts: ['Good', 'Neutral', 'Anxious', 'Sad / low', 'Stressed / overwhelmed', 'Irritable', 'Mixed'], quote: true },
+  { id: 'mAff', label: 'Affect (observed)', opts: ['Full range', 'Congruent with mood', 'Constricted', 'Blunted', 'Flat', 'Labile', 'Anxious', 'Dysphoric', 'Elevated', 'Irritable', 'Tearful'] },
+  { id: 'mTP', label: 'Thought process', opts: ['Linear and goal-directed', 'Circumstantial', 'Tangential', 'Ruminative', 'Racing', 'Disorganized'] },
+  { id: 'mTC', label: 'Thought content', opts: [{ v: 'No delusions or paranoia noted', x: 1 }, 'Worry-focused', 'Ruminative', 'Obsessional content', 'Paranoid ideation', 'Delusional content'] },
+  { id: 'mPerc', label: 'Perception', opts: [{ v: 'No perceptual disturbances noted', x: 1 }, 'Auditory hallucinations', 'Visual hallucinations', 'Other perceptual disturbance'] },
+  { id: 'mCog', label: 'Cognition / orientation', opts: ['Alert', 'Oriented x4', 'Mild cognitive fog', 'Memory concerns', 'Concentration impaired'] },
+  { id: 'mIns', label: 'Insight', single: ['Good', 'Fair', 'Limited', 'Poor'] },
+  { id: 'mJud', label: 'Judgment', single: ['Good', 'Fair', 'Limited', 'Poor'] }
+];
+
+const DX_LIST = [
+  ['F32.0', 'Major depressive disorder, single episode, mild', 'mdd depression depressive'],
+  ['F32.1', 'Major depressive disorder, single episode, moderate', 'mdd depression depressive'],
+  ['F32.2', 'Major depressive disorder, single episode, severe', 'mdd depression depressive'],
+  ['F33.0', 'Major depressive disorder, recurrent, mild', 'mdd depression depressive recurrent'],
+  ['F33.1', 'Major depressive disorder, recurrent, moderate', 'mdd depression depressive recurrent'],
+  ['F33.2', 'Major depressive disorder, recurrent, severe', 'mdd depression depressive recurrent'],
+  ['F34.1', 'Persistent depressive disorder (dysthymia)', 'pdd dysthymia depression'],
+  ['F41.1', 'Generalized anxiety disorder', 'gad anxiety worry'],
+  ['F41.0', 'Panic disorder', 'panic'],
+  ['F41.9', 'Anxiety disorder, unspecified', 'anxiety unspecified'],
+  ['F40.10', 'Social anxiety disorder (social phobia)', 'sad social phobia'],
+  ['F40.218', 'Specific phobia, animal type', 'phobia'],
+  ['F40.228', 'Specific phobia, natural environment type', 'phobia'],
+  ['F40.230', 'Specific phobia, blood-injection-injury type (fear of blood)', 'phobia'],
+  ['F40.231', 'Specific phobia, blood-injection-injury type (fear of injections and transfusions)', 'phobia'],
+  ['F40.232', 'Specific phobia, blood-injection-injury type (fear of other medical care)', 'phobia'],
+  ['F40.233', 'Specific phobia, blood-injection-injury type (fear of injury)', 'phobia'],
+  ['F40.248', 'Specific phobia, situational type', 'phobia'],
+  ['F40.298', 'Specific phobia, other type', 'phobia'],
+  ['F43.10', 'Posttraumatic stress disorder', 'ptsd trauma'],
+  ['F43.11', 'Posttraumatic stress disorder, acute', 'ptsd trauma'],
+  ['F43.12', 'Posttraumatic stress disorder, chronic', 'ptsd trauma'],
+  ['F43.0', 'Acute stress disorder', 'asd acute stress'],
+  ['F43.20', 'Adjustment disorder, unspecified', 'adjustment'],
+  ['F43.21', 'Adjustment disorder with depressed mood', 'adjustment'],
+  ['F43.22', 'Adjustment disorder with anxiety', 'adjustment'],
+  ['F43.23', 'Adjustment disorder with mixed anxiety and depressed mood', 'adjustment'],
+  ['F43.24', 'Adjustment disorder with disturbance of conduct', 'adjustment'],
+  ['F43.25', 'Adjustment disorder with mixed disturbance of emotions and conduct', 'adjustment'],
+  ['F43.9', 'Reaction to severe stress, unspecified', 'stress reaction unspecified'],
+  ['F43.81', 'Prolonged grief disorder', 'pgd grief'],
+  ['F90.0', 'Attention-deficit/hyperactivity disorder, predominantly inattentive presentation', 'adhd add attention'],
+  ['F90.1', 'Attention-deficit/hyperactivity disorder, predominantly hyperactive-impulsive presentation', 'adhd attention'],
+  ['F90.2', 'Attention-deficit/hyperactivity disorder, combined presentation', 'adhd attention'],
+  ['F90.8', 'Attention-deficit/hyperactivity disorder, other specified', 'adhd attention'],
+  ['F90.9', 'Attention-deficit/hyperactivity disorder, unspecified', 'adhd attention'],
+  ['F31.81', 'Bipolar II disorder', 'bipolar'],
+  ['', 'Bipolar I disorder (enter code by current episode)', 'bipolar'],
+  ['F34.0', 'Cyclothymic disorder', 'cyclothymia bipolar'],
+  ['F42.2', 'Obsessive-compulsive disorder', 'ocd obsessive'],
+  ['F42.3', 'Hoarding disorder', 'hoarding ocd'],
+  ['F42.4', 'Excoriation (skin-picking) disorder', 'excoriation skin picking ocd'],
+  ['F45.22', 'Body dysmorphic disorder', 'bdd'],
+  ['F60.3', 'Borderline personality disorder', 'bpd personality'],
+  ['F63.81', 'Intermittent explosive disorder', 'ied anger'],
+  ['F45.1', 'Somatic symptom disorder', 'ssd somatic'],
+  ['F45.21', 'Illness anxiety disorder', 'iad health anxiety'],
+  ['F48.1', 'Depersonalization/derealization disorder', 'dpdr dissociation']
+];
+
+/* ───────────────────────── Form configuration ───────────────────────── */
+function ynPair(id, label, detailLabel, ph) {
+  return [
+    { id, label, type: 'seg', options: YN },
+    { id: id + '_d', label: detailLabel || 'Details', type: 'textarea', rows: 2, ph: ph || '', showIf: () => S.seg(id) === 'Yes' }
+  ];
+}
+function symptomGroup(id, label, opts, notesPh) {
+  return { type: 'group', label, fields: [
+    { id, label: label + ' (select all that apply)', type: 'chips', options: opts, hideLabel: true },
+    { id: id + 'N', label: 'Notes', type: 'textarea', rows: 2, ph: notesPh || 'Optional detail, in your words…', cls: 'notes' }
+  ] };
+}
+
+const SECTIONS = [
+  { id: 'service', title: 'Service Details', fields: [
+    { type: 'row', fields: [
+      { id: 'dos', label: 'Date of service', type: 'date', noCount: true },
+      { id: 'tStart', label: 'Start time', type: 'time' },
+      { id: 'tEnd', label: 'End time', type: 'time' },
+      { id: 'durOut', label: 'Session duration', type: 'readout' }
+    ] },
+    { id: 'cptStatic', label: 'CPT code', type: 'static', text: '90791: Intake/Diagnostic Evaluation' },
+    { id: 'posClient', label: 'Client POS', type: 'seg', options: [
+      { label: 'In-Person, Office (11)', value: 'In-Person, Office' },
+      { label: 'Telehealth, Video, Home (10)', value: 'Telehealth, Video, Home' },
+      { label: 'Telehealth, Video, Not Home (02)', value: 'Telehealth, Video, Not Home' }] },
+    { id: 'posProv', label: 'Provider POS', type: 'seg', options: ['In-Person, Office', 'Telehealth, Video, Home', 'Telehealth, Video, Not Home'] },
+    { type: 'note', text: 'Telehealth claims: append modifier 95 (accepted across your current payers). Do not use GT. Confirm any payer-specific rules in Headway.', showIf: () => /^Telehealth/.test(S.seg('posClient')) || /^Telehealth/.test(S.seg('posProv')) },
+    { type: 'heading', text: 'Client details (optional)' },
+    { type: 'row', fields: [
+      { id: 'age', label: 'Age', type: 'text', ph: 'e.g. 34' },
+      { id: 'genderId', label: 'Gender identity', type: 'text', ph: 'e.g. woman, nonbinary' },
+      { id: 'orient', label: 'Sexual orientation', type: 'text', ph: 'as offered by client' }
+    ] },
+    { id: 'pron', label: 'Pronouns (used in generated sentences)', type: 'seg', options: ['she/her', 'he/him', 'they/them', 'Custom'] },
+    { type: 'note', text: 'Generated sentences use these pronouns. Text you type yourself is never altered. Leave blank and every sentence uses "Client."' },
+    { type: 'row', showIf: () => S.seg('pron') === 'Custom', fields: [
+      { id: 'pnS', label: 'Subject', type: 'text', ph: 'e.g. ze' },
+      { id: 'pnO', label: 'Object', type: 'text', ph: 'e.g. hir' },
+      { id: 'pnP', label: 'Possessive', type: 'text', ph: 'e.g. hir' },
+      { id: 'pnR', label: 'Reflexive', type: 'text', ph: 'e.g. hirself' },
+      { id: 'pnPl', label: 'Verb form', type: 'chips', options: ['Uses plural verbs (like "they")'] }
+    ] }
+  ] },
+
+  { id: 'intake', title: 'Intake Details', fields: [
+    { type: 'row', fields: [
+      { id: 'consent', label: 'Consent reviewed', type: 'seg', options: YN },
+      { id: 'sihi', label: 'SI/HI reviewed', type: 'seg', options: YN },
+      { id: 'safetyInd', label: 'Safety plan indicated', type: 'seg', options: YN },
+      { id: 'refInd', label: 'Referral indicated', type: 'seg', options: YN }
+    ] },
+    { id: 'refInd_d', label: 'Referral details', type: 'textarea', rows: 2, ph: 'Referred to, reason, status…', showIf: () => S.seg('refInd') === 'Yes' }
+  ] },
+
+  { id: 'present', title: 'Presenting Concerns & Reason for Referral', fields: [
+    { id: 'refSource', label: 'Referral source', opt: true, type: 'text', ph: 'e.g. self, PCP, Psychology Today' },
+    { id: 'primary', label: 'Primary problem', type: 'textarea', rows: 2 },
+    { type: 'row', fields: [
+      { id: 'onset', label: 'Onset', type: 'text' },
+      { id: 'duration', label: 'Duration', type: 'text' }
+    ] },
+    { id: 'stressors', label: 'Precipitating stressors / life context', type: 'textarea', rows: 3 },
+    { id: 'pcSummary', label: 'Presenting concerns (clinician summary)', type: 'textarea', rows: 5 },
+    { id: 'goals', label: "Client's goals, in their own words", opt: true, type: 'textarea', rows: 2, ph: 'What the client hopes will change…' }
+  ] },
+
+  { id: 'psych', title: 'Psychiatric & Treatment History', fields: [
+    { type: 'note', text: 'Choose Yes to add a details box.' }
+  ].concat(
+    ynPair('priorTherapy', 'Prior therapy', 'Prior therapy details', 'Modalities, duration, what helped…'),
+    ynPair('priorPsych', 'Prior psychiatric care', 'Prior psychiatric care details'),
+    ynPair('medication', 'Medication', 'Medication details', 'Name, dose, prescriber…'),
+    ynPair('hosp', 'Hospitalizations', 'Hospitalization details', 'Dates, setting, reason…'),
+    ynPair('priorDx', 'Prior diagnoses', 'Prior diagnoses details'),
+    [{ id: 'famPsych', label: 'Family psychiatric history', opt: true, type: 'textarea', rows: 2, ph: 'First-degree relatives; or not reported' }]
+  ) },
+
+  { id: 'medical', title: 'Medical History & Current Health', fields: [
+    { id: 'medConditions', label: 'Relevant medical conditions', type: 'textarea', rows: 2 },
+    { id: 'pcp', label: 'Primary care provider', type: 'text' },
+    { type: 'heading', text: 'Symptoms (builds a narrative summary)' },
+    symptomGroup('sSleep', 'Sleep', ['Within normal limits', 'Hypersomnia', 'Insomnia - onset', 'Insomnia - maintenance', 'Insomnia - late']),
+    symptomGroup('sApp', 'Appetite / eating patterns', ['Within normal limits', 'Decreased appetite', 'Increased appetite', 'Irregular / restricted']),
+    symptomGroup('sAtt', 'Memory / attention', ['Within normal limits', 'Deficits', 'Easily distracted', 'Hyperactive', 'Poor concentration', 'Overly attentive']),
+    symptomGroup('sTho', 'Thought content / perception', ['None reported', 'Delusions', 'Hallucinations', 'Paranoid ideation', 'Obsessions', 'Compulsions', 'Disorganized thinking']),
+    symptomGroup('sMood', 'Mood / affect', ['None reported', 'Depressed', 'Helpless / hopeless', 'Worthless', 'Anxious', 'Panic attacks', 'Excessive worry', 'Irritable', 'Tearful'])
+  ] },
+
+  { id: 'risk', title: 'Risk Assessment', fields: [
+    { type: 'custom', id: 'riskBlock', render: renderRisk }
+  ] },
+
+  { id: 'substance', title: 'Substance Use History', fields: [
+    { id: 'subst', label: 'Addiction history (select all that apply)', type: 'chips', options: [{ v: 'No history of substance use', x: 1 }].concat(SUBSTANCES) },
+    { type: 'custom', id: 'subCards', render: renderSubCards },
+    { id: 'sbNotes', label: 'Additional substance notes', opt: true, type: 'textarea', rows: 2, showIf: () => S.chips('subst').some(x => x !== 'No history of substance use') }
+  ] },
+
+  { id: 'social', title: 'Developmental & Social History', fields: [
+    { id: 'famOrigin', label: 'Family of origin', type: 'textarea', rows: 3 },
+    { id: 'living', label: 'Current living situation', type: 'textarea', rows: 2 },
+    { id: 'relStatus', label: 'Relationship status', type: 'seg', options: ['Single', 'In a relationship', 'Ethical Non-Monogamy', 'Married', 'Civil Union / Domestic Partnership', 'Separated', 'Divorced', 'Widowed'] },
+    { id: 'edu', label: 'Highest level of education completed', type: 'select', options: ['No schooling completed', 'Nursery - 11th grade', '12th grade - no diploma', 'High school diploma or GED/equivalent', 'Some college', 'Associate degree', "Bachelor's degree", "Master's degree", 'Professional degree', 'Doctorate degree'] },
+    { id: 'emp', label: 'Employment status', type: 'seg', options: ['Unemployed', 'Employed - full-time', 'Employed - part-time', 'Independent Contractor', 'Temporary / Seasonal', 'Intern / Apprentice', 'Contingent / On-Call / Casual'] }
+  ].concat(
+    ynPair('legal', 'Legal history', 'Legal history details'),
+    [
+      { id: 'support', label: 'Support system / significant relationships', type: 'textarea', rows: 3 },
+      { id: 'cultural', label: 'Cultural / spiritual / identity context', type: 'textarea', rows: 3 },
+      { id: 'trauma', label: 'History of trauma', type: 'chips', options: [{ v: 'None reported', x: 1 }, 'Not ready to discuss', 'Physical', 'Sexual', 'Emotional', 'Neglect', 'Other'] },
+      { id: 'traumaN', label: 'Trauma notes', opt: true, type: 'textarea', rows: 2, ph: 'As disclosed; pacing; what is deferred…', showIf: () => S.chips('trauma').some(x => x !== 'None reported') }
+    ]) },
+
+  { id: 'mse', title: 'Mental Status Exam', fields: [
+    { type: 'custom', id: 'mseBlock', render: renderMSE },
+    { id: 'mseNarr', label: 'MSE narrative / elaboration', type: 'textarea', rows: 3 }
+  ] },
+
+  { id: 'diag', title: 'Diagnostic Evaluation', fields: [
+    { id: 'dxField', label: 'Diagnosis', type: 'custom', render: renderDx },
+    { id: 'formulation', label: 'Clinical formulation: biopsychosocial summary (clinician-written)', type: 'textarea', rows: 8, ph: 'Biological, psychological, and social factors, and how they interact in this presentation.' },
+    { id: 'strengths', label: 'Strengths', opt: true, type: 'textarea', rows: 2, ph: 'Insight, motivation, supports, coping skills…' },
+    { id: 'medNec', label: 'Medical necessity (clinician-written)', type: 'textarea', rows: 5, ph: 'Link diagnosis, functional impairment, and the need for outpatient psychotherapy in your own words.' }
+  ] },
+
+  { id: 'plan', title: 'Initial Treatment Plan', fields: [
+    { type: 'row', fields: [
+      { id: 'freq', label: 'Session frequency', type: 'text', list: ['Weekly', 'Every other week', 'Monthly', 'As clinically indicated'] },
+      { id: 'dur', label: 'Anticipated duration of treatment', type: 'text', list: ['Short-term (1-3 months)', 'Moderate (3-6 months)', 'Ongoing / open-ended', 'To be determined'] }
+    ] },
+    { id: 'txGoals', label: 'Initial treatment goals', type: 'textarea', rows: 5, ph: 'Goal 1: …\nGoal 2: …' },
+    { id: 'coord', label: 'Coordination of care indicated', type: 'chips', options: [{ v: 'None', x: 1 }, 'PCP', 'Prescriber', 'Psychiatric', 'Other'] },
+    { id: 'coordN', label: 'Coordination details', type: 'textarea', rows: 2, ph: 'Who, what, and whether a release is on file…', showIf: () => S.chips('coord').some(x => x !== 'None') },
+    { id: 'clinNotes', label: 'Clinician notes / additional details', type: 'textarea', rows: 3 }
+  ] },
+
+  { id: 'pirp', title: 'PIRP Note (second output)', fields: [
+    { type: 'note', text: 'The PIRP note builds from everything above. The fields here cover only what the intake does not: your response narrative, plan items, and extra interventions.' },
+    { id: 'pirpOpts', label: 'Options', type: 'chips', options: ['Include SI/HI and safety statements (off by default; risk is documented in the separate risk field)'] },
+    { id: 'pirpAreas', label: 'Interventions listed (auto-selected from filled sections; click to override)', type: 'chips', manual: true,
+      options: [
+        { v: 'consent', l: 'Informed consent and policies' }, { v: 'telehealth', l: 'Telehealth consent' },
+        { v: 'concerns', l: 'Presenting concerns' }, { v: 'psych', l: 'Psychiatric and treatment history' },
+        { v: 'medical', l: 'Medical history and symptoms' }, { v: 'substance', l: 'Substance use history' },
+        { v: 'social', l: 'Developmental and social history' }, { v: 'trauma', l: 'Trauma history (as disclosed)' },
+        { v: 'mse', l: 'Mental status exam' }, { v: 'dx', l: 'Diagnostic evaluation and formulation' },
+        { v: 'plan', l: 'Initial treatment goals and plan' }, { v: 'coord', l: 'Coordination of care' },
+        { v: 'referral', l: 'Referral need' }, { v: 'safety', l: 'SI/HI review (needs the option above)' }
+      ] },
+    { id: 'pirpExtra', label: 'Additional interventions', opt: true, type: 'textarea', rows: 2, ph: 'Only what you actually did, for example psychoeducation provided…' },
+    { id: 'pirpResp', label: 'Response', type: 'textarea', rows: 6, ph: 'Link each intervention to what the client said, concluded, or changed (a takeaway, a shift in confidence or intention), not only affect. Quote only pivotal statements. Separate paragraphs with a blank line.' },
+    { id: 'pirpNext', label: 'Next session focus', type: 'textarea', rows: 2 },
+    { id: 'pirpBetween', label: 'Between-session item', opt: true, type: 'text', ph: 'Client to …' }
+  ] }
+];
+
+/* ───────────────────────── Custom renderers ───────────────────────── */
+function mkLabel(text, id, optional) {
+  const l = el(id ? 'label' : 'div', 'lab', text);
+  if (id) l.htmlFor = id;
+  return l;
+}
+
+function renderRisk(w) {
+  const mk = (cfg, parent) => buildField(cfg, parent);
+  const box = el('div', 'risk-box');
+  box.append(el('div', 'lab', 'Risk screening (complete for every intake)'));
+  const tri = ['Denied', 'Endorsed', 'Not assessed'];
+  const fields = [
+    { id: 'si', label: 'Suicidal ideation', type: 'seg', options: ['None', 'Passive', 'Active'] },
+    { type: 'row', showIf: () => ['Passive', 'Active'].includes(S.seg('si')), fields: [
+      { id: 'siPlan', label: 'Plan', type: 'seg', options: tri },
+      { id: 'siIntent', label: 'Intent', type: 'seg', options: tri },
+      { id: 'siPrep', label: 'Preparatory behavior', type: 'seg', options: tri }
+    ] },
+    { id: 'siD', label: 'SI details', type: 'textarea', rows: 2, ph: 'Frequency, most recent, triggers, what the client does when it occurs…', showIf: () => ['Passive', 'Active'].includes(S.seg('si')) },
+    { id: 'attempt', label: 'Prior suicide attempts', type: 'seg', options: YN },
+    { id: 'attemptD', label: 'Attempt details', type: 'textarea', rows: 2, ph: 'Date(s), method, medical treatment…', showIf: () => S.seg('attempt') === 'Yes' },
+    { id: 'hi', label: 'Homicidal ideation', type: 'seg', options: ['None', 'Passive', 'Active'] },
+    { type: 'row', showIf: () => ['Passive', 'Active'].includes(S.seg('hi')), fields: [
+      { id: 'hiPlan', label: 'Plan', type: 'seg', options: tri },
+      { id: 'hiIntent', label: 'Intent', type: 'seg', options: tri }
+    ] },
+    { id: 'hiD', label: 'HI details', type: 'textarea', rows: 2, ph: 'Identified target, history of violence, access…', showIf: () => ['Passive', 'Active'].includes(S.seg('hi')) },
+    { id: 'nssi', label: 'Self-harm (NSSI)', type: 'seg', options: ['None', 'Historical', 'Active'] },
+    { id: 'nssiD', label: 'NSSI details', type: 'textarea', rows: 2, ph: 'Method, frequency, most recent…', showIf: () => ['Historical', 'Active'].includes(S.seg('nssi')) },
+    { id: 'means', label: 'Means access', type: 'seg', options: ['No access', 'Access, no concern', 'Access, concern'] },
+    { id: 'meansD', label: 'Means details', type: 'textarea', rows: 2, ph: 'Firearms, medications, other; storage or mitigation…', showIf: () => ['Access, no concern', 'Access, concern'].includes(S.seg('means')) },
+    { id: 'safetyPlan', label: 'Safety plan', type: 'seg', options: ['Not indicated', 'Deferred, monitoring', 'Developed, on file'] }
+  ];
+  fields.forEach(f => mk(f, box));
+  w.append(box);
+  buildField({ id: 'protective', label: 'Protective factors', type: 'chips', options: ['Social support', 'Family connection', 'Reasons for living', 'Future orientation', 'Engaged in treatment', 'Work or daily structure', 'Pets or dependents', 'Spiritual or religious beliefs', 'Coping skills', 'Help-seeking', 'Other'] }, w);
+  buildField({ id: 'protectiveN', label: 'Protective factor details', opt: true, type: 'textarea', rows: 2, showIf: () => S.chips('protective').length > 0 }, w);
+  buildField({ id: 'riskNarr', label: 'Risk narrative (clinician-written)', type: 'textarea', rows: 5, ph: 'Risk level, risk and protective factors, and your clinical rationale. Your wording; this is not auto-generated.' }, w);
+}
+
+function renderSubCards(w) {
+  SUBSTANCES.forEach(name => {
+    const key = 'sb_' + slug(name);
+    const card = el('div', 'sub-card');
+    card.append(el('h4', null, name));
+    const inner = [];
+    if (name === 'Other') inner.push({ id: key + '_name', label: 'Substance or behavior', type: 'text' });
+    inner.push({ type: 'row', fields: [
+      { id: key + '_amount', label: 'Amount', type: 'text', ph: 'e.g. 2-3 drinks/week' },
+      { id: key + '_route', label: 'Route', type: 'text', ph: 'e.g. oral, N/A' },
+      { id: key + '_dur', label: 'Duration', type: 'text', ph: 'e.g. 10 years' },
+      { id: key + '_last', label: 'Last use', type: 'text', ph: 'e.g. last week' },
+      { id: key + '_tx', label: 'Treatment history', type: 'text', ph: 'e.g. none' }
+    ] });
+    inner.forEach(f => buildField(f, card));
+    card.dataset.sub = name;
+    conds.push({ node: card, fn: () => S.has('subst', name) });
+    w.append(card);
+  });
+}
+
+function renderMSE(w) {
+  MSE.forEach(d => {
+    if (d.single) {
+      buildField({ id: d.id, label: d.label, type: 'seg', options: d.single }, w);
+    } else {
+      buildField({ id: d.id, label: d.label, type: 'chips', options: d.opts }, w);
+      if (d.quote) buildField({ id: d.id + 'Q', label: "Mood in client's words", opt: true, type: 'text', ph: 'Direct quote, if offered' }, w);
+    }
+  });
+}
+
+/* Diagnosis picker */
+let dxRows = [];
+let dxRowsEl = null;
+function renderDx(w) {
+  const box = el('div', 'dx');
+  const bar = el('div', 'dx-bar');
+  const wrap = el('div', 'dx-search');
+  const search = document.createElement('input');
+  search.type = 'text'; search.className = 'inp'; search.id = 'dxSearch'; search.autocomplete = 'off';
+  search.placeholder = 'Search by name, code, or abbreviation (GAD, F41.1, adjustment…)';
+  search.setAttribute('role', 'combobox'); search.setAttribute('aria-expanded', 'false'); search.setAttribute('aria-controls', 'dxList'); search.setAttribute('aria-label', 'Search diagnoses');
+  const list = el('ul', 'dx-list'); list.id = 'dxList'; list.setAttribute('role', 'listbox'); list.hidden = true;
+  wrap.append(search, list);
+  const custom = el('button', 'btn btn-outline'); custom.type = 'button'; custom.textContent = 'Add custom diagnosis';
+  bar.append(wrap, custom);
+  dxRowsEl = el('div', 'dx-rows');
+  box.append(bar, dxRowsEl);
+  w.append(box);
+
+  let active = -1, shown = [];
+  function fill() {
+    const q = search.value.trim().toLowerCase();
+    shown = DX_LIST.filter(d => !q || (d[0] + ' ' + d[1] + ' ' + d[2]).toLowerCase().includes(q)).slice(0, 14);
+    list.innerHTML = '';
+    if (!shown.length) { const li = el('li', 'dx-empty', 'No match. Use "Add custom diagnosis" for anything not on the list.'); list.append(li); }
+    shown.forEach((d, i) => {
+      const li = el('li'); li.setAttribute('role', 'option'); li.id = 'dxo' + i; li.setAttribute('aria-selected', i === active ? 'true' : 'false');
+      li.append(el('span', 'c', d[0] || '—'), el('span', null, d[1]));
+      li.addEventListener('mousedown', e => { e.preventDefault(); pick(d); });
+      list.append(li);
+    });
+    list.hidden = false; search.setAttribute('aria-expanded', 'true');
+  }
+  function close() { list.hidden = true; search.setAttribute('aria-expanded', 'false'); active = -1; }
+  function pick(d) { addDx({ code: d[0], name: d[1], spec: '', status: dxRows.length ? 'Additional' : 'Principal' }); search.value = ''; close(); }
+  search.addEventListener('focus', fill);
+  search.addEventListener('input', () => { active = -1; fill(); });
+  search.addEventListener('blur', () => setTimeout(close, 120));
+  search.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); if (list.hidden) fill(); active = Math.min(active + 1, shown.length - 1); fill(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); fill(); }
+    else if (e.key === 'Enter') { if (!list.hidden && shown[active]) { e.preventDefault(); pick(shown[active]); } else if (!list.hidden && shown.length === 1) { e.preventDefault(); pick(shown[0]); } }
+    else if (e.key === 'Escape') { close(); }
+  });
+  custom.addEventListener('click', () => { addDx({ code: '', name: '', spec: '', status: dxRows.length ? 'Additional' : 'Principal' }, true); });
+  renderDxRows();
+}
+function addDx(row, focus) { dxRows.push(row); renderDxRows(focus ? dxRows.length - 1 : -1); update(); }
+function dxReset() { dxRows = []; renderDxRows(); }
+function renderDxRows(focusIdx) {
+  if (!dxRowsEl) return;
+  dxRowsEl.innerHTML = '';
+  if (!dxRows.length) { dxRowsEl.append(el('p', 'hint', 'No diagnosis added yet.')); return; }
+  dxRows.forEach((r, i) => {
+    const row = el('div', 'dx-row');
+    const ord = el('span', 'ord', String(i + 1));
+    const code = mkInput(r.code, 'Code', v => { r.code = v; }); code.setAttribute('aria-label', 'ICD-10-CM code');
+    const name = mkInput(r.name, 'Diagnosis name', v => { r.name = v; }, true); name.setAttribute('aria-label', 'Diagnosis name');
+    const spec = mkInput(r.spec, 'Specifier / notes', v => { r.spec = v; }); spec.setAttribute('aria-label', 'Specifier or notes');
+    const st = document.createElement('select'); st.className = 'inp'; st.setAttribute('aria-label', 'Diagnosis status');
+    ['Principal', 'Additional', 'Provisional', 'Rule out'].forEach(o => { const op = el('option', null, o); op.value = o; st.append(op); });
+    st.value = r.status; st.addEventListener('change', () => { r.status = st.value; update(); });
+    const btns = el('div', 'ibtn');
+    const up = el('button', 'icon-btn', '↑'); up.type = 'button'; up.setAttribute('aria-label', 'Move up'); up.disabled = i === 0;
+    const dn = el('button', 'icon-btn', '↓'); dn.type = 'button'; dn.setAttribute('aria-label', 'Move down'); dn.disabled = i === dxRows.length - 1;
+    const rm = el('button', 'icon-btn', '×'); rm.type = 'button'; rm.setAttribute('aria-label', 'Remove diagnosis');
+    up.addEventListener('click', () => { [dxRows[i - 1], dxRows[i]] = [dxRows[i], dxRows[i - 1]]; renderDxRows(); update(); });
+    dn.addEventListener('click', () => { [dxRows[i + 1], dxRows[i]] = [dxRows[i], dxRows[i + 1]]; renderDxRows(); update(); });
+    rm.addEventListener('click', () => { dxRows.splice(i, 1); renderDxRows(); update(); });
+    btns.append(up, dn, rm);
+    const r2 = el('div', 'r2'); r2.append(spec, st, btns);
+    row.append(ord, code, name, r2);
+    dxRowsEl.append(row);
+    if (i === focusIdx) setTimeout(() => code.focus(), 0);
+  });
+}
+function mkInput(val, ph, onInput, multiline) {
+  const i = document.createElement(multiline ? 'textarea' : 'input'); if (multiline) i.rows = 2; else i.type = 'text';
+  i.className = 'inp'; i.value = val || ''; i.placeholder = ph; i.autocomplete = 'off';
+  i.addEventListener('input', () => { onInput(i.value); update(); });
+  return i;
+}
+
+/* ───────────────────────── Form builder ───────────────────────── */
+const conds = [];
+let uid = 0;
+
+function buildField(f, parent) {
+  if (f.type === 'row') {
+    const r = el('div', 'row'); parent.append(r);
+    if (f.showIf) conds.push({ node: r, fn: f.showIf });
+    f.fields.forEach(x => buildField(x, r)); return;
+  }
+  if (f.type === 'group') {
+    const g = el('div', 'grp'); g.append(el('div', 'lab', f.label)); parent.append(g);
+    f.fields.forEach(x => buildField(x, g)); return;
+  }
+  if (f.type === 'heading') { const h = el('h3', 'sub', f.text); parent.append(h); if (f.showIf) conds.push({ node: h, fn: f.showIf }); return; }
+  if (f.type === 'note') { const n = el('p', 'hint', f.text); parent.append(n); if (f.showIf) conds.push({ node: n, fn: f.showIf }); return; }
+  if (f.type === 'custom' && !f.id) { f.render(parent); return; }
+
+  const w = el('div', 'fld' + (f.cls ? ' ' + f.cls : ''));
+  w.dataset.fid = f.id; w.dataset.type = f.type;
+  if (f.noCount) w.dataset.nocount = '1';
+  if (f.showIf) conds.push({ node: w, fn: f.showIf });
+  const inId = 'i-' + f.id + '-' + (uid++);
+  const labText = f.label + '';
+  const needsFor = ['text', 'textarea', 'date', 'time', 'select'].includes(f.type);
+  let labEl = null;
+  if (!f.hideLabel && f.label) {
+    labEl = needsFor ? mkLabel(labText, inId) : mkLabel(labText);
+    if (f.opt) { const o = el('span', 'opt', ' (optional)'); labEl.append(o); }
+    labEl.id = 'l-' + inId;
+    w.append(labEl);
+  }
+  switch (f.type) {
+    case 'text': case 'date': case 'time': {
+      const i = document.createElement('input'); i.type = f.type; i.id = inId; i.className = 'inp'; i.autocomplete = 'off';
+      if (f.ph) i.placeholder = f.ph;
+      if (f.list) { const dl = document.createElement('datalist'); dl.id = 'dl-' + inId; f.list.forEach(o => { const op = document.createElement('option'); op.value = o; dl.append(op); }); i.setAttribute('list', dl.id); w.append(dl); }
+      w.append(i); break;
+    }
+    case 'textarea': {
+      const t = document.createElement('textarea'); t.id = inId; t.className = 'inp'; t.rows = f.rows || 3; t.autocomplete = 'off';
+      if (f.ph) t.placeholder = f.ph; w.append(t); break;
+    }
+    case 'select': {
+      const s = document.createElement('select'); s.id = inId; s.className = 'inp';
+      const e0 = el('option', null, '—'); e0.value = ''; s.append(e0);
+      f.options.forEach(o => { const op = el('option', null, o); op.value = o; s.append(op); });
+      w.append(s); break;
+    }
+    case 'seg': w.append(mkSeg(f, labEl)); break;
+    case 'chips': w.append(mkChips(f, labEl)); break;
+    case 'static': w.append(el('div', 'static', f.text)); break;
+    case 'readout': { const o = document.createElement('output'); o.className = 'readout'; o.id = 'durOutEl'; o.textContent = '—'; w.append(o); break; }
+    case 'custom': f.render(w); break;
+  }
+  parent.append(w);
+}
+
+function mkSeg(f, labEl) {
+  const wrap = el('div', 'seg'); wrap.setAttribute('role', 'radiogroup');
+  if (labEl) wrap.setAttribute('aria-labelledby', labEl.id); else wrap.setAttribute('aria-label', f.label);
+  f.options.forEach(o => {
+    const opt = typeof o === 'string' ? { label: o, value: o } : o;
+    const b = el('button', 'seg-btn', opt.label); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false'); b.dataset.val = opt.value;
+    b.addEventListener('click', () => {
+      const on = b.getAttribute('aria-checked') === 'true';
+      wrap.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', 'false'));
+      if (!on) b.setAttribute('aria-checked', 'true');
+      update();
+    });
+    wrap.append(b);
+  });
+  return wrap;
+}
+
+function mkChips(f, labEl) {
+  const wrap = el('div', 'chips'); wrap.setAttribute('role', 'group');
+  if (labEl) wrap.setAttribute('aria-labelledby', labEl.id); else wrap.setAttribute('aria-label', f.label);
+  const opts = f.options.map(o => typeof o === 'string' ? { v: o, l: o } : { v: o.v, l: o.l || o.v, x: o.x });
+  opts.forEach(o => {
+    const lab = el('label', 'chip'); const i = document.createElement('input'); i.type = 'checkbox'; i.value = o.v; if (o.x) i.dataset.excl = '1';
+    i.addEventListener('change', () => {
+      if (f.manual) i.dataset.manual = '1';
+      if (i.checked) {
+        if (o.x) wrap.querySelectorAll('input').forEach(x => { if (x !== i) x.checked = false; });
+        else wrap.querySelectorAll('input[data-excl]').forEach(x => { x.checked = false; });
+      }
+      syncChips(wrap); update();
+    });
+    lab.append(i, document.createTextNode(o.l)); wrap.append(lab);
+  });
+  return wrap;
+}
+function syncChips(wrap) { wrap.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.querySelector('input').checked)); }
+
+/* ───────────────────────── Page assembly ───────────────────────── */
+const mainEl = $('#form'), navEl = $('#nav');
+const confirmTimers = new WeakMap();
+
+function armButton(btn, idleText, armText, action) {
+  btn.addEventListener('click', () => {
+    if (btn.classList.contains('arm')) { clearTimeout(confirmTimers.get(btn)); btn.classList.remove('arm'); btn.textContent = idleText; action(); return; }
+    btn.classList.add('arm'); btn.textContent = armText;
+    confirmTimers.set(btn, setTimeout(() => { btn.classList.remove('arm'); btn.textContent = idleText; }, 4000));
+  });
+  btn.addEventListener('blur', () => { if (btn.classList.contains('arm')) { clearTimeout(confirmTimers.get(btn)); btn.classList.remove('arm'); btn.textContent = idleText; } });
+}
+
+function clearIn(root) {
+  root.querySelectorAll('input[type=text],input[type=date],input[type=time],textarea,select').forEach(i => { if (!i.classList.contains('keep')) i.value = ''; });
+  root.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-checked', 'false'));
+  root.querySelectorAll('.chips input').forEach(i => { i.checked = false; delete i.dataset.manual; });
+  root.querySelectorAll('.chips').forEach(syncChips);
+  if (root.id === 'sec-diag' || root === mainEl) dxReset();
+  if (root.id === 'sec-service' || root === mainEl) { const d = $('#form [data-fid="dos"] input'); if (d) d.value = todayISO(); }
+  update();
+}
+
+SECTIONS.forEach((sec, idx) => {
+  const card = el('section', 'card'); card.id = 'sec-' + sec.id; card.style.setProperty('--ac-light', ACCENTS[idx % ACCENTS.length]); card.style.setProperty('--ac-dark', ACCENTS_DARK[idx % ACCENTS_DARK.length]);
+  const head = el('div', 'card-head');
+  head.append(el('span', 'num', pad(idx + 1)), el('h2', null, sec.title), el('span', 'grow'));
+  const cb = el('button', 'btn btn-outline btn-sm', 'Clear section'); cb.type = 'button';
+  armButton(cb, 'Clear section', 'Click again to clear', () => clearIn(card));
+  head.append(cb);
+  const body = el('div', 'card-body');
+  sec.fields.forEach(f => buildField(f, body));
+  card.append(head, body); mainEl.append(card);
+  sec.card = card;
+});
+
+// Navigation
+navEl.append(el('div', 'nav-label', 'Sections'));
+SECTIONS.forEach((sec, idx) => {
+  const a = el('a', 'nav-link'); a.href = '#sec-' + sec.id; a.dataset.sec = sec.id;
+  a.append(el('span', 'nn', pad(idx + 1)), el('span', null, sec.title.replace(' (second output)', '').replace('Presenting Concerns & Reason for Referral', 'Presenting Concerns').replace('Developmental & Social History', 'Developmental & Social')), el('span', 'dot'));
+  navEl.append(a);
+});
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { navEl.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.sec === e.target.id.slice(4))); } });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+  SECTIONS.forEach(s => io.observe(s.card));
+}
+
+// Defaults
+const dosEl = $('[data-fid="dos"] input'); dosEl.value = todayISO();
+
+/* ───────────────────────── Pronouns ───────────────────────── */
+let PR = { set: false };
+function readPronouns() {
+  const p = S.seg('pron');
+  if (p === 'she/her') return { set: true, s: 'she', o: 'her', p: 'her', r: 'herself', pl: false, tag: 'she/her' };
+  if (p === 'he/him') return { set: true, s: 'he', o: 'him', p: 'his', r: 'himself', pl: false, tag: 'he/him' };
+  if (p === 'they/them') return { set: true, s: 'they', o: 'them', p: 'their', r: 'themselves', pl: true, tag: 'they/them' };
+  if (p === 'Custom') {
+    const s = S.t('pnS'), o = S.t('pnO'), po = S.t('pnP'), r = S.t('pnR');
+    if (!s) return { set: false };
+    return { set: true, s, o: o || 'them', p: po || 'their', r: r || 'themself', pl: S.chips('pnPl').length > 0, tag: s + '/' + (o || '…') };
+  }
+  return { set: false };
+}
+function third(b) {
+  if (b === 'have') return 'has'; if (b === 'be') return 'is';
+  if (/[^aeiou]y$/.test(b)) return b.slice(0, -1) + 'ies';
+  if (/(s|sh|ch|x|z|o)$/.test(b)) return b + 'es';
+  return b + 's';
+}
+function who(first) {
+  const usePron = PR.set && !first;
+  const plural = usePron && PR.pl;
+  return { subj: usePron ? capFirst(PR.s) : 'Client', v: b => plural ? b : third(b) };
+}
+const possessive = () => PR.set ? PR.p : "the client's";
+const VERBS = ['report', 'describe', 'endorse', 'note'];
+
+/* ───────────────────────── Note builders ───────────────────────── */
+function calcDur() { const a = mins(S.t('tStart')), b = mins(S.t('tEnd')); if (a == null || b == null) return null; let d = b - a; if (d < 0) d += 1440; return d; }
+function posText(v) { return v ? (POS_CODE[v] ? v + ' (' + POS_CODE[v] + ')' : v) : ''; }
+function K(items, k, v, own) { if (v != null && String(v).trim() !== '') items.push({ k, v: String(v).trim(), own }); }
+function withDetail(v, d) { return v ? (d ? v + '. ' + endP(d) : v) : ''; }
+function isLate() { const d = S.t('dos'); return !!d && d !== todayISO(); }
+
+function symptomNarrative() {
+  const out = []; let vi = 0;
+  const say = ph => { const w = who(out.length === 0); out.push(w.subj + ' ' + w.v(VERBS[vi++ % VERBS.length]) + ' ' + ph + '.'); };
+  const note = id => { const n = S.t(id); if (n) out.push(endP(capFirst(n))); };
+
+  let a = S.chips('sSleep');
+  if (a.includes('Within normal limits')) out.push('Sleep is within normal limits.');
+  else {
+    const ph = []; if (a.includes('Hypersomnia')) ph.push('hypersomnia');
+    const ins = []; if (a.includes('Insomnia - onset')) ins.push('sleep onset'); if (a.includes('Insomnia - maintenance')) ins.push('sleep maintenance'); if (a.includes('Insomnia - late')) ins.push('early morning waking');
+    if (ins.length) ph.push('insomnia affecting ' + joinList(ins));
+    if (ph.length) say(joinList(ph));
+  }
+  note('sSleepN');
+
+  a = S.chips('sApp');
+  if (a.includes('Within normal limits')) out.push('Appetite and eating patterns are within normal limits.');
+  else {
+    const ph = []; if (a.includes('Decreased appetite')) ph.push('decreased appetite'); if (a.includes('Increased appetite')) ph.push('increased appetite'); if (a.includes('Irregular / restricted')) ph.push('irregular or restricted eating patterns');
+    if (ph.length) say(joinList(ph));
+  }
+  note('sAppN');
+
+  a = S.chips('sAtt');
+  if (a.includes('Within normal limits')) out.push('Memory and attention are within normal limits.');
+  else {
+    const map = { 'Deficits': 'memory or attention deficits', 'Easily distracted': 'easy distractibility', 'Hyperactive': 'hyperactivity', 'Poor concentration': 'poor concentration', 'Overly attentive': 'overattentiveness' };
+    const ph = a.map(x => map[x]).filter(Boolean); if (ph.length) say(joinList(ph));
+  }
+  note('sAttN');
+
+  a = S.chips('sTho');
+  if (a.includes('None reported')) out.push('No delusions, hallucinations, paranoid ideation, obsessions, compulsions, or disorganized thinking were reported.');
+  else if (a.length) out.push('Thought content and perception are notable for ' + joinList(a.map(x => x.toLowerCase())) + '.');
+  note('sThoN');
+
+  a = S.chips('sMood');
+  if (a.includes('None reported')) { const w = who(out.length === 0); out.push(w.subj + ' ' + w.v('deny') + ' significant mood symptoms.'); }
+  else {
+    const map = { 'Depressed': 'depressed mood', 'Helpless / hopeless': 'feelings of helplessness and hopelessness', 'Worthless': 'feelings of worthlessness', 'Anxious': 'anxiety', 'Panic attacks': 'panic attacks', 'Excessive worry': 'excessive worry', 'Irritable': 'irritability', 'Tearful': 'tearfulness' };
+    const ph = a.map(x => map[x]).filter(Boolean); if (ph.length) say(joinList(ph));
+  }
+  note('sMoodN');
+  return out.join(' ');
+}
+
+function substanceNarrative() {
+  const sel = S.chips('subst'); if (!sel.length) return '';
+  if (sel.includes('No history of substance use')) { const w = who(true); return w.subj + ' ' + w.v('deny') + ' any history of substance use or addictive behavior.'; }
+  const nm = x => x === 'Other' ? (S.t('sb_other_name') || 'other substance or behavior') : SUB_PHRASE[x];
+  const w = who(true);
+  const lines = [w.subj + ' ' + w.v('report') + ' a history of use or involvement with ' + joinList(sel.map(nm)) + '.'];
+  sel.forEach(x => {
+    const k = 'sb_' + slug(x), parts = [];
+    [['amount', 'amount'], ['route', 'route'], ['dur', 'duration'], ['last', 'last use'], ['tx', 'treatment history']].forEach(([id, lab]) => { const v = S.t(k + '_' + id); if (v) parts.push(lab + ' ' + v); });
+    if (parts.length) lines.push(capFirst(nm(x)) + ': ' + parts.join('; ') + '.');
+  });
+  const n = S.t('sbNotes'); if (n) lines.push(endP(capFirst(n)));
+  return lines.join('\n');
+}
+
+function traumaNarrative() {
+  const sel = S.chips('trauma'); if (!sel.length) return '';
+  if (sel.includes('None reported')) return 'No history of trauma was reported.' + (S.t('traumaN') ? ' ' + endP(capFirst(S.t('traumaN'))) : '');
+  const cats = [];
+  if (sel.includes('Physical')) cats.push('physical trauma'); if (sel.includes('Sexual')) cats.push('sexual trauma'); if (sel.includes('Emotional')) cats.push('emotional trauma'); if (sel.includes('Neglect')) cats.push('neglect'); if (sel.includes('Other')) cats.push('other trauma');
+  const parts = [];
+  if (cats.length) { const w = who(true); parts.push(w.subj + ' ' + w.v('report') + ' a history of ' + joinList(cats) + '.'); }
+  if (sel.includes('Not ready to discuss')) { const w = who(!cats.length); parts.push(cats.length ? capFirst(w.subj) + ' ' + (PR.set && PR.pl ? 'are' : 'is') + ' not ready to discuss it further at this time.' : 'Client is not ready to discuss trauma history at this time.'); }
+  const n = S.t('traumaN'); if (n) parts.push(endP(capFirst(n)));
+  return parts.join(' ');
+}
+
+function dxLines() {
+  const rows = dxRows.filter(r => (r.code + r.name).trim());
+  const main = rows.filter(r => r.status !== 'Rule out');
+  const ro = rows.filter(r => r.status === 'Rule out');
+  const fmt = r => (r.code.trim() ? r.code.trim() + ' ' : '') + r.name.trim() + (r.spec.trim() ? ' (' + r.spec.trim() + ')' : '') + (r.status === 'Provisional' ? ' (provisional)' : '');
+  return { main: main.map(fmt), ro: ro.map(r => fmt(r).replace(' (provisional)', '')) };
+}
+
+function buildIntake() {
+  const secs = []; const add = (title, items) => { if (items.length) secs.push({ title, items }); };
+  let it = [];
+
+  K(it, 'Date of Service', fmtDate(S.t('dos')));
+  const d = calcDur(); if (d != null) K(it, 'Session Duration (min)', d);
+  K(it, 'Start Time', fmt12(S.t('tStart'))); K(it, 'End Time', fmt12(S.t('tEnd')));
+  K(it, 'CPT Code', '90791: Intake/Diagnostic Evaluation');
+  K(it, 'Client POS', posText(S.seg('posClient'))); K(it, 'Provider POS', S.seg('posProv'));
+  if (isLate()) K(it, 'Late Entry', 'Note written ' + fmtDate(todayISO()));
+  add('SERVICE DETAILS:', it);
+
+  it = [];
+  K(it, 'Age', S.t('age')); K(it, 'Gender Identity', S.t('genderId')); if (PR.set) K(it, 'Pronouns', PR.tag); K(it, 'Sexual Orientation', S.t('orient'));
+  add('CLIENT DETAILS:', it);
+
+  it = [];
+  K(it, 'Consent Reviewed', S.seg('consent')); K(it, 'SI/HI Reviewed', S.seg('sihi')); K(it, 'Safety Plan Indicated', S.seg('safetyInd'));
+  K(it, 'Referral Indicated', withDetail(S.seg('refInd'), S.t('refInd_d')));
+  add('INTAKE DETAILS:', it);
+
+  it = [];
+  K(it, 'Referral Source', S.t('refSource')); K(it, 'Primary Problem', S.t('primary')); K(it, 'Onset', S.t('onset')); K(it, 'Duration', S.t('duration'));
+  K(it, 'Precipitating Stressors/Life Context', S.t('stressors')); K(it, 'Presenting Concerns (Clinician Summary)', S.t('pcSummary')); K(it, "Client's Goals (in their own words)", S.t('goals'));
+  add('PRESENTING CONCERNS & REASON FOR REFERRAL:', it);
+
+  it = [];
+  [['priorTherapy', 'Prior Therapy'], ['priorPsych', 'Prior Psychiatric Care'], ['medication', 'Medication'], ['hosp', 'Hospitalizations'], ['priorDx', 'Prior Diagnoses']].forEach(([id, lab]) => K(it, lab, withDetail(S.seg(id), S.t(id + '_d'))));
+  K(it, 'Family Psychiatric History', S.t('famPsych'));
+  add('PSYCHIATRIC & TREATMENT HISTORY:', it);
+
+  it = [];
+  K(it, 'Relevant Medical Conditions', S.t('medConditions')); K(it, 'Primary Care Provider', S.t('pcp'));
+  K(it, 'Symptoms', symptomNarrative(), true);
+  add('MEDICAL HISTORY & CURRENT HEALTH:', it);
+
+  it = [];
+  const lvl = (lab, id, planIds, detId) => {
+    const v = S.seg(id); if (!v) return;
+    const parts = [v];
+    if (planIds) planIds.forEach(([pid, pl]) => { const pv = S.seg(pid); if (pv) parts.push(pl + ': ' + pv.toLowerCase()); });
+    let s = parts[0] + (parts.length > 1 ? '. ' + parts.slice(1).map(endP).join(' ') : '');
+    if (detId && S.t(detId)) s += (parts.length > 1 ? ' ' : '. ') + endP(S.t(detId));
+    K(it, lab, s);
+  };
+  lvl('Suicidal Ideation', 'si', [['siPlan', 'Plan'], ['siIntent', 'Intent'], ['siPrep', 'Preparatory behavior']], 'siD');
+  K(it, 'Prior Suicide Attempts', withDetail(S.seg('attempt'), S.t('attemptD')));
+  lvl('Homicidal Ideation', 'hi', [['hiPlan', 'Plan'], ['hiIntent', 'Intent']], 'hiD');
+  K(it, 'Self-Harm (NSSI)', withDetail(S.seg('nssi'), S.t('nssiD')));
+  K(it, 'Means Access', withDetail(S.seg('means'), S.t('meansD')));
+  K(it, 'Safety Plan', S.seg('safetyPlan'));
+  const pf = S.chips('protective').map((x, i) => i ? lcFirst(x) : x).join(', ');
+  K(it, 'Protective Factors', pf ? withDetail(pf, S.t('protectiveN')) : S.t('protectiveN'));
+  K(it, 'Risk Narrative', S.t('riskNarr'));
+  add('RISK ASSESSMENT:', it);
+
+  it = [];
+  K(it, 'Addiction History', substanceNarrative(), true);
+  add('SUBSTANCE USE HISTORY:', it);
+
+  it = [];
+  K(it, 'Family of Origin', S.t('famOrigin')); K(it, 'Current Living Situation', S.t('living')); K(it, 'Relationship Status', S.seg('relStatus'));
+  K(it, 'Highest Level of Education Completed', S.t('edu')); K(it, 'Employment Status', S.seg('emp'));
+  K(it, 'Legal History', withDetail(S.seg('legal'), S.t('legal_d')));
+  K(it, 'Support System/Significant Relationships', S.t('support')); K(it, 'Cultural/Spiritual/Identity Context', S.t('cultural'));
+  K(it, 'History of Trauma', traumaNarrative());
+  add('DEVELOPMENTAL AND SOCIAL HISTORY:', it);
+
+  it = [];
+  MSE.forEach(dm => {
+    if (dm.single) { K(it, dm.label, S.seg(dm.id)); return; }
+    let v = S.chips(dm.id).map((x, i) => i ? lcFirst(x) : x).join(', ');
+    if (dm.quote && S.t(dm.id + 'Q')) v += (v ? '; ' : '') + 'client states "' + S.t(dm.id + 'Q') + '"';
+    K(it, dm.label.replace(' (client-reported)', '').replace(' (observed)', ''), v);
+  });
+  K(it, 'MSE Narrative/Elaboration', S.t('mseNarr'));
+  add('MENTAL STATUS EXAM:', it);
+
+  it = [];
+  const dl = dxLines();
+  if (dl.main.length) K(it, 'Diagnosis', dl.main.map((x, i) => (dl.main.length > 1 ? (i + 1) + '. ' : '') + x).join('\n'));
+  if (dl.ro.length) K(it, 'Rule Out', dl.ro.join('; '));
+  K(it, 'Clinical Formulation: Biopsychosocial Summary', S.t('formulation')); K(it, 'Strengths', S.t('strengths')); K(it, 'Medical Necessity', S.t('medNec'));
+  add('DIAGNOSTIC EVALUATION:', it);
+
+  it = [];
+  K(it, 'Session Frequency', S.t('freq')); K(it, 'Anticipated Duration of Treatment', S.t('dur')); K(it, 'Initial Treatment Goals', S.t('txGoals'));
+  const co = S.chips('coord'); if (co.length) K(it, 'Coordination of Care Indicated', withDetail(co.join(', '), S.t('coordN')));
+  K(it, 'Clinician Notes / Additional Details', S.t('clinNotes'));
+  add('INITIAL TREATMENT PLAN:', it);
+
+  return secs;
+}
+
+/* PIRP */
+const AREA_KEYS = ['consent', 'telehealth', 'concerns', 'psych', 'medical', 'substance', 'social', 'trauma', 'mse', 'dx', 'plan', 'coord', 'referral', 'safety'];
+function riskOn() { return S.chips('pirpOpts').length > 0; }
+function anyT(ids) { return ids.some(i => S.t(i)); }
+function autoArea(k) {
+  switch (k) {
+    case 'consent': return S.seg('consent') === 'Yes';
+    case 'telehealth': return false;
+    case 'concerns': return anyT(['primary', 'onset', 'duration', 'stressors', 'pcSummary']);
+    case 'psych': return ['priorTherapy', 'priorPsych', 'medication', 'hosp', 'priorDx'].some(i => S.seg(i)) || !!S.t('famPsych');
+    case 'medical': return anyT(['medConditions', 'pcp']) || ['sSleep', 'sApp', 'sAtt', 'sTho', 'sMood'].some(i => S.chips(i).length);
+    case 'substance': return S.chips('subst').length > 0;
+    case 'social': return anyT(['famOrigin', 'living', 'edu', 'support', 'cultural']) || !!S.seg('relStatus') || !!S.seg('emp') || !!S.seg('legal');
+    case 'trauma': return S.chips('trauma').length > 0;
+    case 'mse': return MSE.some(m => m.single ? !!S.seg(m.id) : S.chips(m.id).length) || !!S.t('mseNarr');
+    case 'dx': return dxRows.some(r => (r.code + r.name).trim()) || !!S.t('formulation');
+    case 'plan': return anyT(['txGoals', 'freq', 'dur']);
+    case 'coord': return S.chips('coord').some(x => x !== 'None');
+    case 'referral': return S.seg('refInd') === 'Yes';
+    case 'safety': return riskOn() && S.seg('sihi') === 'Yes';
+  }
+  return false;
+}
+function syncAreas() {
+  const e = S.el('pirpAreas'); if (!e) return;
+  e.querySelectorAll('input').forEach(i => { if (!i.dataset.manual) i.checked = autoArea(i.value); });
+  syncChips(e.querySelector('.chips'));
+}
+
+const PH_LIST = [];
+const PH = t => { PH_LIST.push(t); return '[' + t + ']'; };
+
+function buildPIRP() {
+  PH_LIST.length = 0;
+  const areas = S.chips('pirpAreas');
+  const secs = []; let it = [];
+
+  K(it, 'Date', fmtDate(S.t('dos')) || PH('date of service'));
+  const d = calcDur();
+  const st = fmt12(S.t('tStart')), en = fmt12(S.t('tEnd'));
+  K(it, 'Time', st && en ? st + '–' + en + ' (' + d + ' min)' : PH('start and end time'));
+  K(it, 'CPT Code', '90791 (Intake/Diagnostic Evaluation)');
+  K(it, 'POS', posText(S.seg('posClient')) || PH('client POS'));
+  K(it, 'Provider location', S.seg('posProv') || PH('provider location'));
+  const dl = dxLines();
+  K(it, 'Diagnosis', dl.main.length ? dl.main.join('; ') : PH('add diagnosis'));
+  if (isLate()) K(it, 'Late entry', 'Note written ' + fmtDate(todayISO()));
+  secs.push({ title: 'SESSION DETAIL:', items: it.map(x => Object.assign(x, { own: false })) });
+
+  // Presenting problem
+  const pp = ['Client presented for an initial diagnostic evaluation.'];
+  [['Primary concern', 'primary'], ['Onset', 'onset'], ['Duration', 'duration'], ['Precipitating stressors and life context', 'stressors']].forEach(([l, id]) => { if (S.t(id)) pp.push(l + ': ' + endP(S.t(id))); });
+  if (S.t('pcSummary')) pp.push(endP(S.t('pcSummary')));
+  if (S.t('goals')) pp.push('Goals in ' + (PR.set ? PR.p : "the client's") + ' own words: ' + endP(S.t('goals')));
+  if (riskOn()) {
+    const r = []; if (S.seg('si')) r.push('suicidal ideation ' + S.seg('si').toLowerCase()); if (S.seg('hi')) r.push('homicidal ideation ' + S.seg('hi').toLowerCase()); if (S.seg('nssi')) r.push('self-harm ' + S.seg('nssi').toLowerCase());
+    if (r.length) pp.push('Safety/Risk (this session): ' + joinList(r) + ', as documented in the risk assessment.');
+  }
+  secs.push({ title: 'PRESENTING PROBLEM:', items: [{ v: pp.join(' '), own: true }] });
+
+  // Intervention
+  const lines = [];
+  const tele = /^Telehealth/.test(S.seg('posClient'));
+  const listIf = (arr, pre) => { const a = arr.filter(Boolean); return a.length ? pre + joinList(a) : ''; };
+  areas.forEach(k => {
+    switch (k) {
+      case 'consent': lines.push('Therapist reviewed informed consent and practice policies with the client.'); break;
+      case 'telehealth': lines.push('Therapist reviewed telehealth informed consent with the client.'); break;
+      case 'concerns': lines.push('Therapist explored presenting concerns' + listIf([S.t('onset') && 'onset', S.t('duration') && 'duration', S.t('stressors') && 'precipitating stressors'], ', including ') + '.'); break;
+      case 'psych': lines.push('Therapist reviewed psychiatric and treatment history' + listIf([S.seg('priorTherapy') && 'prior therapy', S.seg('priorPsych') && 'psychiatric care', S.seg('medication') && 'medication', S.seg('hosp') && 'hospitalizations', S.seg('priorDx') && 'prior diagnoses'], ', including ') + '.'); break;
+      case 'medical': lines.push('Therapist reviewed relevant medical history and current symptoms' + listIf([S.chips('sSleep').length && 'sleep', S.chips('sApp').length && 'appetite', S.chips('sAtt').length && 'memory and attention', S.chips('sTho').length && 'thought content and perception', S.chips('sMood').length && 'mood'], ', including ') + '.'); break;
+      case 'substance': lines.push('Therapist assessed substance use and addictive behavior history.'); break;
+      case 'social': lines.push('Therapist gathered developmental and social history' + listIf([S.t('famOrigin') && 'family of origin', S.t('living') && 'living situation', S.seg('relStatus') && 'relationship status', S.t('edu') && 'education', S.seg('emp') && 'employment', S.seg('legal') && 'legal history', S.t('support') && 'support system', S.t('cultural') && 'cultural, spiritual, and identity context'], ', including ') + '.'); break;
+      case 'trauma': lines.push(S.has('trauma', 'Not ready to discuss') ? 'Therapist inquired about trauma history; the client was not ready to discuss it at this time.' : 'Therapist inquired about trauma history as disclosed by the client.'); break;
+      case 'mse': lines.push('Therapist completed a mental status examination.'); break;
+      case 'dx': lines.push('Therapist completed a diagnostic evaluation and clinical formulation.'); break;
+      case 'plan': lines.push('Therapist established initial treatment goals and plan.'); break;
+      case 'coord': lines.push('Therapist identified coordination of care needs (' + S.chips('coord').filter(x => x !== 'None').map(lcFirst).join(', ') + ').'); break;
+      case 'referral': lines.push('Therapist identified a referral need.'); break;
+      case 'safety': if (riskOn()) { lines.push('Therapist reviewed suicidal and homicidal ideation with the client.'); if (S.seg('safetyPlan') === 'Developed, on file') lines.push('Therapist developed a safety plan with the client; plan is on file.'); } break;
+    }
+  });
+  if (S.t('pirpExtra')) S.t('pirpExtra').split('\n').filter(x => x.trim()).forEach(x => lines.push(endP(x)));
+  if (!lines.length) lines.push(PH('select interventions or fill intake sections'));
+  secs.push({ title: 'INTERVENTION:', items: lines.map(v => ({ v, own: false })) });
+
+  // Response
+  const resp = S.t('pirpResp');
+  secs.push({ title: 'RESPONSE:', items: resp ? resp.split(/\n{2,}/).map(p => ({ v: p.trim(), own: true })) : [{ v: PH('add client response linked to each intervention'), own: true }] });
+
+  // Plan
+  it = [];
+  K(it, 'Next session focus', S.t('pirpNext') || PH('next session focus'));
+  K(it, 'Session frequency', S.t('freq'));
+  K(it, 'Between session', S.t('pirpBetween'));
+  const co = S.chips('coord').filter(x => x !== 'None'); if (co.length) K(it, 'Coordination of care', withDetail(co.join(', '), S.t('coordN')));
+  if (S.seg('refInd') === 'Yes') K(it, 'Referral', S.t('refInd_d') || 'indicated');
+  secs.push({ title: 'PLAN:', items: it.map(x => Object.assign(x, { own: false })) });
+
+  // Medical necessity
+  secs.push({ title: 'MEDICAL NECESSITY:', items: [{ v: S.t('medNec') || PH('medical necessity statement; write it in the Diagnostic Evaluation section'), own: true }] });
+
+  return secs;
+}
+
+/* ───────────────────────── Rendering notes ───────────────────────── */
+function layoutGroups(sec) {
+  const groups = [[{ head: true, v: sec.title }]];
+  let buf = [];
+  const flush = () => { if (buf.length) { groups.push(buf); buf = []; } };
+  sec.items.forEach(i => {
+    const own = i.own != null ? i.own : (!i.k || i.v.length > 170 || i.v.includes('\n'));
+    if (own) { flush(); groups.push([i]); } else buf.push(i);
+  });
+  flush();
+  return groups;
+}
+function toHTML(secs) {
+  return secs.map(sec => layoutGroups(sec).map(g => '<p>' + g.map(i => i.head ? '<strong>' + esc(i.v) + '</strong>' : (i.k ? '<strong>' + esc(i.k) + ':</strong> ' : '') + escBr(i.v)).join('<br>') + '</p>').join('')).join('');
+}
+function toText(secs) {
+  return secs.map(sec => layoutGroups(sec).map(g => g.map(i => i.head ? i.v : (i.k ? i.k + ': ' : '') + i.v).join('\n')).join('\n\n')).join('\n\n');
+}
+
+/* ───────────────────────── Flags ───────────────────────── */
+function intakeFlags(secs) {
+  const warn = [], info = [];
+  if (isLate()) warn.push('Date of service is not today. A late-entry line was added. Write the actual date written and do not backdate.');
+  const a = mins(S.t('tStart')), b = mins(S.t('tEnd'));
+  if (a != null && b != null && b <= a) warn.push(b === a ? 'Start and end time are the same.' : 'End time is earlier than start time; duration assumes the session crossed midnight.');
+  if (S.seg('consent') !== 'Yes') warn.push('Consent reviewed is not marked Yes.');
+  if (S.seg('sihi') !== 'Yes') warn.push('SI/HI reviewed is not marked Yes.');
+  const si = S.seg('si'), hi = S.seg('hi');
+  if (['Passive', 'Active'].includes(si) && (!S.seg('safetyPlan') || S.seg('safetyPlan') === 'Not indicated')) warn.push('SI is marked ' + si + ' and the safety plan reads "' + (S.seg('safetyPlan') || 'blank') + '". Confirm this matches your clinical judgment.');
+  if (S.seg('means') === 'Access, concern' && S.seg('safetyPlan') !== 'Developed, on file') warn.push('Means access is marked "Access, concern" and no safety plan is on file.');
+  if ((['Passive', 'Active'].includes(si) || ['Passive', 'Active'].includes(hi)) && !S.t('riskNarr')) warn.push('SI or HI is marked present and the risk narrative is empty.');
+  if (['Passive', 'Active'].includes(hi)) warn.push('HI is marked present. Document your assessment of any identified target and your duty-to-protect analysis. That is a legal and clinical judgment; confirm with consultation or an attorney.');
+  const empties = SECTIONS.filter(s => s.id !== 'pirp' && !hasData(s.card)).map(s => s.title);
+  if (empties.length) info.push('Not yet filled (left out of the note): ' + empties.join('; ') + '.');
+  if (!dxRows.some(r => (r.code + r.name).trim())) info.push('No diagnosis entered.');
+  return { warn, info };
+}
+function pirpFlags() {
+  const warn = [], info = [];
+  if (isLate()) warn.push('Date of service is not today. A late-entry line was added. Do not backdate.');
+  if (PH_LIST.length) warn.push('Bracketed placeholders to resolve before pasting: ' + PH_LIST.join('; ') + '.');
+  if (!riskOn() && (['Passive', 'Active'].includes(S.seg('si')) || ['Passive', 'Active'].includes(S.seg('hi')) || ['Historical', 'Active'].includes(S.seg('nssi')))) warn.push('Risk content is recorded in the intake (SI, HI, or NSSI) and is left out of this PIRP by default. Confirm you want it documented only in the separate risk field.');
+  if (S.chips('pirpAreas').includes('safety') && !riskOn()) warn.push('The SI/HI review line needs the "Include SI/HI and safety statements" option.');
+  info.push('Interventions listed come only from the intake sections you filled or the boxes you checked. Confirm each against what you did before it goes in the record.');
+  return { warn, info };
+}
+const REMIND = 'Review each section against what actually happened this session, especially the named interventions, the session length, and any bracketed placeholders, before pasting into Sessions Health. This is a draft, not a finished note or a submittable claim justification.';
+
+/* ───────────────────────── Refresh loop ───────────────────────── */
+let tab = 'intake', outputs = { intake: null, pirp: null };
+const pv = $('#preview'), flagsEl = $('#flags');
+
+function hasData(card) {
+  let found = false;
+  card.querySelectorAll('.fld').forEach(w => {
+    if (found || w.closest('.is-hidden') || w.dataset.nocount) return;
+    const ty = w.dataset.type;
+    if (ty === 'static' || ty === 'readout') return;
+    if (ty === 'seg') { if (w.querySelector('button[aria-checked="true"]')) found = true; }
+    else if (ty === 'chips') { if (w.querySelector('input:checked') && w.dataset.fid !== 'pirpAreas') found = true; }
+    else if (ty === 'custom') { if (w.dataset.fid === 'dxField' && dxRows.some(r => (r.code + r.name).trim())) found = true; }
+    else { const i = w.querySelector('input,textarea,select'); if (i && i.value.trim()) found = true; }
+  });
+  return found;
+}
+
+function applyConds() { conds.forEach(c => c.node.classList.toggle('is-hidden', !c.fn())); }
+
+let raf = 0;
+function update() { cancelAnimationFrame(raf); raf = requestAnimationFrame(refresh); }
+
+function refresh() {
+  applyConds();
+  PR = readPronouns();
+  syncAreas();
+  const d = calcDur(); const out = $('#durOutEl'); if (out) out.textContent = d == null ? '—' : d + ' min';
+  const iSecs = buildIntake(), pSecs = buildPIRP();
+  const empty = !iSecs.some(s => s.items.some(i => i.k !== 'Date of Service' && i.k !== 'CPT Code'));
+  outputs.intake = { html: toHTML(iSecs), text: toText(iSecs), flags: intakeFlags(iSecs), empty };
+  outputs.pirp = { html: toHTML(pSecs), text: toText(pSecs), flags: pirpFlags(), empty: false };
+  renderOutput();
+  SECTIONS.forEach(s => { const dot = navEl.querySelector('[data-sec="' + s.id + '"] .dot'); if (dot) dot.classList.toggle('on', hasData(s.card)); });
+}
+
+function renderOutput() {
+  const o = outputs[tab];
+  if (o.empty) pv.innerHTML = '<p class="empty">Start filling in the form. Your note builds here as you go.</p>';
+  else pv.innerHTML = tab === 'pirp' ? o.html.replace(/\[([^\]<]+)\]/g, '<span class="ph">[$1]</span>') : o.html;
+  const f = o.flags; let h = '<h3>Before you paste</h3>';
+  if (f.warn.length) h += '<ul>' + f.warn.map(x => '<li class="warn">' + esc(x) + '</li>').join('') + '</ul>';
+  if (f.info.length) h += '<ul>' + f.info.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+  h += '<p class="remind">' + esc(REMIND) + '</p>';
+  flagsEl.innerHTML = h;
+}
+
+/* Tabs */
+['intake', 'pirp'].forEach(k => {
+  $('#tab-' + k).addEventListener('click', () => {
+    tab = k;
+    ['intake', 'pirp'].forEach(x => $('#tab-' + x).setAttribute('aria-selected', x === k ? 'true' : 'false'));
+    renderOutput();
+  });
+});
+
+/* ───────────────────────── Copy ───────────────────────── */
+const copiedEl = $('#copied');
+let copiedTimer = 0;
+function say(msg, bad) { copiedEl.textContent = msg; copiedEl.classList.toggle('bad', !!bad); clearTimeout(copiedTimer); copiedTimer = setTimeout(() => { copiedEl.textContent = ''; }, 3500); }
+function execCopyFrom(node) {
+  const r = document.createRange(); r.selectNodeContents(node);
+  const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  sel.removeAllRanges(); return ok;
+}
+async function copyRich() {
+  const o = outputs[tab]; if (o.empty) { say('Nothing to copy yet.', true); return; }
+  try {
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([o.html], { type: 'text/html' }), 'text/plain': new Blob([o.text], { type: 'text/plain' }) })]);
+      say('Copied with formatting ✓'); return;
+    }
+  } catch (e) { /* fall through */ }
+  const stage = el('div', 'copy-stage'); stage.innerHTML = o.html; document.body.append(stage);
+  const okc = execCopyFrom(stage); stage.remove();
+  if (okc) say('Copied with formatting ✓'); else say('The browser blocked copying. Select the preview text and press Ctrl+C.', true);
+}
+async function copyPlain() {
+  const o = outputs[tab]; if (o.empty) { say('Nothing to copy yet.', true); return; }
+  try { if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(o.text); say('Copied as plain text ✓'); return; } } catch (e) { /* fall through */ }
+  const ta = document.createElement('textarea'); ta.value = o.text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.append(ta); ta.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; } ta.remove();
+  if (ok) say('Copied as plain text ✓'); else say('The browser blocked copying. Select the preview text and press Ctrl+C.', true);
+}
+$('#copyRich').addEventListener('click', copyRich);
+$('#copyPlain').addEventListener('click', copyPlain);
+
+/* ───────────────────────── Clear all + safety net ───────────────────────── */
+armButton($('#clearAll'), 'Clear all', 'Click again to clear everything', () => { clearIn(mainEl); window.scrollTo({ top: 0 }); say('Everything cleared.'); });
+mainEl.addEventListener('input', update);
+mainEl.addEventListener('change', update);
+window.addEventListener('beforeunload', e => { if (SECTIONS.some(s => hasData(s.card))) { e.preventDefault(); e.returnValue = ''; } });
+
+const themeBtn = $('#themeBtn');
+themeBtn.addEventListener('click', () => {
+  const dark = document.documentElement.dataset.theme !== 'light';
+  document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+  themeBtn.textContent = dark ? 'Dark mode' : 'Light mode';
+  themeBtn.setAttribute('aria-pressed', dark ? 'false' : 'true');
+});
+
+refresh();
+})();
+</script>
+</body>
+</html>
