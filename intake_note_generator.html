@@ -1142,8 +1142,8 @@ function layoutGroups(sec) {
   flush();
   return groups;
 }
-function toHTML(secs) {
-  return secs.map(sec => layoutGroups(sec).map(g => '<p>' + g.map(i => i.head ? '<strong>' + esc(i.v) + '</strong>' : (i.k ? '<strong>' + esc(i.k) + ':</strong> ' : '') + escBr(i.v)).join('<br>') + '</p>').join('')).join('');
+function toHTML(secs, spacer) {
+  return secs.map(sec => layoutGroups(sec).map(g => '<p>' + g.map(i => i.head ? '<strong>' + esc(i.v) + '</strong>' : (i.k ? '<strong>' + esc(i.k) + ':</strong> ' : '') + escBr(i.v)).join('<br>') + '</p>').join('')).join(spacer ? '<p><br></p>' : '');
 }
 function toText(secs) {
   return secs.map(sec => layoutGroups(sec).map(g => g.map(i => i.head ? i.v : (i.k ? i.k + ': ' : '') + i.v).join('\n')).join('\n\n')).join('\n\n');
@@ -1208,8 +1208,8 @@ function refresh() {
   const d = calcDur(); const out = $('#durOutEl'); if (out) out.textContent = d == null ? '—' : d + ' min';
   const iSecs = buildIntake(), pSecs = buildPIRP();
   const empty = !iSecs.some(s => s.items.some(i => i.k !== 'Date of Service' && i.k !== 'CPT Code'));
-  outputs.intake = { html: toHTML(iSecs), text: toText(iSecs), flags: intakeFlags(iSecs), empty };
-  outputs.pirp = { html: toHTML(pSecs), text: toText(pSecs), flags: pirpFlags(), empty: false };
+  outputs.intake = { html: toHTML(iSecs), copyHtml: toHTML(iSecs, true), text: toText(iSecs), flags: intakeFlags(iSecs), empty };
+  outputs.pirp = { html: toHTML(pSecs), copyHtml: toHTML(pSecs, true), text: toText(pSecs), flags: pirpFlags(), empty: false };
   renderOutput();
   SECTIONS.forEach(s => { const dot = navEl.querySelector('[data-sec="' + s.id + '"] .dot'); if (dot) dot.classList.toggle('on', hasData(s.card)); });
 }
@@ -1248,11 +1248,11 @@ async function copyRich() {
   const o = outputs[tab]; if (o.empty) { say('Nothing to copy yet.', true); return; }
   try {
     if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
-      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([o.html], { type: 'text/html' }), 'text/plain': new Blob([o.text], { type: 'text/plain' }) })]);
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([o.copyHtml], { type: 'text/html' }), 'text/plain': new Blob([o.text], { type: 'text/plain' }) })]);
       say('Copied with formatting ✓'); return;
     }
   } catch (e) { /* fall through */ }
-  const stage = el('div', 'copy-stage'); stage.innerHTML = o.html; document.body.append(stage);
+  const stage = el('div', 'copy-stage'); stage.innerHTML = o.copyHtml; document.body.append(stage);
   const okc = execCopyFrom(stage); stage.remove();
   if (okc) say('Copied with formatting ✓'); else say('The browser blocked copying. Select the preview text and press Ctrl+C.', true);
 }
